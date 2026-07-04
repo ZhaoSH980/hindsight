@@ -1,9 +1,11 @@
 {
   "case_id": "nvda_fy26q1",
   "title": "NVDA into FY2026-Q1 earnings (May 2025)",
+  "title_zh": "英伟达 FY2026-Q1 财报前夜（2025 年 5 月）",
   "ticker": "NVDA",
   "as_of": "2025-05-22",
   "outcome_window_days": 40,
   "description": "Research NVDA days before the May 28, 2025 FY26Q1 report: AI capex narrative running hot, H20 China export-control overhang, Blackwell ramp underway.",
+  "description_zh": "在 2025 年 5 月 28 日 FY26Q1 财报发布前几天研究英伟达：AI 资本开支叙事火热，H20 对华出口管制悬顶，Blackwell 产能爬坡进行中。",
   "tags": ["earnings", "semis", "ai-capex"]
 }

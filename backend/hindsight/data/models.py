@@ -27,6 +27,10 @@ class CaseMeta(BaseModel):
     outcome_window_days: int = Field(gt=0)
     description: str = ""
     tags: list[str] = Field(default_factory=list)
+    # display-only Chinese localization; agent prompts always use the English
+    # title/description (prompt bytes must stay replay-stable)
+    title_zh: str = ""
+    description_zh: str = ""
 
 
 class Document(BaseModel):

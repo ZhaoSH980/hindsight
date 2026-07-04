@@ -24,12 +24,15 @@ def run_analyst(
     temperature: float,
     ledger: CostLedger,
     feedback: str | None = None,
+    language: str = "en",
 ) -> str:
     messages = [
         {"role": "system", "content": ANALYST_SYSTEM},
         {
             "role": "user",
-            "content": analyst_user_prompt(case, render_evidence(evidence_chunks), market_summary),
+            "content": analyst_user_prompt(
+                case, render_evidence(evidence_chunks), market_summary, language
+            ),
         },
     ]
     if feedback:

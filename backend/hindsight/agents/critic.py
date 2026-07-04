@@ -104,13 +104,15 @@ def produce_memo(
     temperature: float,
     trace: TraceRecorder,
     ledger: CostLedger,
+    language: str = "en",
 ) -> tuple[Memo | None, bool]:
     valid_ids = {c.chunk_id for c in evidence_chunks}
     feedback: str | None = None
     last_structurally_valid: Memo | None = None
     for attempt in range(1 + MAX_RETRIES):
         raw = run_analyst(
-            llm, evidence_chunks, case, market_summary, temperature, ledger, feedback
+            llm, evidence_chunks, case, market_summary, temperature, ledger, feedback,
+            language=language,
         )
         memo, errors = structural_check(raw, valid_ids, case)
         if memo is None:

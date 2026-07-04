@@ -64,24 +64,33 @@ def _forward_audit(trace: TraceRecorder, audit: AuditLog, start: int) -> int:
     return len(audit.entries)
 
 
-def _memo_markdown(memo: Memo, graded: list[GradedClaim]) -> str:
+_MEMO_HEADINGS = {
+    "en": ("Research memo", "Background", "Bull case", "Bear case", "Conclusion", "Claims"),
+    "zh": ("研究备忘录", "背景", "看多逻辑", "看空逻辑", "结论", "可证伪声明"),
+}
+
+
+def _memo_markdown(memo: Memo, graded: list[GradedClaim], language: str = "en") -> str:
     status = {g.claim.claim_id: g for g in graded}
+    h_title, h_bg, h_bull, h_bear, h_concl, h_claims = _MEMO_HEADINGS.get(
+        language, _MEMO_HEADINGS["en"]
+    )
     lines = [
-        "# Research memo",
+        f"# {h_title}",
         "",
-        "## Background",
+        f"## {h_bg}",
         memo.background,
         "",
-        "## Bull case",
+        f"## {h_bull}",
         memo.bull_case,
         "",
-        "## Bear case",
+        f"## {h_bear}",
         memo.bear_case,
         "",
-        "## Conclusion",
+        f"## {h_concl}",
         memo.conclusion,
         "",
-        "## Claims",
+        f"## {h_claims}",
     ]
     for c in memo.claims:
         g = status.get(c.claim_id)
@@ -114,6 +123,18 @@ def run_research(
     audit_seen = 0
 
     store.upsert_run(run_id, case.meta.case_id, config.model_dump_json(), "running", suite_id=suite_id)
+
+    # provenance deltas: the llm client may be shared across a suite, so count
+    # from this run's baseline rather than trusting absolute totals
+    hits0 = getattr(llm, "cache_hits", 0)
+    misses0 = getattr(llm, "cache_misses", 0)
+
+    def _provenance() -> dict:
+        return {
+            "cache_hits": getattr(llm, "cache_hits", 0) - hits0,
+            "live_calls": getattr(llm, "cache_misses", 0) - misses0,
+            "offline": bool(getattr(llm, "offline", False)),
+        }
 
     corpus = SandboxedCorpus(BM25Retriever(case.chunks), as_of=as_of, audit=audit)
     market = SandboxedMarketData(case.bars_source, as_of=as_of, audit=audit)
@@ -150,11 +171,13 @@ def run_research(
     audit_seen = _forward_audit(trace, audit, audit_seen)
 
     memo, unverified = produce_memo(
-        llm, bundle, case.meta, market_summary, temperature, trace, ledger
+        llm, bundle, case.meta, market_summary, temperature, trace, ledger,
+        language=config.language,
     )
     if memo is None:
         scores = {"status": "failed_validation", "cost": ledger.summary(),
-                  "contamination_probe": probe_text[:2000]}
+                  "contamination_probe": probe_text[:2000],
+                  "llm_provenance": _provenance()}
         (run_dir / "scores.json").write_text(json.dumps(scores, indent=1), encoding="utf-8")
         store.upsert_run(run_id, case.meta.case_id, config.model_dump_json(), "failed",
                          scores_json=json.dumps(scores), suite_id=suite_id)
@@ -185,11 +208,14 @@ def run_research(
         "cost": ledger.summary(),
         "contamination_probe": probe_text[:2000],
         "unverified": unverified,
+        "llm_provenance": _provenance(),
     }
     trace.emit(TraceEvent(type="score", agent="eval", payload={"outcome": agg, "process": jscores}))
     audit_seen = _forward_audit(trace, audit, audit_seen)
 
-    (run_dir / "memo.md").write_text(_memo_markdown(memo, graded), encoding="utf-8", newline="\n")
+    (run_dir / "memo.md").write_text(
+        _memo_markdown(memo, graded, config.language), encoding="utf-8", newline="\n"
+    )
     (run_dir / "claims.json").write_text(
         json.dumps(
             [

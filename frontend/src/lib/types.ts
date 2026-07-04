@@ -7,6 +7,9 @@ export interface CaseMeta {
   description: string;
   tags: string[];
   n_docs: number;
+  // display-only localizations (may be absent on older datasets)
+  title_zh?: string;
+  description_zh?: string;
 }
 
 export interface Bar { date: string; open: number; high: number; low: number; close: number; volume: number }
@@ -44,6 +47,7 @@ export interface Scores {
   cost?: Record<string, { prompt_tokens: number; completion_tokens: number; calls: number }>;
   contamination_probe?: string;
   unverified?: boolean;
+  llm_provenance?: { cache_hits: number; live_calls: number; offline: boolean };
 }
 
 export interface RunDetail extends RunSummary { memo_md: string | null; claims: Claim[] }

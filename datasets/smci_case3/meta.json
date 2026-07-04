@@ -1,9 +1,11 @@
 {
   "case_id": "smci_case3",
   "title": "SMCI after the delayed 10-K filing rally (Feb 2025)",
+  "title_zh": "超微电脑：迟交 10-K 后的合规反弹（2025 年 2 月）",
   "ticker": "SMCI",
   "as_of": "2025-02-26",
   "outcome_window_days": 40,
   "description": "Research SMCI the day after it filed its delayed FY2024 10-K and regained Nasdaq compliance (Feb 25, 2025): delisting risk cleared, a $40 billion FY26 revenue target on the table, Blackwell rack-scale ramp in full production, and the stock up roughly 90% from its early-February low.",
+  "description_zh": "在超微电脑补交迟到的 FY2024 年报并重获纳斯达克合规资格的次日（2025 年 2 月 25 日）研究该股：退市风险解除，FY26 年 400 亿美元营收目标摆上台面，Blackwell 机架级方案全面投产，股价较 2 月初低点已反弹约 90%。",
   "tags": ["turnaround", "servers", "ai-capex"]
 }

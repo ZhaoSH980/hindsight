@@ -88,6 +88,21 @@ const dict = {
     probeHelp: "With no tools at all, the model is asked what happened after the as-of date. If it answers from memory, its training data leaks the future — and sandbox walls can't stop that. This probe detects it.",
     memoryHelp: "When on, the agent may read lessons distilled from earlier runs — but only from runs whose outcome window closed before this case's as-of date. The past may teach; the future may not.",
 
+    // ——— memo language + run provenance ———
+    researchLang: "Memo language",
+    researchLangHelp: "The language the agent writes its memo and claims in. Recorded demo runs exist for both languages at default settings; in offline mode, other combinations have nothing to replay and will fail.",
+    provReplay: "replayed from recordings",
+    provLive: "live LLM calls",
+    provHelp: "Identical requests are replayed byte-for-byte from the recorded-calls cache instead of hitting the API — that's why a repeated run with the same settings finishes in seconds, deterministically. Change any setting (language, memory, steps) to trigger real calls.",
+
+    // ——— live feed narration ———
+    agentPlanner: "planner", agentAnalyst: "analyst", agentCritic: "critic",
+    agentJudge: "judge", agentSandbox: "sandbox", agentEval: "eval", agentProbe: "probe",
+    feedThink: "thinks", feedSearchCorpus: "searches filings", feedPriceHistory: "pulls price history",
+    feedCalc: "calculates", feedFinish: "finishes research", feedToolResult: "returns",
+    feedValidationPass: "validation passed", feedValidationFail: "validation failed",
+    feedAuditOk: "sandbox check", feedAuditDenied: "BLOCKED lookahead",
+
     // ——— confidence vs outcome (calibration replacement) ———
     confVsOutcome: "Confidence vs. outcome",
     confVsOutcomeHint: "Each marker is one claim, placed at the confidence the agent stated. Green = hit, red = miss. A well-calibrated agent keeps its misses to the left and earns its right-side dots.",
@@ -181,6 +196,21 @@ const dict = {
     attributionHelp: "每条未命中都会被归因：证据缺失（该找的没找到）、误读证据（找到了但读错了）、合理但错误（过程没毛病，世界不配合——这不算智能体的错）。",
     probeHelp: "不给任何工具，直接问模型基准日之后发生了什么。如果它能靠记忆答出来，说明训练数据泄露了未来——沙箱的墙拦不住这条通道，探针专门检测它。",
     memoryHelp: "开启后，智能体可以读取从更早的运行中提炼的经验——但只限结果窗口在本案例基准日之前就已关闭的运行。过去可以教它，未来不行。",
+
+    // ——— 研究语言 + 运行来源 ———
+    researchLang: "研究语言",
+    researchLangHelp: "智能体撰写备忘录和声明所用的语言。默认设置下两种语言都有已录制的演示运行；离线模式下，其它组合没有录制可回放，会运行失败。",
+    provReplay: "录制回放",
+    provLive: "次实时 LLM 调用",
+    provHelp: "相同的请求会从录制缓存中逐字节回放，而不是真正调用 API——所以相同设置的重复运行几秒内就能确定性地完成。改变任何设置（语言、记忆、步数）都会触发真实调用。",
+
+    // ——— 实时动态叙述 ———
+    agentPlanner: "规划器", agentAnalyst: "分析师", agentCritic: "审查员",
+    agentJudge: "裁判", agentSandbox: "沙箱", agentEval: "评估", agentProbe: "探针",
+    feedThink: "思考", feedSearchCorpus: "检索语料", feedPriceHistory: "查询行情",
+    feedCalc: "计算", feedFinish: "结束研究", feedToolResult: "返回结果",
+    feedValidationPass: "校验通过", feedValidationFail: "校验未通过",
+    feedAuditOk: "沙箱审计", feedAuditDenied: "拦截越界访问",
 
     // ——— 置信度 vs 结果（替代校准曲线）———
     confVsOutcome: "置信度 vs 实际结果",

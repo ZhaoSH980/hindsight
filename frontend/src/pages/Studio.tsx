@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../lib/api";
 import { useLang } from "../lib/i18n";
@@ -6,6 +6,7 @@ import { useRunStream } from "../lib/useRunStream";
 import { PriceChart } from "../components/PriceChart";
 import { ClaimCard } from "../components/ClaimCard";
 import { HelpTip } from "../components/HelpTip";
+import { ProvenanceBadge } from "../components/ProvenanceBadge";
 import type { Bar, CaseMeta, RunDetail, TraceEvent } from "../lib/types";
 
 const TYPE_ICON: Record<string, string> = {
@@ -24,25 +25,91 @@ const STEPS = [
   { index: "04", title: "step4Title", desc: "step4Desc" },
 ] as const;
 
+const AGENT_KEY = {
+  planner: "agentPlanner",
+  analyst: "agentAnalyst",
+  critic: "agentCritic",
+  judge: "agentJudge",
+  sandbox: "agentSandbox",
+  eval: "agentEval",
+  probe: "agentProbe",
+} as const;
+
+const TOOL_ACTION = {
+  corpus_search: "feedSearchCorpus",
+  price_history: "feedPriceHistory",
+  calc: "feedCalc",
+  finish_research: "feedFinish",
+} as const;
+
+/** The live feed narrates each raw trace event as a localized human sentence:
+ *  who did what, with the salient argument. Raw payloads live in the Trace
+ *  Explorer; this view is for humans watching the run. */
 function EventLine({ evt }: { evt: TraceEvent }) {
+  const { t } = useLang();
   const icon = TYPE_ICON[evt.type] ?? "•";
-  const summary = useMemo(() => {
-    const p = evt.payload ?? {};
-    if (evt.type === "tool_call") return String((p as { tool?: string }).tool ?? evt.type);
-    if (evt.type === "audit") return String((p as { note?: string }).note ?? evt.type);
-    return evt.type;
-  }, [evt]);
+  const p = (evt.payload ?? {}) as Record<string, unknown>;
+
+  let action = evt.type;
+  let detail = "";
+  let danger = false;
+
+  switch (evt.type) {
+    case "plan_step": {
+      action = t("feedThink");
+      detail = String(p.thought ?? "");
+      break;
+    }
+    case "tool_call": {
+      const key = TOOL_ACTION[String(p.tool) as keyof typeof TOOL_ACTION];
+      const args = (p.args ?? {}) as Record<string, unknown>;
+      action = key ? t(key) : String(p.tool ?? evt.type);
+      detail = String(
+        args.query ?? args.expression ?? args.reason ??
+        (args.lookback_days !== undefined ? `${args.lookback_days}d` : "")
+      );
+      break;
+    }
+    case "tool_result": {
+      const key = TOOL_ACTION[String(p.tool) as keyof typeof TOOL_ACTION];
+      action = `${key ? t(key) : String(p.tool ?? "")} · ${t("feedToolResult")}`;
+      detail = String(p.result ?? "");
+      break;
+    }
+    case "validation": {
+      const failed = p.ok === false || (Array.isArray(p.errors) && p.errors.length > 0);
+      action = failed ? t("feedValidationFail") : t("feedValidationPass");
+      detail = String(p.layer ?? "");
+      danger = failed;
+      break;
+    }
+    case "audit": {
+      const note = String(p.note ?? "");
+      const denied = note.toUpperCase().includes("DENIED");
+      action = denied ? t("feedAuditDenied") : t("feedAuditOk");
+      detail = denied ? `${String(p.tool ?? "")} ${note}` : String(p.tool ?? "");
+      danger = denied;
+      break;
+    }
+    case "score": {
+      action = t("scoreSummary");
+      break;
+    }
+  }
+
+  const agentKey = AGENT_KEY[evt.agent as keyof typeof AGENT_KEY];
   return (
-    <div className="animate-fade-up flex items-start gap-2 font-mono text-xs py-1 border-b border-line/60 last:border-0">
-      <span>{icon}</span>
-      <span className="text-muted w-16 shrink-0">{evt.agent}</span>
-      <span className="text-slate-300 truncate">{summary}</span>
+    <div className={`animate-fade-up flex items-start gap-2 font-mono text-xs py-1 border-b border-line/60 last:border-0 ${danger ? "bg-down/10" : ""}`}>
+      <span className="shrink-0">{icon}</span>
+      <span className="text-muted w-14 shrink-0">{agentKey ? t(agentKey) : evt.agent}</span>
+      <span className={`shrink-0 ${danger ? "text-down font-semibold" : "text-slate-200"}`}>{action}</span>
+      {detail && <span className="text-muted truncate">{detail}</span>}
     </div>
   );
 }
 
 export default function Studio() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const [cases, setCases] = useState<CaseMeta[]>([]);
   const [selected, setSelected] = useState<CaseMeta | null>(null);
   const [bars, setBars] = useState<Bar[]>([]);
@@ -52,9 +119,16 @@ export default function Studio() {
   const [starting, setStarting] = useState(false);
   const [detail, setDetail] = useState<RunDetail | null>(null);
   const [revealed, setRevealed] = useState(false);
+  // memo language follows the UI language until the user explicitly picks one
+  const [memoLang, setMemoLang] = useState<"en" | "zh">(lang);
+  const [memoLangTouched, setMemoLangTouched] = useState(false);
 
   const { events, status } = useRunStream(runId);
   const feedEndRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!memoLangTouched) setMemoLang(lang);
+  }, [lang, memoLangTouched]);
 
   useEffect(() => {
     api.cases().then(setCases).catch(() => setCases([]));
@@ -84,7 +158,7 @@ export default function Studio() {
     setDetail(null);
     setRevealed(false);
     try {
-      const { run_id } = await api.startRun(selected.case_id, memoryOn, maxSteps);
+      const { run_id } = await api.startRun(selected.case_id, memoryOn, maxSteps, memoLang);
       setRunId(run_id);
     } finally {
       setStarting(false);
@@ -149,8 +223,12 @@ export default function Studio() {
                 <span className="font-mono text-sm text-accent">{c.ticker}</span>
                 <span className="text-[10px] font-mono text-muted">{c.as_of}</span>
               </div>
-              <p className="text-sm text-slate-200 mt-1">{c.title}</p>
-              <p className="text-xs text-muted mt-1 line-clamp-2">{c.description}</p>
+              <p className="text-sm text-slate-200 mt-1">
+                {lang === "zh" && c.title_zh ? c.title_zh : c.title}
+              </p>
+              <p className="text-xs text-muted mt-1 line-clamp-2">
+                {lang === "zh" && c.description_zh ? c.description_zh : c.description}
+              </p>
               <div className="flex flex-wrap gap-1 mt-2">
                 {c.tags.map((tag) => (
                   <span key={tag} className="rounded bg-ink-700 px-1.5 py-0.5 text-[10px] text-muted">
@@ -194,6 +272,30 @@ export default function Studio() {
                 className="num w-16 rounded bg-ink-700 border border-line px-2 py-1 text-sm"
               />
             </label>
+            <div className="flex items-center gap-2 text-sm">
+              {t("researchLang")}
+              <div className="flex rounded-md border border-line overflow-hidden">
+                {(["en", "zh"] as const).map((l) => (
+                  <button
+                    key={l}
+                    type="button"
+                    disabled={running}
+                    onClick={() => {
+                      setMemoLang(l);
+                      setMemoLangTouched(true);
+                    }}
+                    className={`px-2.5 py-1 font-mono text-xs transition-colors ${
+                      memoLang === l
+                        ? "bg-accent/15 text-accent"
+                        : "text-muted hover:text-slate-200"
+                    }`}
+                  >
+                    {l === "en" ? "EN" : "中文"}
+                  </button>
+                ))}
+              </div>
+              <HelpTip text={t("researchLangHelp")} />
+            </div>
             <button
               type="button"
               onClick={startRun}
@@ -250,7 +352,7 @@ export default function Studio() {
           {isDone && detail && (
             <section className="flex flex-col gap-4">
               {runId && (
-                <div className="flex gap-3">
+                <div className="flex flex-wrap items-center gap-3">
                   <Link
                     to={`/runs/${runId}/trace`}
                     className="rounded border border-line px-2.5 py-1 font-mono text-[11px] text-accent transition hover:border-accent/60 hover:shadow-glow-sm"
@@ -263,6 +365,7 @@ export default function Studio() {
                   >
                     {t("viewEval")}
                   </Link>
+                  <ProvenanceBadge scores={detail.scores} />
                 </div>
               )}
               {detail.scores?.unverified && (

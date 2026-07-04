@@ -8,6 +8,7 @@ import { ConfidenceStrip } from "../components/ConfidenceStrip";
 import { AttributionBadge } from "../components/AttributionBadge";
 import { RunPicker } from "../components/RunPicker";
 import { HelpTip } from "../components/HelpTip";
+import { ProvenanceBadge } from "../components/ProvenanceBadge";
 import type { Claim, RunDetail } from "../lib/types";
 
 const TYPE_KEY: Record<Claim["type"], "typeDirection" | "typeMagnitude" | "typeVolatility"> = {
@@ -80,12 +81,15 @@ export default function EvalDashboard() {
           <div className="text-[10px] text-muted font-mono">{t("createdAt")}</div>
           <div className="text-xs text-slate-300 font-mono">{detail.created_at ?? "—"}</div>
         </div>
-        <Link
-          to={`/runs/${runId}/trace`}
-          className="ml-auto rounded border border-line px-2.5 py-1 font-mono text-xs text-accent transition-all duration-200 hover:border-accent/60 hover:shadow-glow-sm"
-        >
-          {t("viewTrace")}
-        </Link>
+        <div className="ml-auto flex items-center gap-3">
+          <ProvenanceBadge scores={detail.scores} />
+          <Link
+            to={`/runs/${runId}/trace`}
+            className="rounded border border-line px-2.5 py-1 font-mono text-xs text-accent transition-all duration-200 hover:border-accent/60 hover:shadow-glow-sm"
+          >
+            {t("viewTrace")}
+          </Link>
+        </div>
       </section>
       <p className="text-xs text-muted">{t("evalsSubtitle")}</p>
 

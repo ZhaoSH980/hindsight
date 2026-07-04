@@ -35,6 +35,10 @@ class RecordingLLMClient:
         if offline is None:
             offline = os.environ.get("HINDSIGHT_OFFLINE", "") == "1"
         self.offline = offline
+        # provenance counters: how many chats replayed from cache vs hit the
+        # real endpoint — surfaced per run so the UI can say WHY a run was instant
+        self.cache_hits = 0
+        self.cache_misses = 0
         self._conn = sqlite3.connect(db_path, check_same_thread=False)
         self._lock = threading.Lock()
         self._conn.execute(
@@ -71,12 +75,14 @@ class RecordingLLMClient:
                 "SELECT response_json FROM llm_calls WHERE hash = ?", (key,)
             ).fetchone()
         if row:
+            self.cache_hits += 1
             return json.loads(row[0])
         if self.offline:
             raise ReplayMissError(
                 f"offline replay miss for request hash {key}; "
                 "re-run in record mode to capture it"
             )
+        self.cache_misses += 1
         response = self._transport(request)
         with self._lock:
             self._conn.execute(

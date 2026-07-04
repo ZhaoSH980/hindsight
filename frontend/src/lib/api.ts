@@ -14,11 +14,11 @@ export const api = {
   trace: (runId: string) => get<TraceEvent[]>(`/api/runs/${runId}/trace`),
   suites: () => get<SuiteSummary[]>("/api/eval/suites"),
   suite: (suiteId: string) => get<SuiteStatus>(`/api/eval/suites/${suiteId}`),
-  startRun: async (caseId: string, memoryOn: boolean, maxSteps: number) => {
+  startRun: async (caseId: string, memoryOn: boolean, maxSteps: number, language: "en" | "zh" = "en") => {
     const r = await fetch("/api/runs", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ case_id: caseId, memory_on: memoryOn, max_steps: maxSteps }),
+      body: JSON.stringify({ case_id: caseId, memory_on: memoryOn, max_steps: maxSteps, language }),
     });
     if (!r.ok) throw new Error(`start run failed: ${r.status}`);
     return (await r.json()) as { run_id: string };

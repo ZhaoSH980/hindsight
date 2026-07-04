@@ -148,10 +148,26 @@ def experience_block(rendered_cards: str) -> str:
     )
 
 
-def analyst_user_prompt(meta: CaseMeta, evidence_text: str, market_summary: str) -> str:
+# Appended to the analyst prompt ONLY for language="zh". language="en" must
+# produce byte-identical prompts to the pre-language era so recorded replays
+# (the offline demo) keep hitting the cache.
+MEMO_LANGUAGE_LINES = {
+    "zh": (
+        "\nWrite every free-text field (background, bull_case, bear_case, conclusion, "
+        "and each claim's statement) in Simplified Chinese. Keep the JSON keys, enum "
+        'values ("direction"/"magnitude"/"volatility", "up"/"down", "above"/"below"), '
+        "ticker symbols, and chunk_ids exactly as specified, in English."
+    ),
+}
+
+
+def analyst_user_prompt(
+    meta: CaseMeta, evidence_text: str, market_summary: str, language: str = "en"
+) -> str:
     return (
         case_brief(meta)
         + f"\nMarket snapshot (price_history tool output):\n{market_summary}\n"
         + f"\nEvidence blocks (cite chunk_ids exactly as shown):\n{evidence_text}\n"
+        + MEMO_LANGUAGE_LINES.get(language, "")
         + "\nWrite the memo JSON now."
     )

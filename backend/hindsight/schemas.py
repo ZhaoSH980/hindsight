@@ -97,3 +97,6 @@ class RunConfig(BaseModel):
     memory_on: bool = False
     context_budget: int = Field(default=8000, gt=0)
     retrieval_top_k: int = Field(default=5, gt=0)
+    # memo output language. "en" MUST keep every prompt byte-identical to the
+    # pre-language era, or all recorded replays (offline demo) go stale.
+    language: Literal["en", "zh"] = "en"

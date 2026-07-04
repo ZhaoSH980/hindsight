@@ -79,6 +79,7 @@ class StartRunRequest(BaseModel):
     case_id: str
     memory_on: bool = False
     max_steps: int = 8
+    language: str = "en"
 
 
 def _default_executor(state):
@@ -123,7 +124,7 @@ def start_run(body: StartRunRequest, request: Request):
     if not (state.datasets / body.case_id / "meta.json").exists():
         raise HTTPException(status_code=404, detail=f"unknown case {body.case_id}")
     run_id = _new_run_id(body.case_id)
-    config = {"memory_on": body.memory_on, "max_steps": body.max_steps}
+    config = {"memory_on": body.memory_on, "max_steps": body.max_steps, "language": body.language}
     state.store.upsert_run(run_id, body.case_id, json.dumps(config), "queued")
     executor = state.run_executor or _default_executor(state)
     executor(body.case_id, config, run_id)

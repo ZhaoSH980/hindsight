@@ -362,3 +362,36 @@ calls by `created_at` into each run's time window:
 No backend code touched for this task; full suite re-confirmed green
 immediately before launch: `backend/.venv/Scripts/python -m pytest -q` ->
 **168 passed**.
+
+## 2026-07-05 — memo language option (prompt change, replay-safety audited)
+
+### What changed
+
+`analyst_user_prompt()` gained a `language` parameter (default `"en"`).
+For `language="zh"` one instruction block (`MEMO_LANGUAGE_LINES["zh"]`) is
+inserted immediately before the closing "Write the memo JSON now." line,
+telling the analyst to write all free-text fields in Simplified Chinese
+while keeping JSON keys, enum values, tickers, and chunk_ids in English
+(the structural validator depends on those staying English).
+
+### Replay-safety audit (the invariant that matters)
+
+`language="en"` produces BYTE-IDENTICAL prompts to the pre-language era —
+verified by `test_en_prompt_is_byte_identical_to_pre_language_era`, which
+reconstructs the legacy prompt string literally and compares equality, and
+by `test_zh_prompt_adds_only_the_language_line` (zh minus the block == en).
+`RunConfig.language` defaults to `"en"` and legacy `config_json` rows
+without the field still parse (covered by test). Net effect: every
+recording committed before this change keeps replaying byte-for-byte.
+
+### Why not localize planner thoughts too
+
+Planner queries feed BM25 over an English corpus — Chinese queries would
+degrade retrieval. Thoughts and queries stay English; the UI localizes the
+*framing* of the live feed instead, and the memo/claims (the human-facing
+artifact) follow the selected language.
+
+### Tests
+
+`pytest -q` -> **176 passed** (6 new: prompt byte-identity, zh insertion,
+config compat, provenance counters live/replay/offline).
