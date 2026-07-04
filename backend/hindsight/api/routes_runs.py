@@ -134,6 +134,11 @@ def start_run(body: StartRunRequest, request: Request):
 async def stream_run(ws: WebSocket, run_id: str):
     await ws.accept()
     state = ws.app.state.hindsight
+    rows = [r for r in state.store.get_runs() if r["run_id"] == run_id]
+    if not rows:
+        await ws.send_text(json.dumps({"type": "error", "payload": {"detail": f"unknown run {run_id}"}}))
+        await ws.close(code=4404)
+        return
     trace = state.runs_root / run_id / "trace.jsonl"
     sent = 0
     for _ in range(1500):  # ~10 min ceiling at 0.4s
@@ -145,6 +150,7 @@ async def stream_run(ws: WebSocket, run_id: str):
             sent = len(lines)
         rows = [r for r in state.store.get_runs() if r["run_id"] == run_id]
         status = rows[0]["status"] if rows else "unknown"
+        # invariant executors must uphold: terminal status is upserted AFTER the last trace line
         if status in ("done", "failed") :
             # drain any lines written between the read above and the status flip
             if trace.exists():

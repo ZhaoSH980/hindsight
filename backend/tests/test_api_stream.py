@@ -62,3 +62,12 @@ def test_post_run_unknown_case_404(api_root):
     app.state.hindsight.run_executor = fake_executor_factory(api_root)
     client = TestClient(app)
     assert client.post("/api/runs", json={"case_id": "nope"}).status_code == 404
+
+
+def test_ws_unknown_run_id_closes_immediately(api_root):
+    app = create_app(repo_root=api_root)
+    client = TestClient(app)
+    with client.websocket_connect("/api/runs/bogus_run/stream") as ws:
+        msg = json.loads(ws.receive_text())
+        assert msg["type"] == "error"
+        assert "bogus_run" in msg["payload"]["detail"]
