@@ -76,6 +76,43 @@ def test_prose_answer_ends_loop(tmp_path):
     assert [e.type for e in trace.events].count("plan_step") == 1
 
 
+def test_planner_multi_tool_call_in_one_turn(tmp_path):
+    multi = {
+        "choices": [
+            {
+                "message": {
+                    "role": "assistant",
+                    "content": None,
+                    "tool_calls": [
+                        {
+                            "id": "c1",
+                            "type": "function",
+                            "function": {
+                                "name": "corpus_search",
+                                "arguments": json.dumps({"query": "nvidia demand"}),
+                            },
+                        },
+                        {
+                            "id": "c2",
+                            "type": "function",
+                            "function": {
+                                "name": "finish_research",
+                                "arguments": json.dumps({"reason": "enough"}),
+                            },
+                        },
+                    ],
+                }
+            }
+        ],
+        "usage": {"prompt_tokens": 50, "completion_tokens": 10},
+    }
+    transport = ScriptedTransport([multi])
+    trace, ledger, transport = run(transport, tmp_path)
+    assert len(transport.requests) == 1  # finish in the same turn ends the loop
+    results = [e for e in trace.events if e.type == "tool_result"]
+    assert {r.payload["tool"] for r in results} == {"corpus_search", "finish_research"}
+
+
 def test_unparseable_arguments_survive(tmp_path):
     bad = tool_call_response("corpus_search", {})
     bad["choices"][0]["message"]["tool_calls"][0]["function"]["arguments"] = "{not json"
