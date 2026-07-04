@@ -18,7 +18,8 @@ def make_meta():
 def test_analyst_prompt_names_schema_essentials():
     text = prompts.ANALYST_SYSTEM
     for token in ('"claims"', '"direction"', '"magnitude"', '"volatility"',
-                  '"confidence"', '"evidence"', '"horizon_days"'):
+                  '"confidence"', '"evidence"', '"horizon_days"',
+                  "magnitude semantics:", "volatility semantics:"):
         assert token in text
 
 
