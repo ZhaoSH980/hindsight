@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-ink-900 text-slate-200 antialiased;
+}
+
+.panel {
+  @apply bg-ink-800 border border-line rounded-lg;
+}
+
+.num {
+  @apply font-mono tabular-nums;
+}
