@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <a href="backend/tests"><img src="https://img.shields.io/badge/tests-170%20passed-brightgreen" alt="tests"/></a>
+  <a href="backend/tests"><img src="https://img.shields.io/badge/tests-171%20passed-brightgreen" alt="tests"/></a>
   <a href="docs/demo-script.md"><img src="https://img.shields.io/badge/demo-offline%2C%20no%20API%20key-blue" alt="offline demo"/></a>
   <a href="docs/eval-log.md"><img src="https://img.shields.io/badge/built%20in-4%20days-8a2be2" alt="built in 4 days"/></a>
 </p>
@@ -141,7 +141,7 @@ hindsight/
 │   │   ├── llm/                # OpenAI-compatible client + record/replay
 │   │   ├── store/            # SQLite (runs, experiences, llm_calls)
 │   │   └── api/               # FastAPI app, routers, WebSocket stream, suite endpoints
-│   └── tests/                # 170 tests: sandbox leakage, grading, schema, replay, API
+│   └── tests/                # 171 tests: sandbox leakage, grading, schema, replay, API
 ├── frontend/                # Vite + React + TS + Tailwind + Recharts, dark quant theme
 │   └── src/pages/          # Studio, TraceExplorer, EvalDashboard, Leaderboard
 ├── datasets/                  # <case_id>/{meta.json, bars.json, docs/*.md} — frozen snapshots

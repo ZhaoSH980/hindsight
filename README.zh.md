@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <a href="backend/tests"><img src="https://img.shields.io/badge/tests-170%20passed-brightgreen" alt="tests"/></a>
+  <a href="backend/tests"><img src="https://img.shields.io/badge/tests-171%20passed-brightgreen" alt="tests"/></a>
   <a href="docs/demo-script.md"><img src="https://img.shields.io/badge/demo-%E7%A6%BB%E7%BA%BF%E6%BC%94%E7%A4%BA%EF%BC%8C%E6%97%A0%E9%9C%80%20API%20key-blue" alt="offline demo"/></a>
   <a href="docs/eval-log.md"><img src="https://img.shields.io/badge/built%20in-4%20days-8a2be2" alt="built in 4 days"/></a>
 </p>
@@ -141,7 +141,7 @@ hindsight/
 │   │   ├── llm/                # OpenAI 兼容客户端 + record/replay
 │   │   ├── store/            # SQLite（runs、experiences、llm_calls）
 │   │   └── api/               # FastAPI 应用、路由、WebSocket 流、套件端点
-│   └── tests/                # 170 个测试：沙箱泄漏、评分、schema、回放、API
+│   └── tests/                # 171 个测试：沙箱泄漏、评分、schema、回放、API
 ├── frontend/                # Vite + React + TS + Tailwind + Recharts，深色量化风主题
 │   └── src/pages/          # Studio、TraceExplorer、EvalDashboard、Leaderboard
 ├── datasets/                  # <case_id>/{meta.json, bars.json, docs/*.md} —— 冻结快照

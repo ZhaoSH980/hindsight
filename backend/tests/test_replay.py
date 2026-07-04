@@ -1,6 +1,31 @@
 import pytest
 
+from hindsight.llm.client import LLMConfig
 from hindsight.llm.recording import RecordingLLMClient, ReplayMissError
+
+
+def test_offline_config_needs_no_env(tmp_path, monkeypatch):
+    """README quick start: a fresh clone with no .env must still run offline.
+
+    HINDSIGHT_OFFLINE=1 -> from_env falls back to placeholders, and the model
+    default must match the committed recordings (replay keys embed the model).
+    Without the offline flag, missing vars must still fail fast.
+    """
+    for var in ("LLM_BASE_URL", "LLM_API_KEY", "LLM_MODEL"):
+        monkeypatch.delenv(var, raising=False)
+    missing_dotenv = tmp_path / "no-such.env"  # keep the repo's real .env out
+
+    monkeypatch.setenv("HINDSIGHT_OFFLINE", "1")
+    cfg = LLMConfig.from_env(dotenv_path=missing_dotenv)
+    assert cfg.model == "astron-code-latest"  # the model in llm_calls.sqlite
+
+    monkeypatch.setenv("LLM_MODEL", "my-model")  # explicit env still wins
+    assert LLMConfig.from_env(dotenv_path=missing_dotenv).model == "my-model"
+
+    monkeypatch.delenv("HINDSIGHT_OFFLINE")
+    monkeypatch.delenv("LLM_MODEL")
+    with pytest.raises(KeyError):
+        LLMConfig.from_env(dotenv_path=missing_dotenv)
 
 
 def fake_response(text: str) -> dict:

@@ -336,4 +336,4 @@ flag on either committed case specifically.
 | Byte-identical offline replay (`--offline` A/B) | `docs/eval-log.md` "D2 — case 3" → "Offline replay proof" |
 | Independent byte-identical replay corroboration (SMCI memory run = cache hits) | `docs/eval-log.md` "D4 — evaluation suite" → "Memory asymmetry check" / "CAVEAT confirmed" |
 | Prompt-as-code, mutual-consistency fix and critic rubric fix with before/after scores | `docs/eval-log.md` "D2 — first live NVDA run" (runs 1, 2b, 3) |
-| Full backend suite count (170 passed) | Verified locally: `cd backend && .venv/Scripts/python -m pytest -q` |
+| Full backend suite count (171 passed) | Verified locally: `cd backend && .venv/Scripts/python -m pytest -q` |
