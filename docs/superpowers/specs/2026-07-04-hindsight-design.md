@@ -180,7 +180,7 @@ SQLite 单文件（`hindsight.db`）+ 文件落盘双轨：
 - `GET /api/leaderboard?suite_id=` — 配置对比数据（配对差值）
 - `GET /api/experiences` — 经验库浏览
 
-事件流协议：`{type: plan_step|tool_call|tool_result|agent_output|validation|context_trim|score, agent, payload, tokens, ts}` ——前端实时渲染与事后回放共用同一协议。声明卡片"点击展开原文"由前端从 trace 的 `tool_result` payload 中按 chunk_id 解析证据全文，不设独立证据端点。
+事件流协议：`{type: plan_step|tool_call|tool_result|agent_output|validation|context_trim|score|audit, agent, payload, tokens, ts}` ——前端实时渲染与事后回放共用同一协议。`audit` 事件承载沙箱 `AuditEntry` 载荷（由 D2 编排器在每次沙箱访问后转发进 trace），供 Trace Explorer 的审计日志视图使用。声明卡片"点击展开原文"由前端从 trace 的 `tool_result` payload 中按 chunk_id 解析证据全文，不设独立证据端点。
 
 ## 6. 前端（React 18 + Vite + TS + Tailwind + Recharts）
 
