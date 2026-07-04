@@ -60,3 +60,55 @@ def test_calc_rejects_non_arithmetic(registry):
 def test_unknown_tool_raises(registry):
     with pytest.raises(KeyError):
         registry.call("nope", {})
+
+
+def test_safe_call_overflow_returns_error_json(registry):
+    from hindsight.tools.registry import safe_call
+
+    out = safe_call(registry, "calc", {"expression": "9**9**9"})
+    assert "OverflowError" in json.loads(out)["error"]
+
+
+def test_safe_call_recursion_returns_error_json(registry):
+    from hindsight.tools.registry import safe_call
+
+    out = safe_call(registry, "calc", {"expression": "+".join(["1"] * 5000)})
+    payload = json.loads(out)
+    assert "error" in payload or "value" in payload  # deep-parse limits vary; must not raise
+
+
+def test_safe_call_bad_kwargs_returns_error_json(registry):
+    from hindsight.tools.registry import safe_call
+
+    out = safe_call(registry, "corpus_search", {"query": "x", "evil": "y"})
+    assert "TypeError" in json.loads(out)["error"]
+
+
+def test_safe_call_unknown_tool_returns_error_json(registry):
+    from hindsight.tools.registry import safe_call
+
+    out = safe_call(registry, "nope", {})
+    assert "KeyError" in json.loads(out)["error"]
+
+
+def test_excerpt_truncation_marker(registry):
+    from datetime import date as _date
+
+    from hindsight.rag.bm25_retriever import BM25Retriever
+    from hindsight.sandbox.audit import AuditLog
+    from hindsight.sandbox.gate import SandboxedCorpus
+    from hindsight.tools.corpus_search import make_corpus_tool
+
+    long_chunk = Chunk(
+        chunk_id="long::000",
+        doc_id="long",
+        title="long doc",
+        published_at=_date(2025, 5, 1),
+        text="nvidia " * 200,  # 1400 chars > 700
+    )
+    corpus = SandboxedCorpus(BM25Retriever([long_chunk]), as_of=AS_OF, audit=AuditLog())
+    spec = make_corpus_tool(corpus)
+    payload = json.loads(spec.fn(query="nvidia"))
+    excerpt = payload["results"][0]["excerpt"]
+    assert excerpt.endswith("...")
+    assert len(excerpt) == 700 + 3

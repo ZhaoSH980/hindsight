@@ -1,6 +1,7 @@
 """Tool registry: named tools with JSON-schema params, OpenAI-spec export."""
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
 from typing import Any, Callable
 
@@ -35,3 +36,15 @@ class ToolRegistry:
 
     def call(self, name: str, args: dict[str, Any]) -> str:
         return self._tools[name].fn(**args)
+
+
+def safe_call(registry: ToolRegistry, name: str, args: dict[str, Any]) -> str:
+    """LLM-facing dispatch: any failure becomes error JSON the model can read.
+
+    The ReAct loop must never die on a malformed tool call (OverflowError,
+    RecursionError, TypeError from unexpected kwargs, unknown tool, ...).
+    """
+    try:
+        return registry.call(name, args)
+    except Exception as exc:  # noqa: BLE001 - deliberate catch-all at the LLM boundary
+        return json.dumps({"error": f"{type(exc).__name__}: {exc}"})

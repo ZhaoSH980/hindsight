@@ -20,7 +20,8 @@ def make_corpus_tool(corpus: SandboxedCorpus) -> ToolSpec:
                         "title": s.chunk.title,
                         "published_at": s.chunk.published_at.isoformat(),
                         "score": round(s.score, 3),
-                        "excerpt": s.chunk.text[:_EXCERPT_CHARS],
+                        "excerpt": s.chunk.text[:_EXCERPT_CHARS]
+                        + ("..." if len(s.chunk.text) > _EXCERPT_CHARS else ""),
                     }
                     for s in results
                 ]
