@@ -121,6 +121,12 @@ const dict = {
     wizCreated: "Case created",
     wizWindowOpen: "Note: the outcome window has not fully closed yet — some claims may grade as ungradable until it does.",
     wizNeedsOnline: "Creating a case fetches live market data — the server must run in online mode.",
+    edgarSection: "Import SEC filings (one click)",
+    edgarHint: "Filing dates are stamped by the SEC itself — the one automatable source whose dates cannot lie. News articles still need manual curation.",
+    edgarSearch: "Find filings", edgarSearching: "Searching EDGAR…",
+    edgarImport: "Import selected", edgarImporting: "Importing…",
+    edgarNone: "No filings found before the as-of date.",
+    edgarNeedTickerDate: "Enter ticker and as-of date first.",
 
     // ——— confidence vs outcome (calibration replacement) ———
     confVsOutcome: "Confidence vs. outcome",
@@ -249,6 +255,12 @@ const dict = {
     wizCreated: "案例已创建",
     wizWindowOpen: "注意：结果窗口尚未完全关闭——部分声明在窗口关闭前会评为不可评分。",
     wizNeedsOnline: "创建案例需要拉取实时行情——服务器必须以在线模式运行。",
+    edgarSection: "一键导入 SEC 申报文件",
+    edgarHint: "申报日期由 SEC 官方盖章——这是唯一日期不会说谎的可自动化来源。新闻类文档仍需人工甄别。",
+    edgarSearch: "查询申报文件", edgarSearching: "正在查询 EDGAR…",
+    edgarImport: "导入所选", edgarImporting: "导入中…",
+    edgarNone: "基准日之前没有找到申报文件。",
+    edgarNeedTickerDate: "请先填写股票代码和研究基准日。",
 
     // ——— 置信度 vs 结果（替代校准曲线）———
     confVsOutcome: "置信度 vs 实际结果",

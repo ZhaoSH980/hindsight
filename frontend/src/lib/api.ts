@@ -14,6 +14,58 @@ export const api = {
   trace: (runId: string) => get<TraceEvent[]>(`/api/runs/${runId}/trace`),
   suites: () => get<SuiteSummary[]>("/api/eval/suites"),
   suite: (suiteId: string) => get<SuiteStatus>(`/api/eval/suites/${suiteId}`),
+  edgarFilings: async (ticker: string, before: string) => {
+    const r = await fetch(
+      `/api/edgar/filings?ticker=${encodeURIComponent(ticker)}&before=${encodeURIComponent(before)}`
+    );
+    if (!r.ok) {
+      let detail = `${r.status}`;
+      try {
+        detail = String((await r.json()).detail ?? detail);
+      } catch {
+        // keep status code
+      }
+      throw new Error(detail);
+    }
+    return (await r.json()) as {
+      cik: number;
+      form: string;
+      filed: string;
+      accession: string;
+      document: string;
+    }[];
+  },
+  edgarFetch: async (payload: {
+    ticker: string;
+    cik: number;
+    accession: string;
+    document: string;
+    form: string;
+    filed: string;
+  }) => {
+    const r = await fetch("/api/edgar/fetch", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (!r.ok) {
+      let detail = `${r.status}`;
+      try {
+        detail = String((await r.json()).detail ?? detail);
+      } catch {
+        // keep status code
+      }
+      throw new Error(detail);
+    }
+    return (await r.json()) as {
+      title: string;
+      published_at: string;
+      source: string;
+      url: string;
+      doc_type: string;
+      text: string;
+    };
+  },
   createCase: async (payload: {
     ticker: string;
     as_of: string;
