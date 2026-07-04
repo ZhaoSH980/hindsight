@@ -164,3 +164,73 @@ the receipts for "evaluation as the primary mechanism to guide behavior".
     infra-retry (run2's 503 crash) — within the relaxed ~6-run budget.
   - Full test suite: 138 passed throughout, no regressions from either
     prompt edit.
+
+## D2 — case 3: SMCI falsification case (2026-07-04)
+
+Spec §4.1 case 3: a window where the contemporaneous bullish narrative was
+falsified within 20-40 trading days. SMCI (the plan's initial candidate)
+offered exactly such a window — no ticker swap needed.
+
+- **Window research (verified with real yfinance bars BEFORE authoring).**
+  Chose `as_of = 2025-02-26`, the day after SMCI filed its delayed FY2024
+  10-K (Feb 25, the Nasdaq deadline day) and regained listing compliance —
+  the crest of a month-long turnaround rally: $26.85 close on Feb 3 → $60.25
+  on Feb 19 → $51.11 on Feb 26 (+90% off the Feb 3 low). The prior 60-90 days'
+  public narrative was predominantly bullish: special-committee exoneration
+  (Dec 2), Nasdaq extension (Dec 6), Blackwell rack-scale full production
+  (Feb 5), the $40B FY26 revenue target (Feb 11), the on-time 10-K with no
+  restatements + clean BDO opinion on the financials (Feb 25), Loop Capital
+  reiterating Buy with a raised $70 target (Feb 26). Frozen-bar returns from
+  the $51.11 baseline falsify it at EVERY horizon: +1d -16.0%, +5d -23.9%,
+  +20d -27.5%, +30d -28.2%, +40d -29.9% (closing trough $29.51 on Apr 21,
+  -42%). Well past the ≥15% drawdown bar. The thesis also broke
+  fundamentally inside the calendar window: Apr 29 preliminary Q3 FY25 miss
+  ($4.5-4.6B vs $5.0-6.0B guided), May 6 final print (GM 9.6%, FY25 guide cut
+  again to $21.8-22.6B) — captured in the deliberate future doc.
+- **Corpus:** `datasets/smci_case3/` — meta.json (`outcome_window_days: 40`)
+  + 8 English docs: 7 dated ≤ as_of (Dec 6 saga recap; Feb 5 Blackwell/DLC
+  production; Feb 8 hyperscaler-capex macro; Feb 11 Q2 update with the $40B
+  target AND the buried FY25 cut; Feb 24 bear view on margins/dilution/
+  governance; Feb 26 10-K-filed news; Feb 26 bull thesis) and ONE deliberate
+  future doc (May 7) recording what actually happened. Every number was
+  verified against primary/secondary sources via web search during curation
+  (SMCI IR releases, SEC filings, CNBC/Bloomberg/CFO Dive coverage) and every
+  price/percentage against the frozen yfinance bars; pre-as_of docs state
+  facts only as known at their publication dates (one violation caught and
+  fixed during authoring: the Feb 11 doc originally cited the convert's
+  conversion price, which priced off the Feb 12 VWAP — moved to the Feb 24
+  doc). Bars frozen 2024-10-29 → 2025-05-30 (146 bars; 81 pre-as_of survive
+  → volatility grading has ≥41 rolling samples ≥ MIN_VOL_SAMPLES=20).
+- **Validation run (record mode):** `run_smci_case3_20260704_082812_622419`,
+  12 metered calls (probe 1, planner 6, analyst 2, critic 1, judge 2), passed
+  the critic on the second analyst attempt, `unverified: false`. Probe clean
+  ("I do not know what happened to SMCI... after February 26, 2025").
+- **Results:** 4 claims, 4/4 gradable, `n_hit=1`, `hit_rate=0.25`,
+  `brier=0.237`.
+  - c1 direction 20d "down ≥5%" conf 0.55 → **hit** (realized -27.53%)
+  - c2 magnitude 20d "[-15%, -5%]" conf 0.40 → **miss** (realized -27.53%,
+    below the band — the drawdown exceeded even the bearish scenario)
+  - c3 volatility 40d "above p70" conf 0.68 → **miss** (realized 0.0694 vs
+    p70 0.0867 — the pre-as_of history it is ranked against contains the
+    Oct-Dec 2024 saga (-33% and +31% days), so "turbulent by this stock's
+    own recent standards" was a high bar even in a -30% window)
+  - c4 direction 40d "up ≥10%" conf 0.35 → **miss** (realized -29.94%)
+- **Failure-shape verdict: HOLDS.** The narrative-following bullish claim
+  (c4, citing the bull-thesis/capex/Blackwell chunks) was falsified, which is
+  this case's purpose. Notably the agent did NOT swallow the bull narrative
+  whole: it weighted the bear-doc evidence (margins, governance, JPM's $23
+  target), led with a bearish direction claim that hit, and kept the bullish
+  claim at low confidence (0.35) — the acceptable-alternative shape the plan
+  anticipated ("if the agent is bearish and hits — also acceptable"). The
+  case still punishes narrative-following on two axes: the bullish claim
+  missed outright, and even the bearish magnitude band underestimated the
+  crash (c2 miss). Judge: `judge_failed=false`, grounding 1.0, reasoning 4,
+  retrieval 4; attributions c2/c4 `reasonable_but_wrong`, c3
+  `evidence_missing`.
+- **Offline replay proof:** `run_smci_case3_20260704_083129_603736` —
+  re-ran with `--offline`, completed without network, memo byte-identical to
+  the record-mode run.
+- **Tests:** `backend/tests/test_smci_case.py` (3 integrity tests, long-doc
+  test deliberately dropped — that is case 1's job) → full suite 141 passed.
+- Live-call budget: 1 record run (12 calls) + 1 free offline replay — well
+  under the ~6-run allowance; no 429 stalls observed.
