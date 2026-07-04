@@ -73,6 +73,13 @@ def main() -> None:
     pr.add_argument("--db", default="hindsight.db")
     pr.add_argument("--offline", action="store_true")
 
+    ps = sub.add_parser("suite", help="run an eval suite: cases x config presets")
+    ps.add_argument("--cases", required=True, help="comma-separated dataset dirs")
+    ps.add_argument("--presets", default="base,memory")
+    ps.add_argument("--runs-root", default="runs")
+    ps.add_argument("--db", default="hindsight.db")
+    ps.add_argument("--offline", action="store_true")
+
     args = ap.parse_args()
     if args.command == "dry-run":
         dry_run(_anchor(args.case), args.query)
@@ -100,6 +107,32 @@ def main() -> None:
         )
         print(f"run {result.run_id} -> {result.run_dir}")
         print(json.dumps(result.scores, indent=1, ensure_ascii=False))
+    if args.command == "suite":
+        from hindsight.eval.suite import PRESETS, run_suite
+        from hindsight.llm.client import LLMConfig, openai_transport
+        from hindsight.llm.recording import RecordingLLMClient
+        from hindsight.llm.retry import with_retry
+        from hindsight.store.db import Store
+
+        cfg = LLMConfig.from_env()
+        llm = RecordingLLMClient(
+            transport=with_retry(openai_transport(cfg)),
+            db_path=_anchor("llm_calls.sqlite"),
+            model=cfg.model,
+            offline=True if args.offline else None,
+        )
+        configs = {}
+        for name in args.presets.split(","):
+            preset = PRESETS[name.strip()]
+            configs[name.strip()] = preset.model_copy(update={"model": cfg.model})
+        suite_id = run_suite(
+            [_anchor(p.strip()) for p in args.cases.split(",")],
+            configs,
+            llm=llm,
+            store=Store(_anchor(args.db)),
+            runs_root=_anchor(args.runs_root),
+        )
+        print(f"suite {suite_id} complete -> {_anchor(args.runs_root) / 'suites' / (suite_id + '.json')}")
 
 
 if __name__ == "__main__":
