@@ -24,12 +24,22 @@ MAX_RETRIES = 2
 
 
 def strip_fence(text: str) -> str:
+    """Extract the JSON payload from an LLM reply: tolerates ```json fences
+    (with or without a space/language tag), prose before/after the fence,
+    and bare prose around a top-level JSON object."""
     text = text.strip()
-    if text.startswith("```"):
-        text = text.strip("`")
-        if text.startswith("json"):
-            text = text[4:]
-    return text.strip()
+    if "```" in text:
+        start = text.find("```")
+        rest = text[start + 3 :].lstrip()
+        if rest[:4].lower() == "json":
+            rest = rest[4:]
+        end = rest.find("```")
+        if end != -1:
+            rest = rest[:end]
+        return rest.strip()
+    if not text.startswith("{") and "{" in text and text.rfind("}") > text.find("{"):
+        return text[text.find("{") : text.rfind("}") + 1]
+    return text
 
 
 def structural_check(
@@ -78,8 +88,12 @@ def semantic_check(
         verdict = json.loads(text)
         return bool(verdict.get("ok")), [str(p) for p in verdict.get("problems", [])]
     except (json.JSONDecodeError, AttributeError):
-        # critic itself unparseable: inconclusive pass, do not consume a retry
-        return True, ["critic_unparseable"]
+        # fail CLOSED: an unreviewable verdict consumes a retry; repeated
+        # failures leave the memo marked unverified instead of silently passing
+        return False, [
+            "semantic review could not parse its verdict; regenerate the memo "
+            "JSON exactly (unchanged if you believe it is correct)"
+        ]
 
 
 def produce_memo(

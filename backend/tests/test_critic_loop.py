@@ -122,3 +122,43 @@ def test_markdown_fenced_json_is_accepted(tmp_path):
         [content_response(fenced), content_response(SEMANTIC_OK)], tmp_path
     )
     assert memo is not None and not unverified
+
+
+def test_unparseable_critic_consumes_retry_and_degrades(tmp_path):
+    memo, unverified, t = run_loop(
+        [
+            content_response(VALID_MEMO),
+            content_response("I think it looks fine!"),
+            content_response(VALID_MEMO),
+            content_response("still prose"),
+            content_response(VALID_MEMO),
+            content_response("nope"),
+        ],
+        tmp_path,
+    )
+    assert memo is not None
+    assert unverified is True  # gate fails CLOSED, not open
+
+
+def test_fence_with_space_and_prose_wrapping(tmp_path):
+    wrapped = (
+        "Sure! Here is the memo:\n``` json\n" + VALID_MEMO + "\n```\nHope this helps."
+    )
+    memo, unverified, t = run_loop(
+        [content_response(wrapped), content_response(SEMANTIC_OK)], tmp_path
+    )
+    assert memo is not None and not unverified
+
+
+def test_bare_prose_around_json(tmp_path):
+    wrapped = "Here is the JSON you asked for: " + VALID_MEMO + " Let me know!"
+    memo, unverified, t = run_loop(
+        [content_response(wrapped), content_response(SEMANTIC_OK)], tmp_path
+    )
+    assert memo is not None and not unverified
+
+
+def test_structural_exhaustion_returns_none(tmp_path):
+    memo, unverified, t = run_loop([content_response("{broken")] * 3, tmp_path)
+    assert memo is None
+    assert unverified is True
