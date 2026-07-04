@@ -1,4 +1,9 @@
-"""as_of information gates. All agent-facing data access goes through here."""
+"""as_of information gates. All agent-facing data access goes through here.
+
+The gates enforce date-based visibility of documents and bars. Semantic
+date-consistency of document *content* is a corpus-authoring concern
+(spec §4.1), not enforced here.
+"""
 from __future__ import annotations
 
 from datetime import date
@@ -13,8 +18,12 @@ from hindsight.sandbox.errors import LookaheadError
 class SandboxedCorpus:
     def __init__(self, retriever: BM25Retriever, as_of: date, audit: AuditLog):
         self._retriever = retriever
-        self.as_of = as_of
+        self._as_of = as_of
         self.audit = audit
+
+    @property
+    def as_of(self) -> date:
+        return self._as_of
 
     def search(self, query: str, top_k: int = 5) -> list[ScoredChunk]:
         results = self._retriever.search(query, as_of=self.as_of, top_k=top_k)
@@ -29,8 +38,12 @@ class SandboxedCorpus:
 class SandboxedMarketData:
     def __init__(self, source: MarketDataSource, as_of: date, audit: AuditLog):
         self._source = source
-        self.as_of = as_of
+        self._as_of = as_of
         self.audit = audit
+
+    @property
+    def as_of(self) -> date:
+        return self._as_of
 
     def get_bars(self, ticker: str, start: date, end: date) -> list[Bar]:
         if end > self.as_of:
@@ -42,7 +55,15 @@ class SandboxedMarketData:
             raise LookaheadError(
                 f"requested bars up to {end}, but as_of is {self.as_of}"
             )
-        bars = self._source.get_bars(ticker, start, end)
+        try:
+            bars = self._source.get_bars(ticker, start, end)
+        except Exception as exc:
+            self.audit.record(
+                tool="market_data",
+                params={"ticker": ticker, "start": str(start), "end": str(end)},
+                note=f"ERROR: {exc}",
+            )
+            raise
         self.audit.record(
             tool="market_data",
             params={"ticker": ticker, "start": str(start), "end": str(end)},

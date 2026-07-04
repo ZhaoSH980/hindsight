@@ -86,3 +86,18 @@ def test_denied_market_access_is_audited(market):
         market.get_bars("NVDA", date(2025, 5, 21), date(2025, 6, 30))
     entry = market.audit.entries[-1]
     assert entry.note == "DENIED lookahead"
+
+
+def test_source_error_is_audited(market):
+    with pytest.raises(ValueError):
+        market.get_bars("TSLA", date(2025, 5, 21), AS_OF)
+    entry = market.audit.entries[-1]
+    assert entry.tool == "market_data"
+    assert entry.note.startswith("ERROR:")
+
+
+def test_as_of_is_read_only(market, corpus):
+    with pytest.raises(AttributeError):
+        market.as_of = date(2099, 1, 1)
+    with pytest.raises(AttributeError):
+        corpus.as_of = date(2099, 1, 1)
