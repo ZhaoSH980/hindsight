@@ -3298,4 +3298,5 @@ git tag d2-complete
 - Same conventions as D1: subagent per task, spec-then-quality review, sanctioned deviations amend this plan file first.
 - Tasks 14-15 make real API calls (authorized; ≤3 live runs each). All other tasks are network-free.
 - Deviation rule for LLM-behavior surprises: if the real model's response SHAPE differs from the stubs (e.g. tool_calls field variants), fix the parsing layer, add a regression test mirroring the real shape, and note it in eval-log.
+- **D3 forward notes from T12/T13 reviews:** ① failed runs have no memo.md/claims.json — the UI must render "validation failed" gracefully, and leaderboard readers must `.get("outcome")` (failed runs' scores carry only status/cost/probe); ② the suite snapshot boundary is deliberately strict `<` (same-second card excluded = safe under-inclusion; do NOT "fix" to `<=`); ③ `load_case` runs twice per suite case (sort + run) — memoize only if cases grow.
 
