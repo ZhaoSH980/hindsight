@@ -56,8 +56,12 @@ def run_trace(run_id: str, request: Request):
     trace = state.runs_root / run_id / "trace.jsonl"
     if not trace.exists():
         return []
-    return [
-        json.loads(line)
-        for line in trace.read_text(encoding="utf-8").splitlines()
-        if line.strip()
-    ]
+    events = []
+    for line in trace.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        try:
+            events.append(json.loads(line))
+        except json.JSONDecodeError:
+            continue  # truncated tail from a crash-mid-write; drop, never 500
+    return events

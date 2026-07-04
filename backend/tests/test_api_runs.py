@@ -50,6 +50,17 @@ def test_trace_endpoint_parses_jsonl(api_root):
     assert events[0]["type"] == "plan_step"
 
 
+def test_trace_tolerates_truncated_tail(api_root):
+    seed_run(api_root, "r_crash", "failed", with_memo=False)
+    trace = api_root / "runs" / "r_crash" / "trace.jsonl"
+    with trace.open("a", encoding="utf-8", newline="\n") as f:
+        f.write('{"type": "tool_call", "agent": "planner", "payload": {}, "tokens": 0, "ts": "t"}\n')
+        f.write('{"type": "tool_result", "agent": "pla')  # truncated mid-write
+    client = TestClient(create_app(repo_root=api_root))
+    events = client.get("/api/runs/r_crash/trace").json()
+    assert [e["type"] for e in events] == ["plan_step", "tool_call"]
+
+
 def test_unknown_run_404(api_root):
     client = TestClient(create_app(repo_root=api_root))
     assert client.get("/api/runs/nope").status_code == 404
