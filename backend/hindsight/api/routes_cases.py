@@ -15,7 +15,10 @@ def list_cases(request: Request):
     cases = []
     if state.datasets.exists():
         for meta_path in sorted(state.datasets.glob("*/meta.json")):
-            meta = json.loads(meta_path.read_text(encoding="utf-8"))
+            try:
+                meta = json.loads(meta_path.read_text(encoding="utf-8"))
+            except (json.JSONDecodeError, OSError):
+                continue  # a stray/broken case dir must not 500 the whole list
             meta["n_docs"] = len(list((meta_path.parent / "docs").glob("*.md")))
             cases.append(meta)
     return cases

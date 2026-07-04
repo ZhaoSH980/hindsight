@@ -34,9 +34,30 @@ def create_app(repo_root: Path | None = None) -> FastAPI:
 
     dist = app.state.hindsight.root / "frontend" / "dist"
     if dist.exists():
+        from fastapi.responses import FileResponse
         from fastapi.staticfiles import StaticFiles
 
-        app.mount("/", StaticFiles(directory=dist, html=True), name="frontend")
+        assets_dir = dist / "assets"
+        if assets_dir.exists():
+            app.mount("/assets", StaticFiles(directory=assets_dir), name="frontend-assets")
+
+        @app.get("/{full_path:path}")
+        def spa_fallback(full_path: str):
+            # Registered AFTER every API router above, so /api/* and the
+            # websocket route still win; this only catches client-side
+            # routes (e.g. /runs/xyz) so a hard refresh doesn't 404.
+            candidate = (dist / full_path).resolve()
+            dist_resolved = dist.resolve()
+            if (
+                full_path
+                and candidate.is_file()
+                and candidate.is_relative_to(dist_resolved)
+            ):
+                # top-level static assets Vite copies from public/ (favicon,
+                # icons) that don't live under /assets
+                return FileResponse(candidate)
+            return FileResponse(dist / "index.html")
+
     return app
 
 
