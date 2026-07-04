@@ -1990,6 +1990,8 @@ def case_dir(tmp_path) -> Path:
 ```python
 from datetime import date
 
+import pytest
+
 from hindsight.data.cases import load_case
 
 
@@ -2011,6 +2013,12 @@ def test_dry_run_smoke(case_dir, capsys):
     assert "corpus_search" in out
     assert "DENIED lookahead" in out
     assert "post-earnings recap" not in out  # future doc never surfaces
+
+
+def test_load_case_requires_min_docs(case_dir):
+    (case_dir / "docs" / "future.md").unlink()
+    with pytest.raises(ValueError, match="needs >= 2 docs"):
+        load_case(case_dir)
 ```
 
 - [ ] **Step 3: Run tests to verify they fail**
@@ -2074,6 +2082,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from datetime import timedelta
 from pathlib import Path
 
@@ -2114,6 +2123,8 @@ def dry_run(case_dir: Path, query: str) -> None:
 
 
 def main() -> None:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")  # Windows console defaults to cp1252
     ap = argparse.ArgumentParser(prog="hindsight")
     sub = ap.add_subparsers(dest="command", required=True)
     p = sub.add_parser("dry-run", help="sandboxed retrieval + market data, no LLM")
