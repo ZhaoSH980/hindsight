@@ -102,6 +102,9 @@ const dict = {
     feedCalc: "calculates", feedFinish: "finishes research", feedToolResult: "returns",
     feedValidationPass: "validation passed", feedValidationFail: "validation failed",
     feedAuditOk: "sandbox check", feedAuditDenied: "BLOCKED lookahead",
+    flowTitle: "Execution flow", flowRewrite: "rewrite", flowSteps: "steps",
+    flowTools: "tool calls", flowChecks: "checks", flowScoring: "Scoring",
+    flowMemo: "Memo",
 
     // ——— case wizard ———
     newCase: "New case", newCaseTitle: "Create a case",
@@ -236,6 +239,9 @@ const dict = {
     feedCalc: "计算", feedFinish: "结束研究", feedToolResult: "返回结果",
     feedValidationPass: "校验通过", feedValidationFail: "校验未通过",
     feedAuditOk: "沙箱审计", feedAuditDenied: "拦截越界访问",
+    flowTitle: "执行流程", flowRewrite: "次重写", flowSteps: "步",
+    flowTools: "次工具", flowChecks: "次校验", flowScoring: "评分",
+    flowMemo: "备忘录",
 
     // ——— 案例向导 ———
     newCase: "新建案例", newCaseTitle: "创建一个案例",

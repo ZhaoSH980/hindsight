@@ -8,6 +8,7 @@ import { ClaimCard } from "../components/ClaimCard";
 import { HelpTip } from "../components/HelpTip";
 import { ProvenanceBadge } from "../components/ProvenanceBadge";
 import { CaseWizard } from "../components/CaseWizard";
+import { RunFlow } from "../components/RunFlow";
 import type { Bar, CaseMeta, RunDetail, TraceEvent } from "../lib/types";
 
 const TYPE_ICON: Record<string, string> = {
@@ -346,6 +347,9 @@ export default function Studio() {
           <section>
             <PriceChart bars={bars} asOf={selected.as_of} revealed={revealed} />
           </section>
+
+          {/* 4a. Dynamic pipeline diagram, driven by the same event stream */}
+          {runId && <RunFlow events={events} status={status} />}
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             {/* 4. Live feed */}
