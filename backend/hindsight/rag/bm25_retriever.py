@@ -30,6 +30,7 @@ class BM25Retriever:
         self._chunks = list(chunks)
 
     def search(self, query: str, as_of: date, top_k: int = 5) -> list[ScoredChunk]:
+        top_k = max(1, top_k)
         visible = [c for c in self._chunks if c.published_at <= as_of]
         if not visible:
             return []

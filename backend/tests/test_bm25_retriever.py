@@ -53,3 +53,16 @@ def test_top_k_respected():
     r = BM25Retriever(CORPUS)
     results = r.search("nvidia", as_of=date(2025, 5, 22), top_k=2)
     assert len(results) <= 2
+
+
+def test_non_positive_top_k_treated_as_one():
+    r = BM25Retriever(CORPUS)
+    assert len(r.search("nvidia", as_of=date(2025, 5, 22), top_k=0)) == 1
+    assert len(r.search("nvidia", as_of=date(2025, 5, 22), top_k=-3)) == 1
+
+
+def test_zero_score_fallback_returns_single_visible_chunk():
+    r = BM25Retriever(CORPUS[:2])
+    results = r.search("zzz qqq", as_of=date(2025, 5, 22), top_k=3)
+    assert len(results) == 1
+    assert results[0].chunk.published_at <= date(2025, 5, 22)
