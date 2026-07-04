@@ -12,6 +12,8 @@
 
 **Reference docs:** spec `docs/superpowers/specs/2026-07-04-hindsight-design.md` (§3.1-3.6, §4.3-4.4, §8, §10-D2); D1 plan carryover list (all 11 items are folded into Tasks 1, 2, 5, 9, 11, 12 below); probe results `docs/eval-log.md`.
 
+**Test-count drift note:** review fixes during execution added 2 extra tests beyond this plan's originals (Task 2: broken-`__str__` guard; Task 3: time-gate boundary). Every "Expected: N passed" from Task 4 onward therefore runs **+2** versus the number printed in the task body. Trust the arithmetic (previous suite total + this task's new tests), not the stale literal.
+
 **Sanctioned spec notes baked into this plan:** Researcher is deterministic (spec §4.2 amended); claims/trace live in run-dir files, no separate SQLite tables (spec §4.3 amended); `audit` trace events are forwarded sandbox `AuditEntry`s (spec §5 amended).
 
 **LLM call budget per live run:** probe 1 + planner ≤8 + analyst 1-3 + critic-semantic 1-3 + judge 1-2 ≈ 12-17 calls. xf-yun throttles bursts (429 code 11210 after ~4 rapid calls) — the retry transport (Task 1) absorbs this; the recording layer makes re-runs free.
