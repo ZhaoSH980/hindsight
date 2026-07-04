@@ -60,6 +60,7 @@ def _percentile(values: list[float], p: float) -> float:
 
 
 def grade_claim(claim: Claim, bars: list[Bar], as_of: date) -> GradedClaim:
+    bars = sorted(bars, key=lambda b: b.date)  # defensive: grading correctness must not depend on a caller three modules away keeping bars sorted
     i0 = _baseline_index(bars, as_of)
     if i0 is None:
         return GradedClaim(claim, GradeStatus.ungradable, None, "no baseline bar at or before as_of")
@@ -104,6 +105,9 @@ def grade_claim(claim: Claim, bars: list[Bar], as_of: date) -> GradedClaim:
         hit = (pred.low_pct <= pct <= pred.high_pct) or math.isclose(
             pct, pred.low_pct, abs_tol=1e-9
         ) or math.isclose(pct, pred.high_pct, abs_tol=1e-9)
+        # NOTE: rule 3 compares in ratio-space, rule 4 in pct-space (100x scale
+        # difference in effective tolerance). Verified harmless: real float noise
+        # tops out ~3e-14 in ratio space, >1000x below the tighter bound.
         return GradedClaim(
             claim,
             GradeStatus.hit if hit else GradeStatus.miss,

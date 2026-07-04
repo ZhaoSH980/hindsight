@@ -144,3 +144,28 @@ def test_aggregate_brier_and_calibration():
     buckets = {(b["lo"], b["hi"]): b for b in agg["calibration"]}
     assert buckets[(0.8, 1.0)]["n"] == 2
     assert math.isclose(buckets[(0.8, 1.0)]["hit_rate"], 0.5)
+
+
+def test_shuffled_bars_grade_identically():
+    import random as _random
+
+    bars = make_bars([100, 100, 100, 102, 105.0])
+    shuffled = bars[:]
+    # seed 0, not 3: seed 3's permutation [0,2,3,4,1] happens to reproduce the
+    # correct grade even without sorting (baseline still hits a 100-close and
+    # horizon+2 still lands on 105.0); seed 0's [2,1,0,4,3] genuinely diverges
+    # (miss/2.0 vs hit/5.0), so only seed 0 actually locks the defensive sort.
+    _random.Random(0).shuffle(shuffled)
+    a = grade_claim(direction_claim(threshold=5.0, horizon=2), bars, AS_OF)
+    b = grade_claim(direction_claim(threshold=5.0, horizon=2), shuffled, AS_OF)
+    assert (a.status, a.realized_return_pct) == (b.status, b.realized_return_pct)
+
+
+def test_percentile_linear_interpolation():
+    from hindsight.eval.outcome_grader import _percentile
+
+    values = [4.0, 1.0, 3.0, 2.0]
+    assert _percentile(values, 0) == 1.0
+    assert _percentile(values, 100) == 4.0
+    assert _percentile(values, 50) == 2.5
+    assert _percentile(values, 25) == 1.75
