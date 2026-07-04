@@ -591,6 +591,8 @@ git commit -m "feat(d2): sqlite store for runs and time-gated experiences"
 
 All prompts are English (spec §4.2). They are versioned code: every later edit is an eval-log entry (spec §3.4 留痕).
 
+> Post-plan prompt iterations (repo is authoritative; see docs/eval-log.md "D2 — first live NVDA run" for before/after evidence): ① ANALYST_SYSTEM gained magnitude/volatility semantics rules + a magnitude example (T4 review) and a MUTUAL CONSISTENCY rule for same-horizon claims (T14 live iteration); ② CRITIC_SEMANTIC_SYSTEM was clarified so volatility claims count as mechanically checkable and thresholds need only be motivated, not derived (T14 live iteration).
+
 **Files:**
 - Create: `backend/hindsight/agents/__init__.py` (empty)
 - Create: `backend/hindsight/agents/prompts.py`
