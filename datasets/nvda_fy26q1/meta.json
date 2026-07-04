@@ -1,0 +1,9 @@
+{
+  "case_id": "nvda_fy26q1",
+  "title": "NVDA into FY2026-Q1 earnings (May 2025)",
+  "ticker": "NVDA",
+  "as_of": "2025-05-22",
+  "outcome_window_days": 40,
+  "description": "Research NVDA days before the May 28, 2025 FY26Q1 report: AI capex narrative running hot, H20 China export-control overhang, Blackwell ramp underway.",
+  "tags": ["earnings", "semis", "ai-capex"]
+}
