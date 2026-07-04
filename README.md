@@ -84,6 +84,8 @@ Plus a **contamination probe** per case: a bare prompt asking the model directly
 
 **Read these honestly**: each case above is **one run, four claims** — nowhere near a statistically meaningful sample. These numbers are receipts that the grading pipeline computes what it says it computes and that the pipeline *can* expose an overconfident, narrative-following agent (the SMCI case) — not a claim that the agent is "25% accurate" in any generalizable sense. Statistical significance is a stated non-goal at this scale; `EvalSuite` is built to extend to more cases, and the case-count-vs-confidence tradeoff is discussed in `docs/design-decisions.md`.
 
+See `docs/evaluation-methodology.md` for the full grading semantics, statistical limitations, anti-lookahead channels, judge validity, and reproducibility evidence, and `docs/judge-meta-eval.md` for the judge-vs-human agreement receipts.
+
 ## Repo map
 
 ```
