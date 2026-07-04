@@ -97,3 +97,10 @@ def test_runconfig_defaults():
 
 def test_grade_status_values():
     assert {s.value for s in GradeStatus} == {"hit", "miss", "ungradable"}
+
+
+def test_unknown_fields_rejected():
+    with pytest.raises(ValidationError):
+        make_claim(extra_field="nope")
+    with pytest.raises(ValidationError):
+        make_claim(prediction={"direction": "up", "threshold_pct": 5.0, "low_pct": -9})

@@ -4,15 +4,17 @@ from __future__ import annotations
 from enum import Enum
 from typing import Literal, Union
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
+# NOTE: use .value for string interpolation / SQL binding — str() yields "ClassName.member" on Python 3.11+.
 class ClaimType(str, Enum):
     direction = "direction"
     magnitude = "magnitude"
     volatility = "volatility"
 
 
+# NOTE: use .value for string interpolation / SQL binding — str() yields "ClassName.member" on Python 3.11+.
 class GradeStatus(str, Enum):
     hit = "hit"
     miss = "miss"
@@ -20,11 +22,15 @@ class GradeStatus(str, Enum):
 
 
 class DirectionPrediction(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     direction: Literal["up", "down"]
     threshold_pct: float = Field(gt=0)
 
 
 class MagnitudePrediction(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     low_pct: float
     high_pct: float
 
@@ -36,6 +42,8 @@ class MagnitudePrediction(BaseModel):
 
 
 class VolatilityPrediction(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     relation: Literal["above", "below"]
     percentile: float = Field(ge=0, le=100)
 
@@ -50,6 +58,8 @@ _PREDICTION_FOR_TYPE = {
 
 
 class Claim(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     claim_id: str
     statement: str
     type: ClaimType
@@ -71,6 +81,8 @@ class Claim(BaseModel):
 
 
 class Memo(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     background: str
     bull_case: str
     bear_case: str
