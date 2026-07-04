@@ -40,3 +40,14 @@ def test_headings_start_new_chunks():
 def test_no_empty_chunks():
     chunks = chunk_document(make_doc("a\n\n\n\n\n\nb"))
     assert all(c.text.strip() for c in chunks)
+
+
+def test_oversized_blank_line_free_paragraph_is_hard_split():
+    table = "\n".join(f"row {i} | val {i} | more {i}" for i in range(800))
+    chunks = chunk_document(make_doc(table), target_chars=1600)
+    assert len(chunks) >= 8
+    assert all(len(c.text) <= 2 * 1600 for c in chunks)
+
+
+def test_whitespace_only_doc_yields_no_chunks():
+    assert chunk_document(make_doc("   \n\n   ")) == []
