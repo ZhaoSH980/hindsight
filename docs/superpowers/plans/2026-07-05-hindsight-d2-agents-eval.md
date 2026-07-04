@@ -918,8 +918,12 @@ class EvidenceManager:
         return {cid: s.chunk for cid, s in self._best.items()}
 
     def bundle(self, trace: TraceRecorder | None = None) -> list[Chunk]:
-        """Highest-score-first selection under the token budget (spec §3.6:
-        drop lowest-relevance first). Every dropped chunk emits context_trim."""
+        """Greedy best-fit packing in descending score order: each chunk is kept
+        iff it fits the remaining budget. A lower-scored small chunk can survive
+        where a pricier higher-scored one didn't (score-density beats strict
+        rank truncation). Caveat: a single oversized top-ranked chunk can
+        consume the whole budget and starve smaller lower-ranked chunks.
+        Every dropped chunk emits a context_trim event."""
         ranked = sorted(self._best.values(), key=lambda s: s.score, reverse=True)
         kept: list[Chunk] = []
         used = 0
