@@ -1,7 +1,7 @@
 """Load markdown documents with YAML frontmatter into Document records."""
 from __future__ import annotations
 
-from datetime import date, datetime
+from datetime import date, datetime, time
 from pathlib import Path
 
 import frontmatter
@@ -11,6 +11,10 @@ from hindsight.data.models import Document
 
 def _as_date(value: object, doc_path: Path) -> date:
     if isinstance(value, datetime):
+        if value.tzinfo is not None or value.time() != time.min:
+            raise ValueError(
+                f"{doc_path.name}: 'published_at' must be a plain date, got timestamp {value!r}"
+            )
         return value.date()
     if isinstance(value, date):
         return value

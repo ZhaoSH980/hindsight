@@ -52,3 +52,33 @@ def test_documents_sorted_by_id(tmp_path):
     write(tmp_path, "a.md", DOC)
     docs = load_documents(tmp_path)
     assert [d.doc_id for d in docs] == ["a", "b"]
+
+
+def test_time_bearing_published_at_rejected(tmp_path):
+    doc = DOC.replace("published_at: 2025-02-27", "published_at: 2025-02-27 23:30:00")
+    write(tmp_path, "t.md", doc)
+    with pytest.raises(ValueError, match="published_at"):
+        load_documents(tmp_path)
+
+
+def test_midnight_datetime_published_at_accepted(tmp_path):
+    doc = DOC.replace("published_at: 2025-02-27", "published_at: 2025-02-27 00:00:00")
+    write(tmp_path, "m.md", doc)
+    docs = load_documents(tmp_path)
+    assert docs[0].published_at == date(2025, 2, 27)
+
+
+def test_case_meta_rejects_unknown_keys():
+    from pydantic import ValidationError
+
+    from hindsight.data.models import CaseMeta
+
+    with pytest.raises(ValidationError):
+        CaseMeta(
+            case_id="c",
+            title="t",
+            ticker="T",
+            as_of=date(2025, 1, 1),
+            outcome_window_days=10,
+            decription="typo",
+        )

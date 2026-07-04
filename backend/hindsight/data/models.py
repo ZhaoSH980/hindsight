@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from datetime import date
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class Bar(BaseModel):
@@ -18,6 +18,8 @@ class Bar(BaseModel):
 
 
 class CaseMeta(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     case_id: str
     title: str
     ticker: str
