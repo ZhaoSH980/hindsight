@@ -1,0 +1,86 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "NVDA closes at least 3% above the as-of price ($132.64) on the 5th trading day after May 22, capturing the earnings reaction",
+  "type": "direction",
+  "ticker": "NVDA",
+  "horizon_days": 5,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 3.0
+  },
+  "confidence": 0.52,
+  "evidence": [
+   "hyperscaler_capex::000",
+   "hyperscaler_capex::001",
+   "blackwell_ramp::001",
+   "analyst_preview::000"
+  ],
+  "status": "miss",
+  "realized_return_pct": 1.7315382877462815,
+  "detail": "horizon-end return +1.73% vs up 3.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "NVDA's 5-trading-day return lands between +3% and +12%, consistent with a positive but not extreme earnings reaction",
+  "type": "magnitude",
+  "ticker": "NVDA",
+  "horizon_days": 5,
+  "prediction": {
+   "low_pct": 3.0,
+   "high_pct": 12.0
+  },
+  "confidence": 0.4,
+  "evidence": [
+   "hyperscaler_capex::000",
+   "blackwell_ramp::001",
+   "analyst_preview::000",
+   "q4_fy25_recap::001"
+  ],
+  "status": "miss",
+  "realized_return_pct": 1.7315382877462815,
+  "detail": "horizon-end return +1.73% vs [3.0, 12.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "NVDA's realized daily log-return volatility over the 5 trading days following the as-of date falls above the 70th percentile of same-length rolling windows from the prior 252 days, reflecting elevated earnings-event turbulence",
+  "type": "volatility",
+  "ticker": "NVDA",
+  "horizon_days": 5,
+  "prediction": {
+   "relation": "above",
+   "percentile": 70.0
+  },
+  "confidence": 0.68,
+  "evidence": [
+   "analyst_preview::000",
+   "h20_export_restriction::000",
+   "h20_export_restriction::001",
+   "ai_capex_skeptic::001"
+  ],
+  "status": "miss",
+  "realized_return_pct": 1.7315382877462815,
+  "detail": "realized vol 0.02449 vs p70 0.03657 (above)"
+ },
+ {
+  "claim_id": "c4",
+  "statement": "NVDA closes at least 5% above the as-of price on the 20th trading day after May 22, reflecting sustained post-earnings strength as Blackwell demand and hyperscaler capex visibility dominate",
+  "type": "direction",
+  "ticker": "NVDA",
+  "horizon_days": 20,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 5.0
+  },
+  "confidence": 0.45,
+  "evidence": [
+   "hyperscaler_capex::001",
+   "blackwell_ramp::000",
+   "blackwell_ramp::001",
+   "analyst_preview::000"
+  ],
+  "status": "hit",
+  "realized_return_pct": 8.54476102742401,
+  "detail": "horizon-end return +8.54% vs up 5.0%"
+ }
+]

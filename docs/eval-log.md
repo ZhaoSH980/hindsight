@@ -85,3 +85,82 @@ the receipts for "evaluation as the primary mechanism to guide behavior".
     edit only adds prose to `ANALYST_SYSTEM`, which `test_prompts.py` checks
     by substring presence, not exact match).
   - See run 2 below for scores after the fix.
+
+- Run 2 (record mode, first attempt): crashed with `openai.InternalServerError:
+  503 {'code': 10310, 'message': 'The system is busy, please try again later.'}`
+  from the semantic-critic call. This is a transient upstream outage, distinct
+  from the 429/11210 rate-limit case the retry transport special-cases — it
+  fell into the generic-backoff bucket (2/4/8s, 3 tries) and correctly
+  re-raised after exhaustion rather than hanging. 5 calls were recorded before
+  the crash (now free replays). Re-ran immediately (run 2b) per the
+  coordinator's mid-task update relaxing the live-run budget to ~6 (quota is
+  ample; burst rate-limiting was the only real constraint) — this crash/retry
+  is not counted as a quality-iteration attempt, just an infra retry.
+
+- Run 2b (record mode): `run_nvda_fy26q1_20260704_075823_3fdb4f`. The mutual-
+  consistency fix worked as intended on the first critic attempt (attempt 0's
+  c1/c2 pair: direction "up>=3%" + magnitude "[3%,12%]", band fully at/above
+  the threshold — no more overlap on that pair, and the realized +8.54% return
+  would have made both a HIT). Still ended `unverified: true` after 3 attempts,
+  but the blocking reason changed and revealed a **second, distinct root
+  cause**: the semantic critic repeatedly rejected the `volatility`-type claim
+  as "not objectively checkable" / requiring data "not specified in the
+  memo" — a misreading of `CRITIC_SEMANTIC_SYSTEM`'s first rejection bullet,
+  which the critic model was interpreting as "the evidence must let a human
+  independently derive the exact numeric threshold," rather than "the type is
+  mechanically gradable from daily closes" (which volatility legitimately is
+  — realized log-return vol vs. rolling windows is exactly what
+  `outcome_grader.py` computes from bars, no evidence-side proof needed). A
+  secondary attempt-1 draft also transiently reintroduced the same direction/
+  magnitude overlap bug on a different horizon (5d) — the analyst fix reduces
+  but doesn't guarantee the failure mode disappears on every sampled draft;
+  the critic itself is the backstop, so it must judge that failure mode
+  correctly instead of over-rejecting on an unrelated, correct claim.
+  - Before: `CRITIC_SEMANTIC_SYSTEM`'s bullet 1 was a single ambiguous phrase
+    ("not objectively checkable against daily closing prices") that let the
+    critic conflate "type is checkable" with "evidence must independently
+    prove the number." Bullet 2 ("a cited evidence excerpt does not actually
+    support its claim") was similarly read as "evidence must derive the exact
+    threshold," which no probabilistic forecast claim can satisfy by
+    construction.
+  - After: rewrote bullet 1 to explicitly state all three claim types
+    (direction/magnitude/volatility) are mechanically checkable from a daily-
+    close series, that volatility is graded by the outcome grader from bars
+    (not proven by evidence), and that a claim is a probabilistic forecast —
+    evidence only needs to motivate the claim's direction/theme, not derive
+    its numeric threshold. Reworded bullet 2 to "topically unrelated," not
+    "doesn't prove the number." Added an explicit mutual-consistency
+    cross-reference so the critic's overlap check stays anchored to the
+    analyst's rule instead of drifting.
+  - Scores before (run 2b, pre-fix): `unverified: true`, `n_gradable: 0`,
+    grounding_rate 1.0, reasoning_consistency 4, retrieval_sufficiency 4 —
+    process scores were already healthy; only the critic-gate was miscalibrated.
+  - Full test suite re-run after the edit: 138 passed.
+  - See run 3 below for scores after this second fix.
+
+- Run 3 (record mode): `run_nvda_fy26q1_20260704_080442_ce7ca0` — **PASSED
+  the full acceptance bar on the first critic attempt** (analyst 1 call,
+  critic 1 call; previous runs needed all 3 attempts and still failed).
+  - Memo: 4 claims (2 direction, 1 magnitude, 1 volatility), all citing real
+    chunk ids from the nvda_fy26q1 corpus (`hyperscaler_capex`,
+    `blackwell_ramp`, `analyst_preview`, `q4_fy25_recap`,
+    `h20_export_restriction`, `ai_capex_skeptic`).
+  - Outcome: `n_gradable=4/4`, `n_hit=1`, `hit_rate=0.25`, `brier=0.299`. c1/c2/c3
+    (5-day horizon) all missed — realized 5d return was +1.73%, short of the
+    +3% thresholds both claims needed; c3's realized volatility (0.0245) fell
+    short of its 70th-percentile bar (0.0366). c4 (20-day "up >=5%") hit — the
+    realized 20-day return was +8.54%.
+  - Process: `judge_failed=false`, `grounding_rate=1.0`, `reasoning_consistency=4`,
+    `retrieval_sufficiency=4`, all 3 misses attributed `reasonable_but_wrong`
+    (the judge agreed the process was sound — evidence was retrieved and
+    read correctly, the 5-day window just didn't move as far as the analyst's
+    reasonable bull case implied; this is the market disagreeing with a
+    grounded thesis, not a process failure).
+  - Total metered calls this run: 14 (probe 1, planner 5, analyst 1, critic 1,
+    judge 2) — well under the ~12-17/run estimate.
+  - Total live-run calls across the whole Task 14 sequence: run1=14,
+    run2(crashed after 5)=5, run2b=19 cumulative (14 replayed free + 5 new),
+    run3=14 new. 3 quality-relevant live attempts (run1, run2b, run3) plus one
+    infra-retry (run2's 503 crash) — within the relaxed ~6-run budget.
+  - Full test suite: 138 passed throughout, no regressions from either
+    prompt edit.

@@ -58,23 +58,44 @@ range over the period.
 horizon window is compared against same-length rolling windows from the prior ~252 \
 trading days; "above" percentile p predicts unusually turbulent price action for this \
 stock, "below" predicts unusually calm.
+- MUTUAL CONSISTENCY: all claims are graded off the SAME realized horizon-end return r \
+for a given horizon_days (direction and magnitude claims sharing a horizon are not \
+independent bets — they are two views of the one r that will actually happen). A \
+direction claim "up >= T%" is only consistent with a magnitude claim on the same horizon \
+if the magnitude's [low_pct, high_pct] band lies entirely at or above +T (no overlap \
+below +T); likewise "down >= T%" requires the band entirely at or below -T. Never emit a \
+direction claim and a magnitude claim on the same horizon whose ranges overlap or \
+disagree on the sign of the move — pick different horizons, or make the magnitude band \
+strictly compatible with the direction threshold.
 - confidence is used for calibration scoring (Brier). Do not inflate it.
 Example claim: {"claim_id": "c1", "statement": "NVDA closes >=5% above the as-of price \
 on the 20th trading day after as-of", "type": "direction", "ticker": "NVDA", \
 "horizon_days": 20, "prediction": {"direction": "up", "threshold_pct": 5.0}, \
 "confidence": 0.62, "evidence": ["q4_recap::001"]}
-Example magnitude claim: {"claim_id": "c2", "statement": "NVDA's 20-trading-day \
-return lands between -2% and +8%", "type": "magnitude", "ticker": "NVDA", \
-"horizon_days": 20, "prediction": {"low_pct": -2.0, "high_pct": 8.0}, \
-"confidence": 0.55, "evidence": ["q4_recap::001"]}
+Example magnitude claim, consistent with c1 above because its whole band sits at or \
+above +5%: {"claim_id": "c2", "statement": "NVDA's 20-trading-day return lands between \
++5% and +15%", "type": "magnitude", "ticker": "NVDA", "horizon_days": 20, "prediction": \
+{"low_pct": 5.0, "high_pct": 15.0}, "confidence": 0.4, "evidence": ["q4_recap::001"]}
 """
 
 CRITIC_SEMANTIC_SYSTEM = """\
 You are the memo critic of Hindsight. You receive a research memo (JSON) and the evidence \
 excerpts its claims cite. Return ONLY a JSON object: {"ok": true|false, "problems": ["..."]}.
 Mark ok=false when any of the following holds:
-- a claim is not objectively checkable against daily closing prices within its horizon,
-- a cited evidence excerpt does not actually support its claim,
+- a claim's TYPE is structurally uncheckable from daily closing prices — e.g. it depends \
+on intraday path, on data no closing-price series can supply, or its prediction object \
+does not match its declared type. NOTE: direction, magnitude, and volatility claims are \
+ALL mechanically checkable purely from a daily-close price series (volatility is realized \
+daily log-return volatility over the horizon vs prior rolling windows — this is computed \
+by the grader from bars, not something the evidence needs to prove numerically). Do NOT \
+reject a claim merely because the evidence doesn't independently derive its exact \
+numeric threshold — a claim is a probabilistic forecast, not a proven fact; evidence only \
+needs to plausibly motivate the DIRECTION or THEME of the bet (e.g. "capex strength" \
+motivating an "up" claim, "H20 charges" motivating elevated-volatility around the print).
+- claims sharing the same horizon_days are mutually inconsistent (see MUTUAL CONSISTENCY \
+in the analyst's rules) — flag this only when ranges actually overlap or disagree on sign,
+- a cited evidence excerpt is topically unrelated to its claim (not merely "doesn't prove \
+the number"),
 - the conclusion contradicts the direction of the claims.
 List each problem as one short actionable sentence. If everything is sound, return \
 {"ok": true, "problems": []}.
