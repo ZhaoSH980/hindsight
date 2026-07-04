@@ -1859,8 +1859,22 @@ def grade_claim(claim: Claim, bars: list[Bar], as_of: date) -> GradedClaim:
     pct = r * 100
     pred = claim.prediction
     if isinstance(pred, DirectionPrediction):
-        # rule 3: at-horizon-end, >= for up, <= -threshold for down
-        hit = r >= pred.threshold_pct / 100 if pred.direction == "up" else r <= -pred.threshold_pct / 100
+        # rule 3: at-horizon-end, >= for up, <= -threshold for down.
+        # Boundary comparisons use math.isclose first: pct is derived from
+        # bars[hi].close / p0 - 1, and binary floats mean an exact-percent
+        # baseline (e.g. a 108.0/100 close) can land a few ULPs off the
+        # threshold (8.000000000000007 instead of 8.0). Without the
+        # tolerance, a claim landing exactly on its stated threshold is
+        # spuriously graded a miss depending on rounding direction, which
+        # would contradict the ">=" / closed-interval semantics rule 3/4
+        # promise. abs_tol=1e-9 pp is far below any real price-derived
+        # difference, so it never masks a genuine miss.
+        if pred.direction == "up":
+            threshold = pred.threshold_pct / 100
+            hit = r >= threshold or math.isclose(r, threshold, abs_tol=1e-9)
+        else:
+            threshold = -pred.threshold_pct / 100
+            hit = r <= threshold or math.isclose(r, threshold, abs_tol=1e-9)
         return GradedClaim(
             claim,
             GradeStatus.hit if hit else GradeStatus.miss,
@@ -1868,8 +1882,11 @@ def grade_claim(claim: Claim, bars: list[Bar], as_of: date) -> GradedClaim:
             f"horizon-end return {pct:+.2f}% vs {pred.direction} {pred.threshold_pct}%",
         )
     if isinstance(pred, MagnitudePrediction):
-        # rule 4: closed interval
-        hit = pred.low_pct <= pct <= pred.high_pct
+        # rule 4: closed interval [low_pct, high_pct] — same float-boundary
+        # tolerance as rule 3 (see comment above) applied to both endpoints.
+        hit = (pred.low_pct <= pct <= pred.high_pct) or math.isclose(
+            pct, pred.low_pct, abs_tol=1e-9
+        ) or math.isclose(pct, pred.high_pct, abs_tol=1e-9)
         return GradedClaim(
             claim,
             GradeStatus.hit if hit else GradeStatus.miss,
