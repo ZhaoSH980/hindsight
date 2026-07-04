@@ -103,6 +103,25 @@ const dict = {
     feedValidationPass: "validation passed", feedValidationFail: "validation failed",
     feedAuditOk: "sandbox check", feedAuditDenied: "BLOCKED lookahead",
 
+    // ——— case wizard ———
+    newCase: "New case", newCaseTitle: "Create a case",
+    newCaseIntro: "A case is a sealed moment in time: pick a ticker and an as-of date, then paste documents that were genuinely published before that date. Prices are fetched and frozen automatically.",
+    newCaseHonesty: "The evaluation is only as honest as this corpus. Every document must truly predate the as-of date — the wizard rejects wrong dates, but the truthfulness of the text is on you.",
+    wizTicker: "Ticker", wizAsOf: "As-of date", wizWindow: "Outcome window (trading days)",
+    wizTitleEn: "Title (English)", wizTitleZh: "Title (Chinese, optional)",
+    wizDescEn: "Description (English)", wizDescZh: "Description (Chinese, optional)",
+    wizTags: "Tags (comma separated)",
+    wizDocs: "Documents", wizAddDoc: "Add document", wizRemoveDoc: "Remove",
+    wizDocTitle: "Document title", wizDocDate: "Published date", wizDocSource: "Source",
+    wizDocUrl: "URL (optional)", wizDocText: "Full text (paste here)",
+    wizDocDateBad: "published after as-of — will be rejected",
+    wizMinDocs: "At least 2 documents; 5+ recommended for meaningful retrieval.",
+    wizSubmit: "Create case", wizSubmitting: "Creating…",
+    wizCancel: "Cancel",
+    wizCreated: "Case created",
+    wizWindowOpen: "Note: the outcome window has not fully closed yet — some claims may grade as ungradable until it does.",
+    wizNeedsOnline: "Creating a case fetches live market data — the server must run in online mode.",
+
     // ——— confidence vs outcome (calibration replacement) ———
     confVsOutcome: "Confidence vs. outcome",
     confVsOutcomeHint: "Each marker is one claim, placed at the confidence the agent stated. Green = hit, red = miss. A well-calibrated agent keeps its misses to the left and earns its right-side dots.",
@@ -211,6 +230,25 @@ const dict = {
     feedCalc: "计算", feedFinish: "结束研究", feedToolResult: "返回结果",
     feedValidationPass: "校验通过", feedValidationFail: "校验未通过",
     feedAuditOk: "沙箱审计", feedAuditDenied: "拦截越界访问",
+
+    // ——— 案例向导 ———
+    newCase: "新建案例", newCaseTitle: "创建一个案例",
+    newCaseIntro: "一个案例就是一个被封印的时间点：选定股票和研究基准日，然后粘贴真实发布于基准日之前的文档。行情会自动拉取并冻结。",
+    newCaseHonesty: "评测的可信度完全取决于这份语料：每份文档必须真实发布于基准日之前——日期错误会被拒绝，但文本内容的真实性由你负责。",
+    wizTicker: "股票代码", wizAsOf: "研究基准日", wizWindow: "结果窗口（交易日）",
+    wizTitleEn: "标题（英文）", wizTitleZh: "标题（中文，可选）",
+    wizDescEn: "描述（英文）", wizDescZh: "描述（中文，可选）",
+    wizTags: "标签（逗号分隔）",
+    wizDocs: "文档", wizAddDoc: "添加文档", wizRemoveDoc: "移除",
+    wizDocTitle: "文档标题", wizDocDate: "发布日期", wizDocSource: "来源",
+    wizDocUrl: "URL（可选）", wizDocText: "全文（粘贴到这里）",
+    wizDocDateBad: "晚于基准日——会被拒绝",
+    wizMinDocs: "至少 2 份文档；建议 5 份以上，检索才有意义。",
+    wizSubmit: "创建案例", wizSubmitting: "创建中…",
+    wizCancel: "取消",
+    wizCreated: "案例已创建",
+    wizWindowOpen: "注意：结果窗口尚未完全关闭——部分声明在窗口关闭前会评为不可评分。",
+    wizNeedsOnline: "创建案例需要拉取实时行情——服务器必须以在线模式运行。",
 
     // ——— 置信度 vs 结果（替代校准曲线）———
     confVsOutcome: "置信度 vs 实际结果",

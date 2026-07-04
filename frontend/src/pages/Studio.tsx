@@ -7,6 +7,7 @@ import { PriceChart } from "../components/PriceChart";
 import { ClaimCard } from "../components/ClaimCard";
 import { HelpTip } from "../components/HelpTip";
 import { ProvenanceBadge } from "../components/ProvenanceBadge";
+import { CaseWizard } from "../components/CaseWizard";
 import type { Bar, CaseMeta, RunDetail, TraceEvent } from "../lib/types";
 
 const TYPE_ICON: Record<string, string> = {
@@ -122,6 +123,8 @@ export default function Studio() {
   // memo language follows the UI language until the user explicitly picks one
   const [memoLang, setMemoLang] = useState<"en" | "zh">(lang);
   const [memoLangTouched, setMemoLangTouched] = useState(false);
+  const [wizardOpen, setWizardOpen] = useState(false);
+  const [wizardNotice, setWizardNotice] = useState<string | null>(null);
 
   const { events, status } = useRunStream(runId);
   const feedEndRef = useRef<HTMLDivElement | null>(null);
@@ -208,7 +211,37 @@ export default function Studio() {
 
       {/* 1. Case selector */}
       <section>
-        <h2 className="hud-label mb-2">{t("selectCase")}</h2>
+        <div className="mb-2 flex items-center justify-between">
+          <h2 className="hud-label">{t("selectCase")}</h2>
+          <button
+            type="button"
+            onClick={() => setWizardOpen((o) => !o)}
+            className="rounded border border-line px-3 py-1 font-mono text-xs text-accent transition hover:border-accent/60 hover:shadow-glow-sm"
+          >
+            + {t("newCase")}
+          </button>
+        </div>
+        {wizardOpen && (
+          <div className="mb-4">
+            <CaseWizard
+              onCancel={() => setWizardOpen(false)}
+              onCreated={(caseId, windowOpen) => {
+                setWizardOpen(false);
+                setWizardNotice(windowOpen ? t("wizWindowOpen") : null);
+                api.cases().then((cs) => {
+                  setCases(cs);
+                  const created = cs.find((c) => c.case_id === caseId);
+                  if (created) selectCase(created);
+                }).catch(() => {});
+              }}
+            />
+          </div>
+        )}
+        {wizardNotice && (
+          <div className="mb-3 border-l-2 border-l-amber pl-3 text-xs text-slate-300">
+            {t("wizCreated")} — {wizardNotice}
+          </div>
+        )}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {cases.map((c) => (
             <button
