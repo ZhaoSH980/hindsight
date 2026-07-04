@@ -89,3 +89,36 @@ def test_judge_scores_math():
     assert scores["grounding_rate"] == 0.5
     assert scores["judge_failed"] is False
     assert judge_scores(None)["judge_failed"] is True
+
+
+def test_hallucinated_attribution_ids_are_filtered(tmp_path):
+    report_json = json.dumps(
+        {
+            "grounding": [{"claim_id": "c1", "supported": True, "comment": "ok"}],
+            "reasoning_consistency": 4,
+            "retrieval_sufficiency": 3,
+            "attributions": [
+                {"claim_id": "c1", "attribution": "reasonable_but_wrong"},
+                {"claim_id": "ghost", "attribution": "evidence_missing"},
+            ],
+        }
+    )
+    report = run([content_response(report_json)], tmp_path)
+    assert [a.claim_id for a in report.attributions] == ["c1"]
+
+
+def test_ledger_accounts_judge_calls(tmp_path):
+    from hindsight.trace.cost_ledger import CostLedger
+
+    ledger = CostLedger()
+    llm = RecordingLLMClient(
+        transport=ScriptedTransport(
+            [content_response("{broken"), content_response(VALID_REPORT)]
+        ),
+        db_path=tmp_path / "llm.sqlite",
+        model="m1",
+    )
+    memo = make_memo()
+    graded = [GradedClaim(memo.claims[0], GradeStatus.miss, -1.0, "missed")]
+    run_judge(llm, memo, graded, CHUNKS, temperature=0.0, ledger=ledger)
+    assert ledger.summary()["judge"]["calls"] == 2

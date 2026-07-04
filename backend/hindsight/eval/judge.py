@@ -17,7 +17,7 @@ from hindsight.agents.prompts import JUDGE_SYSTEM
 from hindsight.data.models import Chunk
 from hindsight.eval.outcome_grader import GradedClaim
 from hindsight.llm.recording import RecordingLLMClient
-from hindsight.schemas import Memo
+from hindsight.schemas import GradeStatus, Memo
 from hindsight.trace.cost_ledger import CostLedger
 
 
@@ -87,9 +87,14 @@ def run_judge(
         ledger.add("judge", usage.get("prompt_tokens", 0), usage.get("completion_tokens", 0))
         text = strip_fence(resp["choices"][0]["message"].get("content") or "")
         try:
-            return JudgeReport.model_validate_json(text)
+            report = JudgeReport.model_validate_json(text)
         except (ValidationError, ValueError) as exc:
             feedback = f"\n\nYour previous reply was invalid ({str(exc)[:300]}). Return ONLY the JSON object."
+            continue
+        missed = {g.claim.claim_id for g in graded if g.status == GradeStatus.miss}
+        # drop hallucinated attribution ids: only genuinely missed claims may carry a lesson vote
+        report.attributions = [a for a in report.attributions if a.claim_id in missed]
+        return report
     return None
 
 
