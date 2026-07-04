@@ -1009,6 +1009,14 @@ export interface RunSummary {
   scores: Scores | null;
 }
 
+export interface CalBucket {
+  lo: number;
+  hi: number;
+  n: number;
+  avg_confidence: number | null;
+  hit_rate: number | null;
+}
+
 export interface Scores {
   status?: string;
   outcome?: { n_claims: number; n_gradable: number; n_hit: number; hit_rate: number | null; brier: number | null; calibration: CalBucket[] };
