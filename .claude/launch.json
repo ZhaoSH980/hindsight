@@ -1,0 +1,18 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "backend",
+      "runtimeExecutable": "backend/.venv/Scripts/python",
+      "runtimeArgs": ["-m", "uvicorn", "hindsight.api.app:app", "--port", "8000"],
+      "port": 8000,
+      "env": { "HINDSIGHT_OFFLINE": "1" }
+    },
+    {
+      "name": "frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "frontend"],
+      "port": 5173
+    }
+  ]
+}

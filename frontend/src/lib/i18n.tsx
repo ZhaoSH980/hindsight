@@ -11,6 +11,13 @@ const dict = {
     probe: "Contamination probe", calibration: "Calibration", costs: "Token costs",
     auditLog: "Sandbox audit log", allEvents: "All events", asOf: "as-of",
     theFuture: "the future does not exist yet",
+    selectCase: "Select a case", docs: "docs", liveFeed: "Live feed",
+    waitingForRun: "Start a run to see the agent think, step by step.",
+    viewTrace: "View full trace", noMemo: "No memo for this run.",
+    memoryOnLabel: "Memory on", memoryOffLabel: "Memory off",
+    revealHint: "The outcome window has closed. See what actually happened.",
+    confidence: "confidence",
+    typeDirection: "DIR", typeMagnitude: "MAG", typeVolatility: "VOL", days: "d",
   },
   zh: {
     studio: "研究台", trace: "轨迹回放", evals: "评估看板",
@@ -22,6 +29,13 @@ const dict = {
     probe: "污染探针", calibration: "校准", costs: "Token 成本",
     auditLog: "沙箱审计日志", allEvents: "全部事件", asOf: "研究基准日",
     theFuture: "未来尚不存在",
+    selectCase: "选择案例", docs: "份文档", liveFeed: "实时动态",
+    waitingForRun: "开始一次运行，逐步查看智能体的思考过程。",
+    viewTrace: "查看完整轨迹", noMemo: "本次运行没有备忘录。",
+    memoryOnLabel: "记忆已开启", memoryOffLabel: "记忆已关闭",
+    revealHint: "结果窗口已结束。看看实际发生了什么。",
+    confidence: "置信度",
+    typeDirection: "方向", typeMagnitude: "幅度", typeVolatility: "波动", days: "天",
   },
 } as const;
 
