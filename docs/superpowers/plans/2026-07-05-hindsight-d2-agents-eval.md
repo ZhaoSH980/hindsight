@@ -2527,7 +2527,10 @@ def build_card(
     if misses and report is not None and report.attributions:
         counts = Counter(a.attribution for a in report.attributions)
         attribution = counts.most_common(1)[0][0]
-    if not misses:
+    gradable = [g for g in graded if g.status != GradeStatus.ungradable]
+    if not gradable:
+        lesson = "No claims could be graded (insufficient data); no lesson available."
+    elif not misses:
         lesson = "Calibration held: graded claims came true at the stated confidence."
     elif attribution:
         lesson = f"Missed claims were mostly {attribution}; adjust research accordingly."
