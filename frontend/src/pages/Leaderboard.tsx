@@ -5,6 +5,7 @@ import {
 import { api } from "../lib/api";
 import { useLang } from "../lib/i18n";
 import { num, pct } from "../lib/format";
+import { HelpTip } from "../components/HelpTip";
 import type { Scores, SuiteRunRow, SuiteStatus, SuiteSummary } from "../lib/types";
 
 function parseJsonSafe<T>(text: string | null | undefined): T | null {
@@ -45,9 +46,9 @@ function totalTokens(scores: Scores | null | undefined): number | null {
 
 const CASE_LABEL_COLORS = ["#38bdf8", "#f59e0b", "#a78bfa", "#22c55e", "#ef4444", "#eab308"];
 const CONFIG_COLORS: Record<string, string> = {
-  base: "#8b98ad",
-  memory: "#38bdf8",
-  tight: "#a78bfa",
+  base: "#7d8aa5",
+  memory: "#22d3ee",
+  tight: "#8b5cf6",
 };
 
 function colorForConfig(name: string, idx: number): string {
@@ -66,7 +67,8 @@ function SuitePicker({
   const { t } = useLang();
   return (
     <div className="flex flex-col gap-3">
-      <h2 className="text-sm font-mono text-muted">{t("pickASuite")}</h2>
+      <h2 className="hud-label">{t("pickASuite")}</h2>
+      {!selected && <p className="text-xs text-muted">{t("leaderboardSubtitle")}</p>}
       {suites.length === 0 ? (
         <p className="text-xs text-muted">{t("noSuitesYet")}</p>
       ) : (
@@ -77,7 +79,7 @@ function SuitePicker({
               key={s.suite_id}
               type="button"
               onClick={() => onSelect(s.suite_id)}
-              className={`panel p-3 flex flex-wrap items-center gap-3 hover:border-accent/60 transition-colors text-left ${
+              className={`panel panel-hover p-3 flex flex-wrap items-center gap-3 text-left ${
                 s.suite_id === selected ? "border-accent/60" : ""
               }`}
             >
@@ -99,6 +101,11 @@ function fmtBrier(v: number | null | undefined): string {
 function deltaClass(better: boolean | null): string {
   if (better === null) return "text-muted";
   return better ? "text-up" : "text-down";
+}
+
+function hitRateClass(v: number | null | undefined): string {
+  if (v === null || v === undefined) return "text-slate-200";
+  return v >= 0.5 ? "text-up" : "text-down";
 }
 
 export default function Leaderboard() {
@@ -182,27 +189,30 @@ export default function Leaderboard() {
 
       {suiteId && !notFound && summary && (
         <>
-          <section className="panel p-4 flex flex-wrap items-center gap-4">
-            <div>
-              <div className="text-[10px] text-muted font-mono">{t("suiteHeader")}</div>
-              <div className="font-mono text-sm text-accent">{suiteId}</div>
+          <section className="panel hud-corners p-4 flex flex-col gap-2">
+            <div className="flex flex-wrap items-center gap-4">
+              <div>
+                <div className="text-[10px] text-muted font-mono">{t("suiteHeader")}</div>
+                <div className="font-mono text-sm text-accent">{suiteId}</div>
+              </div>
+              <div>
+                <div className="text-[10px] text-muted font-mono">{t("startedAt")}</div>
+                <div className="text-xs text-slate-300 font-mono">{summary.started_at ?? "—"}</div>
+              </div>
+              <div>
+                <div className="text-[10px] text-muted font-mono">{t("casesLabel")}</div>
+                <div className="text-xs text-slate-300">{cases.join(", ") || "—"}</div>
+              </div>
+              <div>
+                <div className="text-[10px] text-muted font-mono">{t("configsLabel")}</div>
+                <div className="text-xs text-slate-300">{configs.join(", ") || "—"}</div>
+              </div>
             </div>
-            <div>
-              <div className="text-[10px] text-muted font-mono">{t("startedAt")}</div>
-              <div className="text-xs text-slate-300 font-mono">{summary.started_at ?? "—"}</div>
-            </div>
-            <div>
-              <div className="text-[10px] text-muted font-mono">{t("casesLabel")}</div>
-              <div className="text-xs text-slate-300">{cases.join(", ") || "—"}</div>
-            </div>
-            <div>
-              <div className="text-[10px] text-muted font-mono">{t("configsLabel")}</div>
-              <div className="text-xs text-slate-300">{configs.join(", ") || "—"}</div>
-            </div>
+            <p className="text-xs text-muted">{t("leaderboardSubtitle")}</p>
           </section>
 
           <section className="flex flex-col gap-2">
-            <h3 className="text-sm font-mono text-muted">{t("matrixTitle")}</h3>
+            <h3 className="hud-label">{t("matrixTitle")}</h3>
             <div className="panel overflow-x-auto">
               <table className="w-full text-xs">
                 <thead>
@@ -219,13 +229,22 @@ export default function Leaderboard() {
                     {configs.map((cfg) => (
                       <Fragment key={cfg}>
                         <th className="py-1 px-3 font-normal text-right border-l border-line">
-                          {t("hitRate")}
+                          <span className="inline-flex items-center gap-1">
+                            {t("hitRate")}
+                            <HelpTip text={t("hitRateHelp")} />
+                          </span>
                         </th>
                         <th className="py-1 px-3 font-normal text-right">
-                          {t("brier")}
+                          <span className="inline-flex items-center gap-1">
+                            {t("brier")}
+                            <HelpTip text={t("brierHelp")} />
+                          </span>
                         </th>
                         <th className="py-1 px-3 font-normal text-right">
-                          {t("grounding")}
+                          <span className="inline-flex items-center gap-1">
+                            {t("grounding")}
+                            <HelpTip text={t("groundingHelp")} />
+                          </span>
                         </th>
                       </Fragment>
                     ))}
@@ -244,7 +263,11 @@ export default function Leaderboard() {
                           const process = scores?.process;
                           return (
                             <Fragment key={cfg}>
-                              <td className="py-2 px-3 text-right num text-slate-200 border-l border-line">
+                              <td
+                                className={`py-2 px-3 text-right num border-l border-line ${
+                                  status !== "ok" ? "text-slate-200" : hitRateClass(outcome?.hit_rate)
+                                }`}
+                              >
                                 {status !== "ok" ? (
                                   <span
                                     title={status}
@@ -354,21 +377,21 @@ export default function Leaderboard() {
                 </tbody>
               </table>
             </div>
-            <p className="text-xs text-muted italic">{t("sampleSizeHonesty")}</p>
+            <p className="text-xs text-slate-300 border-l-2 border-l-amber pl-3">{t("sampleSizeHonesty")}</p>
           </section>
 
           <section className="flex flex-col gap-2">
-            <h3 className="text-sm font-mono text-muted">{t("scatterTitle")}</h3>
+            <h3 className="hud-label">{t("scatterTitle")}</h3>
             <div className="panel p-3 h-72">
               <ResponsiveContainer>
                 <ScatterChart margin={{ top: 10, right: 16, bottom: 8, left: 0 }}>
-                  <CartesianGrid stroke="#1f2937" strokeDasharray="3 3" />
+                  <CartesianGrid stroke="#1c2740" strokeDasharray="3 3" />
                   <XAxis
                     type="number"
                     dataKey="x"
                     name={t("scatterX")}
-                    tick={{ fill: "#8b98ad", fontSize: 10 }}
-                    label={{ value: t("scatterX"), fill: "#8b98ad", fontSize: 10, position: "insideBottom", offset: -2 }}
+                    tick={{ fill: "#7d8aa5", fontSize: 10 }}
+                    label={{ value: t("scatterX"), fill: "#7d8aa5", fontSize: 10, position: "insideBottom", offset: -2 }}
                   />
                   <YAxis
                     type="number"
@@ -376,16 +399,16 @@ export default function Leaderboard() {
                     name={t("scatterY")}
                     domain={[0, 1]}
                     width={40}
-                    tick={{ fill: "#8b98ad", fontSize: 10 }}
-                    label={{ value: t("scatterY"), fill: "#8b98ad", fontSize: 10, angle: -90, position: "insideLeft" }}
+                    tick={{ fill: "#7d8aa5", fontSize: 10 }}
+                    label={{ value: t("scatterY"), fill: "#7d8aa5", fontSize: 10, angle: -90, position: "insideLeft" }}
                   />
                   <Tooltip
-                    contentStyle={{ background: "#11161f", border: "1px solid #1f2937" }}
+                    contentStyle={{ background: "#0b111e", border: "1px solid #1c2740" }}
                     formatter={(v: number | string | readonly (number | string)[] | undefined, key: string | number | undefined) =>
                       typeof v === "number" ? (key === "y" ? pct(v) : num(v)) : v
                     }
                   />
-                  <Legend wrapperStyle={{ fontSize: 10, color: "#8b98ad" }} />
+                  <Legend wrapperStyle={{ fontSize: 10, color: "#7d8aa5" }} />
                   {Object.entries(scatterByConfig).map(([cfgName, pts], idx) => (
                     <Scatter
                       key={cfgName}
@@ -394,8 +417,9 @@ export default function Leaderboard() {
                       fill={colorForConfig(cfgName, idx)}
                       shape={(p: any) => (
                         <g>
-                          <circle cx={p.cx} cy={p.cy} r={5} fill={colorForConfig(cfgName, idx)} fillOpacity={0.8} />
-                          <text x={p.cx} y={p.cy - 10} fill="#8b98ad" fontSize={9} textAnchor="middle">
+                          <circle cx={p.cx} cy={p.cy} r={9} fill={colorForConfig(cfgName, idx)} fillOpacity={0.15} />
+                          <circle cx={p.cx} cy={p.cy} r={4.5} fill={colorForConfig(cfgName, idx)} fillOpacity={0.85} />
+                          <text x={p.cx} y={p.cy - 12} fill="#7d8aa5" fontSize={9} textAnchor="middle">
                             {p.payload.case}
                           </text>
                         </g>

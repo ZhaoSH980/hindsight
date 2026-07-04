@@ -1,17 +1,31 @@
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { useLang } from "../lib/i18n";
 import type { TraceEvent } from "../lib/types";
 
-interface Props { evt: TraceEvent }
+interface Props {
+  evt: TraceEvent;
+  className?: string;
+  style?: CSSProperties;
+}
 
 const RAIL_COLOR: Record<string, string> = {
   plan_step: "bg-accent",
-  tool_call: "bg-sky-400",
-  tool_result: "bg-sky-400",
+  tool_call: "bg-violet",
+  tool_result: "bg-violet",
   validation: "bg-amber",
-  audit: "bg-emerald-600",
+  audit: "bg-up",
   score: "bg-up",
   context_trim: "bg-up",
+};
+
+const CHIP_STYLE: Record<string, string> = {
+  plan_step: "border-accent/40 text-accent",
+  tool_call: "border-violet/40 text-violet",
+  tool_result: "border-violet/40 text-violet",
+  validation: "border-amber/40 text-amber",
+  audit: "border-up/40 text-up",
+  score: "border-up/40 text-up",
+  context_trim: "border-up/40 text-up",
 };
 
 function truncate(s: string, n = 90): string {
@@ -35,8 +49,6 @@ function summarize(evt: TraceEvent): string {
       const note = String(p.note ?? "");
       return `${String(p.tool ?? "")}${note ? ` — ${note}` : ""}`;
     }
-    case "score":
-      return "outcome + process scored";
     default:
       return evt.type;
   }
@@ -48,15 +60,19 @@ function isDenied(evt: TraceEvent): boolean {
   return note.toUpperCase().includes("DENIED");
 }
 
-export function EventRow({ evt }: Props) {
+export function EventRow({ evt, className, style }: Props) {
   const { t } = useLang();
   const [open, setOpen] = useState(false);
   const denied = isDenied(evt);
-  const rail = denied ? "bg-down" : (RAIL_COLOR[evt.type] ?? "bg-line");
+  const rail = denied ? "bg-down shadow-glow-down" : (RAIL_COLOR[evt.type] ?? "bg-line");
+  const chip = denied ? "border-down/40 text-down" : (CHIP_STYLE[evt.type] ?? "border-line text-muted");
   const p = (evt.payload ?? {}) as Record<string, unknown>;
 
   return (
-    <div className={`flex gap-2 border-b border-line/60 last:border-0 ${denied ? "bg-down/10" : ""}`}>
+    <div
+      className={`flex gap-2 border-b border-line/60 last:border-0 animate-fade-up ${denied ? "bg-down/10" : ""} ${className ?? ""}`}
+      style={style}
+    >
       <div className={`w-1 shrink-0 rounded-full ${rail}`} />
       <div className="flex-1 py-1.5 pr-2 min-w-0">
         <button
@@ -67,10 +83,12 @@ export function EventRow({ evt }: Props) {
           <span className="rounded bg-ink-700 px-1.5 py-0.5 font-mono text-[10px] text-muted shrink-0">
             {evt.agent}
           </span>
-          <span className="rounded border border-line px-1.5 py-0.5 font-mono text-[10px] text-muted shrink-0">
+          <span className={`rounded border px-1.5 py-0.5 font-mono text-[10px] shrink-0 transition-colors ${chip}`}>
             {evt.type}
           </span>
-          <span className="font-mono text-xs text-slate-300 truncate flex-1">{summarize(evt)}</span>
+          <span className="font-mono text-xs text-slate-300 truncate flex-1">
+            {evt.type === "score" ? t("scoreSummary") : summarize(evt)}
+          </span>
           {evt.tokens > 0 && (
             <span className="num text-[10px] text-muted shrink-0">{evt.tokens} {t("tokens")}</span>
           )}
@@ -94,7 +112,7 @@ export function EventRow({ evt }: Props) {
                   <span className="text-slate-200">{String(p.data_max_date ?? "—")}</span>
                 </div>
                 {denied ? (
-                  <div className="rounded bg-down/20 border border-down/50 px-1.5 py-1 text-down font-semibold">
+                  <div className="rounded bg-down/20 border border-down/50 px-1.5 py-1 text-down font-semibold animate-fade-in">
                     {t("denied")}: {String(p.note ?? "")}
                   </div>
                 ) : (

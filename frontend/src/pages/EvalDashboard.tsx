@@ -4,9 +4,10 @@ import { api } from "../lib/api";
 import { useLang } from "../lib/i18n";
 import { pct } from "../lib/format";
 import { ScoreCards } from "../components/ScoreCards";
-import { CalibrationChart } from "../components/CalibrationChart";
+import { ConfidenceStrip } from "../components/ConfidenceStrip";
 import { AttributionBadge } from "../components/AttributionBadge";
 import { RunPicker } from "../components/RunPicker";
+import { HelpTip } from "../components/HelpTip";
 import type { Claim, RunDetail } from "../lib/types";
 
 const TYPE_KEY: Record<Claim["type"], "typeDirection" | "typeMagnitude" | "typeVolatility"> = {
@@ -40,7 +41,6 @@ export default function EvalDashboard() {
   }, [runId]);
 
   const attributions = detail?.scores?.process?.attributions ?? {};
-  const calibration = detail?.scores?.outcome?.calibration;
   const probe = detail?.scores?.contamination_probe;
   const isFailed = detail?.status === "failed";
   const isUnverified = detail?.scores?.unverified === true;
@@ -67,7 +67,7 @@ export default function EvalDashboard() {
   return (
     <div className="p-6 flex flex-col gap-4">
       {/* Header */}
-      <section className="panel p-4 flex flex-wrap items-center gap-4">
+      <section className="panel hud-corners p-4 flex flex-wrap items-center gap-4">
         <div>
           <div className="text-[10px] text-muted font-mono">{t("runHeader")}</div>
           <div className="font-mono text-sm text-accent">{runId}</div>
@@ -80,10 +80,14 @@ export default function EvalDashboard() {
           <div className="text-[10px] text-muted font-mono">{t("createdAt")}</div>
           <div className="text-xs text-slate-300 font-mono">{detail.created_at ?? "—"}</div>
         </div>
-        <Link to={`/runs/${runId}/trace`} className="ml-auto text-xs text-accent underline">
+        <Link
+          to={`/runs/${runId}/trace`}
+          className="ml-auto rounded border border-line px-2.5 py-1 font-mono text-xs text-accent transition-all duration-200 hover:border-accent/60 hover:shadow-glow-sm"
+        >
           {t("viewTrace")}
         </Link>
       </section>
+      <p className="text-xs text-muted">{t("evalsSubtitle")}</p>
 
       {/* Banners */}
       {isFailed && (
@@ -96,18 +100,21 @@ export default function EvalDashboard() {
       {/* Score cards — tolerant of missing keys (failed runs carry only scores.status) */}
       <ScoreCards scores={detail.scores} />
 
-      {/* Calibration — skip entirely if absent */}
-      {calibration && calibration.length > 0 && (
-        <section className="flex flex-col gap-2">
-          <h3 className="text-sm font-mono text-muted">{t("calibration")}</h3>
-          <p className="text-xs text-muted">{t("calibrationHint")}</p>
-          <CalibrationChart buckets={calibration} />
-        </section>
-      )}
+      {/* Confidence vs outcome — every claim shown individually; honest at tiny n */}
+      <section className="flex flex-col gap-2">
+        <h3 className="hud-label">{t("confVsOutcome")}</h3>
+        <ConfidenceStrip claims={detail.claims} />
+        <div className="panel border-amber/40 border-l-2 border-l-amber p-3 text-xs text-slate-300 leading-relaxed">
+          {t("calibrationHonesty")}
+        </div>
+      </section>
 
       {/* Claims table */}
       <section className="flex flex-col gap-2">
-        <h3 className="text-sm font-mono text-muted">{t("claimsTable")}</h3>
+        <h3 className="hud-label">
+          {t("claimsTable")}
+          <HelpTip text={t("claimsHelp")} />
+        </h3>
         {claimsSorted.length === 0 ? (
           <p className="text-xs text-muted">{t("noClaims")}</p>
         ) : (
@@ -122,7 +129,12 @@ export default function EvalDashboard() {
                   <th className="py-2 px-3 font-normal text-right">{t("confidence")}</th>
                   <th className="py-2 px-3 font-normal">{t("status")}</th>
                   <th className="py-2 px-3 font-normal text-right">{t("realizedReturn")}</th>
-                  <th className="py-2 px-3 font-normal">{t("attribution")}</th>
+                  <th className="py-2 px-3 font-normal">
+                    <span className="inline-flex items-center gap-1">
+                      {t("attribution")}
+                      <HelpTip text={t("attributionHelp")} />
+                    </span>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -183,16 +195,21 @@ export default function EvalDashboard() {
 
       {/* Contamination probe — collapsible */}
       <section className="panel p-3">
-        <button
-          type="button"
-          onClick={() => setProbeOpen((o) => !o)}
-          className="w-full flex items-center justify-between text-left"
-        >
-          <span className="text-sm font-mono text-muted">{t("contaminationProbe")}</span>
-          <span className="text-muted text-xs">{probeOpen ? "▾" : "▸"}</span>
-        </button>
+        <div className="flex items-center justify-between gap-3">
+          <h3 className="hud-label">
+            {t("contaminationProbe")}
+            <HelpTip text={t("probeHelp")} />
+          </h3>
+          <button
+            type="button"
+            onClick={() => setProbeOpen((o) => !o)}
+            className="rounded border border-line px-2 py-0.5 font-mono text-[10px] text-muted transition-colors duration-200 hover:border-accent/60 hover:text-accent"
+          >
+            {probeOpen ? t("hideProbe") : t("showProbe")}
+          </button>
+        </div>
         {probeOpen && (
-          <div className="mt-2 flex flex-col gap-2">
+          <div className="mt-2 flex flex-col gap-2 animate-fade-in">
             <p className="text-xs text-muted">{t("probeHint")}</p>
             {probe ? (
               <pre className="whitespace-pre-wrap rounded border border-line bg-ink-900 p-3 font-mono text-xs text-slate-300">

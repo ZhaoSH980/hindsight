@@ -7,7 +7,9 @@ interface Props { attribution: string }
 const STYLE: Record<Attribution, string> = {
   evidence_missing: "bg-amber/15 text-amber border-amber/40",
   misread_evidence: "bg-down/15 text-down border-down/40",
-  reasonable_but_wrong: "bg-sky-400/15 text-sky-400 border-sky-400/40",
+  // violet, not red: "reasonable but wrong" means the process was sound and
+  // the world didn't cooperate — informative, not the agent's fault
+  reasonable_but_wrong: "bg-violet/15 text-violet border-violet/40",
 };
 
 const LABEL_KEY: Record<Attribution, "attrEvidenceMissing" | "attrMisreadEvidence" | "attrReasonableButWrong"> = {

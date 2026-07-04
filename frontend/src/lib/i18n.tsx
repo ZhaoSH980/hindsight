@@ -91,6 +91,7 @@ const dict = {
     // ——— confidence vs outcome (calibration replacement) ———
     confVsOutcome: "Confidence vs. outcome",
     confVsOutcomeHint: "Each marker is one claim, placed at the confidence the agent stated. Green = hit, red = miss. A well-calibrated agent keeps its misses to the left and earns its right-side dots.",
+    scoreSummary: "outcome + process scored",
     calibrationHonesty: "Why no calibration curve? Bucketed calibration needs dozens of claims to mean anything; a single run has three to five. Drawing a curve from that would be self-deception — so we show every claim instead.",
     noGradedClaims: "Claims have not been graded yet — reveal the future first.",
   },
@@ -184,6 +185,7 @@ const dict = {
     // ——— 置信度 vs 结果（替代校准曲线）———
     confVsOutcome: "置信度 vs 实际结果",
     confVsOutcomeHint: "每个标记是一条声明，位置就是智能体给出的置信度。绿色 = 命中，红色 = 未中。校准良好的智能体：错的都在左边，右边的点都对得起它的自信。",
+    scoreSummary: "结局 + 过程已评分",
     calibrationHonesty: "为什么没有校准曲线？分桶校准需要几十条以上的声明才有统计意义，而单次运行只有三到五条——硬画一条曲线是自欺。所以我们把每条声明都直接画出来。",
     noGradedClaims: "声明尚未评分——请先揭示未来。",
   },

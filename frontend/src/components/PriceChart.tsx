@@ -1,5 +1,5 @@
 import {
-  Area, ComposedChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis,
+  Area, CartesianGrid, ComposedChart, ReferenceLine, ResponsiveContainer, Tooltip, XAxis, YAxis,
 } from "recharts";
 import { useLang } from "../lib/i18n";
 import type { Bar } from "../lib/types";
@@ -17,23 +17,30 @@ export function PriceChart({ bars, asOf, revealed }: Props) {
     <div className="panel p-3 h-72 relative">
       <ResponsiveContainer>
         <ComposedChart data={data} margin={{ top: 8, right: 8, bottom: 0, left: 0 }}>
-          <XAxis dataKey="date" tick={{ fill: "#8b98ad", fontSize: 10 }} minTickGap={40} />
-          <YAxis domain={["auto", "auto"]} tick={{ fill: "#8b98ad", fontSize: 10 }} width={48} />
+          <CartesianGrid stroke="#1c2740" strokeDasharray="3 3" vertical={false} />
+          <XAxis dataKey="date" tick={{ fill: "#7d8aa5", fontSize: 10 }} minTickGap={40} stroke="#1c2740" />
+          <YAxis domain={["auto", "auto"]} tick={{ fill: "#7d8aa5", fontSize: 10 }} width={48} stroke="#1c2740" />
           <Tooltip
-            contentStyle={{ background: "#11161f", border: "1px solid #1f2937" }}
-            labelStyle={{ color: "#8b98ad" }}
+            contentStyle={{ background: "#0b111e", border: "1px solid #1c2740", borderRadius: 8 }}
+            labelStyle={{ color: "#7d8aa5" }}
           />
-          <ReferenceLine x={asOf} stroke="#f59e0b" strokeDasharray="4 4"
-            label={{ value: `${t("asOf")} ${asOf}`, fill: "#f59e0b", fontSize: 10, position: "insideTopRight" }} />
-          <Area dataKey="past" stroke="#38bdf8" fill="#38bdf8" fillOpacity={0.08} strokeWidth={1.5} dot={false} isAnimationActive={false} />
-          <Area dataKey="future" stroke="#22c55e" fill="#22c55e" fillOpacity={0.08} strokeWidth={1.5} dot={false} isAnimationActive={true} animationDuration={1200} />
+          <ReferenceLine x={asOf} stroke="#fbbf24" strokeDasharray="4 4"
+            label={{ value: `${t("asOf")} ${asOf}`, fill: "#fbbf24", fontSize: 10, position: "insideTopRight" }} />
+          <Area dataKey="past" stroke="#22d3ee" fill="#22d3ee" fillOpacity={0.08} strokeWidth={1.5} dot={false} isAnimationActive={false} />
+          <Area dataKey="future" stroke="#34d399" fill="#34d399" fillOpacity={0.08} strokeWidth={1.5} dot={false} isAnimationActive={true} animationDuration={1200} />
         </ComposedChart>
       </ResponsiveContainer>
-      {!revealed && (
-        <div className="absolute inset-y-0 right-0 w-[38%] bg-gradient-to-r from-transparent to-ink-950/90 flex items-center justify-end pr-4 pointer-events-none">
-          <span className="text-muted text-xs font-mono rotate-0">{t("theFuture")}</span>
+      {/* sealed-future mask — always mounted; dissolves on reveal so the seal visibly breaks */}
+      <div
+        aria-hidden="true"
+        className={`absolute inset-y-0 right-0 w-[38%] pointer-events-none transition-opacity duration-1000 ease-out ${
+          revealed ? "opacity-0" : "opacity-100"
+        }`}
+      >
+        <div className="scan-zone h-full w-full bg-gradient-to-r from-transparent to-ink-950/90 flex items-center justify-end pr-4">
+          <span className="font-mono text-[11px] text-accent/80 animate-blink">{t("theFuture")}</span>
         </div>
-      )}
+      </div>
     </div>
   );
 }

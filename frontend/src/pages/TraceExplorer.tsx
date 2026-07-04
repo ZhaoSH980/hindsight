@@ -110,7 +110,7 @@ export default function TraceExplorer() {
   return (
     <div className="p-6 flex flex-col gap-4">
       {/* Run header */}
-      <section className="panel p-4 flex flex-wrap items-center gap-4">
+      <section className="panel hud-corners p-4 flex flex-wrap items-center gap-4">
         <div>
           <div className="text-[10px] text-muted font-mono">{t("runHeader")}</div>
           <div className="font-mono text-sm text-accent">{runId}</div>
@@ -120,7 +120,14 @@ export default function TraceExplorer() {
           <div className="text-sm text-slate-200">{detail?.case_id ?? "—"}</div>
         </div>
         {detail?.status && (
-          <span className={`rounded border px-2 py-0.5 font-mono text-[10px] ${STATUS_STYLE[detail.status] ?? STATUS_STYLE.queued}`}>
+          <span
+            className={`inline-flex items-center gap-1.5 rounded border px-2 py-0.5 font-mono text-[10px] ${
+              STATUS_STYLE[detail.status] ?? STATUS_STYLE.queued
+            } ${detail.status === "running" ? "shadow-glow-sm" : ""}`}
+          >
+            {detail.status === "running" && (
+              <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse-dot" aria-hidden="true" />
+            )}
             {t(STATUS_KEY[detail.status] ?? "statusQueued")}
           </span>
         )}
@@ -136,6 +143,8 @@ export default function TraceExplorer() {
         </div>
       </section>
 
+      <p className="text-xs text-muted">{t("traceSubtitle")}</p>
+
       {/* Filter pills */}
       <section className="flex flex-wrap gap-2">
         {FILTERS.map((f) => (
@@ -145,7 +154,7 @@ export default function TraceExplorer() {
             onClick={() => setFilter(f.key)}
             className={`rounded-full border px-3 py-1 text-xs font-mono transition-colors ${
               filter === f.key
-                ? "border-accent bg-accent/15 text-accent"
+                ? "border-accent bg-accent/15 text-accent shadow-glow-sm"
                 : "border-line text-muted hover:text-slate-200"
             }`}
           >
@@ -161,7 +170,7 @@ export default function TraceExplorer() {
         ) : (
           <div className="flex flex-col">
             {visible.map((evt, i) => (
-              <EventRow key={i} evt={evt} />
+              <EventRow key={i} evt={evt} style={{ animationDelay: `${Math.min(i * 20, 300)}ms` }} />
             ))}
           </div>
         )}
@@ -169,7 +178,7 @@ export default function TraceExplorer() {
 
       {/* Cost footer */}
       <section className="panel p-4">
-        <h3 className="text-sm font-mono text-muted mb-3">{t("costFooter")}</h3>
+        <h3 className="hud-label mb-3">{t("costFooter")}</h3>
         {costRows.length === 0 ? (
           <p className="text-xs text-muted">{t("noCostData")}</p>
         ) : (
@@ -201,7 +210,7 @@ export default function TraceExplorer() {
                   <td className="py-1 pr-4 text-right num text-slate-200">{num(costTotals.calls)}</td>
                   <td className="py-1 pr-4 text-right num text-slate-200">{num(costTotals.prompt)}</td>
                   <td className="py-1 pr-4 text-right num text-slate-200">{num(costTotals.completion)}</td>
-                  <td className="py-1 pr-4 text-right num text-accent">{num(costTotals.total)}</td>
+                  <td className="py-1 pr-4 text-right num text-accent glow-text">{num(costTotals.total)}</td>
                 </tr>
               </tfoot>
             </table>

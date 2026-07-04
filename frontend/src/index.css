@@ -25,31 +25,36 @@ body::before {
   mask-image: radial-gradient(ellipse 90% 80% at 50% 20%, black 40%, transparent 100%);
 }
 
-.panel {
-  @apply rounded-lg border border-line;
-  background: rgba(11, 17, 30, 0.75);
-  backdrop-filter: blur(6px);
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
-}
+/* component classes live in the components layer so plain utilities
+   (border-amber/40, border-l-2, …) can still override them in the cascade */
+@layer components {
+  .panel {
+    @apply rounded-lg border border-line;
+    background: rgba(11, 17, 30, 0.75);
+    backdrop-filter: blur(6px);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  }
 
-.panel-hover:hover {
-  @apply border-accent/50 shadow-glow-sm;
-}
+  .panel-hover:hover {
+    @apply border-accent/50 shadow-glow-sm;
+  }
 
-.num {
-  @apply font-mono tabular-nums;
-}
+  .num {
+    @apply font-mono tabular-nums;
+  }
 
-/* HUD-style section label: uppercase, tracked-out, with a leading tick */
-.hud-label {
-  @apply font-mono text-[11px] uppercase tracking-[0.2em] text-muted flex items-center gap-2;
-}
-.hud-label::before {
-  content: "";
-  @apply inline-block h-3 w-0.5 bg-accent shadow-glow-sm;
+  /* HUD-style section label: uppercase, tracked-out, with a leading tick */
+  .hud-label {
+    @apply font-mono text-[11px] uppercase tracking-[0.2em] text-muted flex items-center gap-2;
+  }
+  .hud-label::before {
+    content: "";
+    @apply inline-block h-3 w-0.5 bg-accent shadow-glow-sm;
+  }
 }
 
 /* sci-fi corner brackets for feature panels */
+@layer components {
 .hud-corners {
   position: relative;
 }
@@ -131,6 +136,7 @@ body::before {
 .stagger > *:nth-child(4) { animation-delay: 0.12s; }
 .stagger > *:nth-child(5) { animation-delay: 0.15s; }
 .stagger > *:nth-child(6) { animation-delay: 0.18s; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   *,

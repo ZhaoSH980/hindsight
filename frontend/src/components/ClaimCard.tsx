@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { useLang } from "../lib/i18n";
 import { pct } from "../lib/format";
 import type { Claim } from "../lib/types";
@@ -5,8 +6,8 @@ import type { Claim } from "../lib/types";
 interface Props { claim: Claim; revealed: boolean }
 
 const STATUS_STYLE: Record<string, string> = {
-  hit: "bg-up/15 text-up border-up/40",
-  miss: "bg-down/15 text-down border-down/40",
+  hit: "bg-up/15 text-up border-up/40 shadow-glow-up",
+  miss: "bg-down/15 text-down border-down/40 shadow-glow-down",
   ungradable: "bg-ink-700 text-muted border-line",
 };
 
@@ -21,11 +22,25 @@ export function ClaimCard({ claim, revealed }: Props) {
   const status = claim.status;
   const confPct = Math.round(claim.confidence * 100);
 
+  // Animate the confidence bar from 0 to its value on mount (double rAF so the
+  // 0-width frame is actually painted before the transition kicks in).
+  const [barWidth, setBarWidth] = useState(0);
+  useEffect(() => {
+    let raf2 = 0;
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => setBarWidth(confPct));
+    });
+    return () => {
+      cancelAnimationFrame(raf1);
+      cancelAnimationFrame(raf2);
+    };
+  }, [confPct]);
+
   return (
-    <div className="panel p-3 flex flex-col gap-2">
+    <div className="panel panel-hover p-3 flex flex-col gap-2">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className="rounded border border-line px-1.5 py-0.5 font-mono text-[10px] text-accent">
+          <span className="rounded border border-accent/40 px-1.5 py-0.5 font-mono text-[10px] text-accent">
             {t(TYPE_KEY[claim.type])}
           </span>
           <span className="text-muted text-xs font-mono">{claim.horizon_days}{t("days")}</span>
@@ -45,7 +60,10 @@ export function ClaimCard({ claim, revealed }: Props) {
           <span>{confPct}%</span>
         </div>
         <div className="h-1.5 w-full rounded bg-ink-700 overflow-hidden">
-          <div className="h-full bg-accent" style={{ width: `${confPct}%` }} />
+          <div
+            className="h-full bg-gradient-to-r from-accent to-violet transition-[width] duration-700 ease-out"
+            style={{ width: `${barWidth}%` }}
+          />
         </div>
       </div>
 
