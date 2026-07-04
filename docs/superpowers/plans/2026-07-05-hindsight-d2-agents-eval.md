@@ -366,7 +366,11 @@ def safe_call(registry: ToolRegistry, name: str, args: dict[str, Any]) -> str:
     try:
         return registry.call(name, args)
     except Exception as exc:  # noqa: BLE001 - deliberate catch-all at the LLM boundary
-        return json.dumps({"error": f"{type(exc).__name__}: {exc}"})
+        try:
+            msg = str(exc)
+        except Exception:  # noqa: BLE001 - even __str__ can be broken
+            msg = "<unprintable exception>"
+        return json.dumps({"error": f"{type(exc).__name__}: {msg}"})
 ```
 
 In `backend/hindsight/tools/corpus_search.py`, replace the excerpt line inside the results mapping with:
