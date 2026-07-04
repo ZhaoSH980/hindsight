@@ -32,7 +32,6 @@ const dict = {
     runNotFound: "Run not found.",
     hitRate: "Hit rate", brier: "Brier score", groundingRate: "Grounding rate",
     reasoningConsistency: "Reasoning consistency", retrievalSufficiency: "Retrieval sufficiency",
-    calibrationHint: "Confidence vs. realized hit rate, bucketed. Points on the diagonal are well-calibrated.",
     claimsTable: "Claims", id: "ID", type: "Type", statement: "Statement",
     horizon: "Horizon", status: "Status", realizedReturn: "Realized %", attribution: "Attribution",
     attrEvidenceMissing: "evidence missing", attrMisreadEvidence: "misread evidence",
@@ -57,6 +56,43 @@ const dict = {
     noSuiteSelected: "Select a suite above to see its results.",
     suiteNotFound: "Suite not found.",
     statusOk: "ok",
+
+    // ——— narrative layer ———
+    heroTitle: "Send a research agent back in time.",
+    heroTagline:
+      "Hindsight drops an AI research agent onto a past trading day, seals off everything after that date, forces it to commit falsifiable predictions — then grades them against what actually happened.",
+    heroProblem:
+      "Why a time machine? Because agent research skill is nearly impossible to grade. Ask it about today and nobody knows the answer yet. Ask it about the past and the model has already memorized the ending. The only honest exam is a sealed past with anti-cheat.",
+    step1Title: "Pick a case",
+    step1Desc: "Each case pins an as-of date — that day becomes the agent's “today”.",
+    step2Title: "Research in the sandbox",
+    step2Desc: "It searches filings, pulls prices, runs math. Anything dated after as-of is blocked on the spot — and the attempt is logged.",
+    step3Title: "Commit falsifiable claims",
+    step3Desc: "It must state concrete predictions with a confidence and a deadline. Vague hedging fails validation.",
+    step4Title: "Reveal the future",
+    step4Desc: "When the window closes, real market data grades every claim mechanically — and every miss gets a failure attribution.",
+    traceSubtitle: "Every thought, every tool call, every blocked lookahead — the full replayable record of one run.",
+    evalsSubtitle: "Three-track scoring for one run: outcome (was it right), process (how it worked), and cost.",
+    leaderboardSubtitle: "Cases × configs, side by side: does switching on experience memory actually help?",
+    liveFeedHint: "The agent's steps stream in live: plan → tool → validation → sandbox audit.",
+
+    // ——— metric explainers ———
+    hitRateHelp: "Share of gradable claims that came true. The sample is tiny — read it as a signal, not a statistic.",
+    brierHelp: "Honesty of confidence: being confidently wrong costs the most. 0 = perfect, 0.25 ≈ coin-flip guessing. A low hit rate with a low Brier means the agent knew it was unsure.",
+    groundingHelp: "How many key statements in the memo trace back to document chunks the agent actually retrieved. Does it cite what it read?",
+    reasoningHelp: "An LLM judge scores 1–5 whether the memo's conclusions actually follow from the evidence it cites.",
+    retrievalHelp: "An LLM judge scores 1–5 whether the agent's searches covered the information that mattered for this case.",
+    tokensHelp: "Total tokens across every LLM call in this run. Quality only means something next to its cost.",
+    claimsHelp: "A falsifiable claim is a prediction that market data can mechanically grade as right or wrong once its deadline passes. These are the anchor of the whole evaluation.",
+    attributionHelp: "Every miss is attributed to a cause: evidence missing (didn't find it), misread evidence (found it, read it wrong), or reasonable-but-wrong (sound process, uncooperative world — not the agent's fault).",
+    probeHelp: "With no tools at all, the model is asked what happened after the as-of date. If it answers from memory, its training data leaks the future — and sandbox walls can't stop that. This probe detects it.",
+    memoryHelp: "When on, the agent may read lessons distilled from earlier runs — but only from runs whose outcome window closed before this case's as-of date. The past may teach; the future may not.",
+
+    // ——— confidence vs outcome (calibration replacement) ———
+    confVsOutcome: "Confidence vs. outcome",
+    confVsOutcomeHint: "Each marker is one claim, placed at the confidence the agent stated. Green = hit, red = miss. A well-calibrated agent keeps its misses to the left and earns its right-side dots.",
+    calibrationHonesty: "Why no calibration curve? Bucketed calibration needs dozens of claims to mean anything; a single run has three to five. Drawing a curve from that would be self-deception — so we show every claim instead.",
+    noGradedClaims: "Claims have not been graded yet — reveal the future first.",
   },
   zh: {
     studio: "研究台", trace: "轨迹回放", evals: "评估看板",
@@ -89,7 +125,6 @@ const dict = {
     runNotFound: "未找到该运行。",
     hitRate: "命中率", brier: "Brier 分数", groundingRate: "依据覆盖率",
     reasoningConsistency: "推理一致性", retrievalSufficiency: "检索充分性",
-    calibrationHint: "置信度与实际命中率的分桶对比。落在对角线上表示校准良好。",
     claimsTable: "声明列表", id: "编号", type: "类型", statement: "陈述",
     horizon: "周期", status: "状态", realizedReturn: "实际收益 %", attribution: "归因",
     attrEvidenceMissing: "证据缺失", attrMisreadEvidence: "误读证据",
@@ -114,6 +149,43 @@ const dict = {
     noSuiteSelected: "请在上方选择一个套件以查看结果。",
     suiteNotFound: "未找到该套件。",
     statusOk: "正常",
+
+    // ——— 叙事层 ———
+    heroTitle: "把研究智能体送回过去",
+    heroTagline:
+      "Hindsight 把 AI 研究智能体投放到过去的某个交易日，封锁那一天之后的全部信息，强制它做出可证伪的预测——然后用真实发生的未来给它评分。",
+    heroProblem:
+      "为什么需要时光机？因为智能体的“研究能力”几乎无法评分：问它当下，答案还没揭晓；问它过去，模型早就背过结局。唯一诚实的考法，是一段被封印的过去，外加防作弊。",
+    step1Title: "选择案例",
+    step1Desc: "每个案例锁定一个研究基准日——那一天就是智能体的“今天”。",
+    step2Title: "沙箱内研究",
+    step2Desc: "它检索公告、拉取行情、做计算。任何晚于基准日的数据都会被当场拦截——而且每次越界尝试都留有记录。",
+    step3Title: "提交可证伪声明",
+    step3Desc: "必须给出带置信度、带期限的具体预测。含糊其辞过不了校验。",
+    step4Title: "揭示未来",
+    step4Desc: "结果窗口关闭后，真实行情机械评分每一条声明——每个错误都会被归因。",
+    traceSubtitle: "每一步思考、每次工具调用、每次越界拦截——一次运行的完整可回放留痕。",
+    evalsSubtitle: "一次运行的三轨评分：结局（对没对）、过程（怎么做的）、成本。",
+    leaderboardSubtitle: "案例 × 配置并排对比：开启经验记忆到底有没有用？",
+    liveFeedHint: "智能体的每一步实时推送：计划 → 工具 → 校验 → 沙箱审计。",
+
+    // ——— 指标解释 ———
+    hitRateHelp: "可评分声明中预测正确的比例。样本很小——当信号看，别当统计结论看。",
+    brierHelp: "置信度的诚实度：错得越自信罚得越重。0 = 完美，0.25 ≈ 对半瞎猜。命中率低但 Brier 也低，说明智能体知道自己没把握。",
+    groundingHelp: "备忘录里的关键论断有多少能追溯到智能体实际检索到的文档片段——它说的话有没有出处？",
+    reasoningHelp: "LLM 裁判按 1–5 分评价：备忘录的结论是否真的能从它引用的证据推出来。",
+    retrievalHelp: "LLM 裁判按 1–5 分评价：智能体的检索是否覆盖了这个案例真正关键的信息。",
+    tokensHelp: "本次运行全部 LLM 调用的 token 总量。质量必须和成本放在一起看才有意义。",
+    claimsHelp: "可证伪声明 = 到期后能用行情数据机械判定对错的预测。它是整个评测的锚点。",
+    attributionHelp: "每条未命中都会被归因：证据缺失（该找的没找到）、误读证据（找到了但读错了）、合理但错误（过程没毛病，世界不配合——这不算智能体的错）。",
+    probeHelp: "不给任何工具，直接问模型基准日之后发生了什么。如果它能靠记忆答出来，说明训练数据泄露了未来——沙箱的墙拦不住这条通道，探针专门检测它。",
+    memoryHelp: "开启后，智能体可以读取从更早的运行中提炼的经验——但只限结果窗口在本案例基准日之前就已关闭的运行。过去可以教它，未来不行。",
+
+    // ——— 置信度 vs 结果（替代校准曲线）———
+    confVsOutcome: "置信度 vs 实际结果",
+    confVsOutcomeHint: "每个标记是一条声明，位置就是智能体给出的置信度。绿色 = 命中，红色 = 未中。校准良好的智能体：错的都在左边，右边的点都对得起它的自信。",
+    calibrationHonesty: "为什么没有校准曲线？分桶校准需要几十条以上的声明才有统计意义，而单次运行只有三到五条——硬画一条曲线是自欺。所以我们把每条声明都直接画出来。",
+    noGradedClaims: "声明尚未评分——请先揭示未来。",
   },
 } as const;
 

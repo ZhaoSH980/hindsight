@@ -4,12 +4,140 @@
 
 body {
   @apply bg-ink-900 text-slate-200 antialiased;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(34, 211, 238, 0.08), transparent),
+    radial-gradient(ellipse 60% 40% at 90% 110%, rgba(139, 92, 246, 0.06), transparent);
+  background-attachment: fixed;
+}
+
+/* faint drifting grid behind everything — the "simulation space" */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(34, 211, 238, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  animation: grid-drift 60s linear infinite;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 20%, black 40%, transparent 100%);
 }
 
 .panel {
-  @apply bg-ink-800 border border-line rounded-lg;
+  @apply rounded-lg border border-line;
+  background: rgba(11, 17, 30, 0.75);
+  backdrop-filter: blur(6px);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.panel-hover:hover {
+  @apply border-accent/50 shadow-glow-sm;
 }
 
 .num {
   @apply font-mono tabular-nums;
+}
+
+/* HUD-style section label: uppercase, tracked-out, with a leading tick */
+.hud-label {
+  @apply font-mono text-[11px] uppercase tracking-[0.2em] text-muted flex items-center gap-2;
+}
+.hud-label::before {
+  content: "";
+  @apply inline-block h-3 w-0.5 bg-accent shadow-glow-sm;
+}
+
+/* sci-fi corner brackets for feature panels */
+.hud-corners {
+  position: relative;
+}
+.hud-corners::before,
+.hud-corners::after {
+  content: "";
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: rgba(34, 211, 238, 0.55);
+  pointer-events: none;
+}
+.hud-corners::before {
+  top: -1px;
+  left: -1px;
+  border-top: 1px solid;
+  border-left: 1px solid;
+  border-color: inherit;
+  border-top-color: rgba(34, 211, 238, 0.55);
+  border-left-color: rgba(34, 211, 238, 0.55);
+}
+.hud-corners::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 1px solid rgba(34, 211, 238, 0.55);
+  border-right: 1px solid rgba(34, 211, 238, 0.55);
+}
+
+.glow-text {
+  text-shadow: 0 0 12px rgba(34, 211, 238, 0.45);
+}
+
+/* moving scanline for "the future is sealed" zones */
+.scan-zone {
+  position: relative;
+  overflow: hidden;
+}
+.scan-zone::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  height: 40%;
+  background: linear-gradient(to bottom, transparent, rgba(34, 211, 238, 0.05), transparent);
+  animation: scanline 3.5s linear infinite;
+  pointer-events: none;
+}
+
+/* accessible CSS-only tooltip (used by HelpTip) */
+.helptip {
+  @apply relative inline-flex;
+}
+.helptip > button {
+  @apply flex h-4 w-4 items-center justify-center rounded-full border border-line font-mono text-[9px] text-muted transition-colors;
+}
+.helptip:hover > button,
+.helptip:focus-within > button {
+  @apply border-accent/60 text-accent;
+}
+.helptip > span[role="tooltip"] {
+  @apply pointer-events-none absolute left-1/2 top-full z-50 mt-2 w-64 -translate-x-1/2 rounded-md border border-line bg-ink-950/95 p-2.5 text-left font-sans text-xs font-normal normal-case leading-relaxed tracking-normal text-slate-300 opacity-0 shadow-glow-sm transition-opacity duration-150;
+}
+.helptip:hover > span[role="tooltip"],
+.helptip:focus-within > span[role="tooltip"] {
+  @apply opacity-100;
+}
+
+/* page-level entry animation */
+.page-enter {
+  animation: fade-up 0.4s ease-out both;
+}
+
+/* staggered children (live feed rows, cards) */
+.stagger > * {
+  animation: fade-up 0.35s ease-out both;
+}
+.stagger > *:nth-child(1) { animation-delay: 0.03s; }
+.stagger > *:nth-child(2) { animation-delay: 0.06s; }
+.stagger > *:nth-child(3) { animation-delay: 0.09s; }
+.stagger > *:nth-child(4) { animation-delay: 0.12s; }
+.stagger > *:nth-child(5) { animation-delay: 0.15s; }
+.stagger > *:nth-child(6) { animation-delay: 0.18s; }
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
