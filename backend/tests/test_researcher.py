@@ -36,6 +36,22 @@ def test_bundle_respects_budget_and_emits_trim(tmp_path):
     assert trims[0].payload["chunk_id"] == "c::000"
 
 
+def test_bundle_greedy_skips_large_mid_score_chunk(tmp_path):
+    em = EvidenceManager(context_budget=250)
+    em.add_results(
+        [
+            sc("a::000", 3.0, "x" * 400),   # ~100 tokens, kept
+            sc("b::000", 2.0, "x" * 800),   # ~200 tokens, does not fit -> trimmed
+            sc("c::000", 1.0, "x" * 40),    # ~10 tokens, fits -> kept
+        ]
+    )
+    rec = TraceRecorder(run_dir=tmp_path)
+    bundle = em.bundle(trace=rec)
+    assert [c.chunk_id for c in bundle] == ["a::000", "c::000"]
+    trimmed = [e.payload["chunk_id"] for e in rec.events if e.type == "context_trim"]
+    assert trimmed == ["b::000"]
+
+
 def test_bundle_always_keeps_at_least_one():
     em = EvidenceManager(context_budget=1)
     em.add_results([sc("a::000", 1.0, "x" * 4000)])
