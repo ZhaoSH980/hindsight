@@ -102,10 +102,11 @@ def run_research(
     runs_root: Path,
     suite_id: str | None = None,
     suite_started_at: str | None = None,
+    run_id: str | None = None,
 ) -> RunResult:
     case = load_case(Path(case_dir))
     as_of = case.meta.as_of
-    run_id = _new_run_id(case.meta.case_id)
+    run_id = run_id or _new_run_id(case.meta.case_id)
     run_dir = Path(runs_root) / run_id
     trace = TraceRecorder(run_dir=run_dir)
     ledger = CostLedger()

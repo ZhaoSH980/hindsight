@@ -151,3 +151,21 @@ def test_unverified_path_persists_done_with_ungradable(case_dir, tmp_path):
         store.query_experiences("9999-01-01", exclude_case_id="other")[0]["card_json"]
     )
     assert "No claims could be graded" in card["lesson_text"]
+
+
+def test_run_id_can_be_preassigned(case_dir, tmp_path):
+    llm = RecordingLLMClient(
+        transport=ScriptedTransport(SCRIPT),
+        db_path=tmp_path / "llm.sqlite",
+        model="m1",
+    )
+    result = run_research(
+        case_dir=case_dir,
+        config=RunConfig(model="m1"),
+        llm=llm,
+        store=Store(tmp_path / "h.db"),
+        runs_root=tmp_path / "runs",
+        run_id="run_preassigned_001",
+    )
+    assert result.run_id == "run_preassigned_001"
+    assert result.run_dir.name == "run_preassigned_001"

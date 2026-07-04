@@ -8,6 +8,14 @@ from fastapi import APIRouter, HTTPException, Request
 
 router = APIRouter()
 
+import asyncio
+import threading
+
+from fastapi import WebSocket
+from pydantic import BaseModel
+
+from hindsight.agents.orchestrator import _new_run_id
+
 
 def _row_to_summary(row: dict) -> dict:
     return {
@@ -65,3 +73,87 @@ def run_trace(run_id: str, request: Request):
         except json.JSONDecodeError:
             continue  # truncated tail from a crash-mid-write; drop, never 500
     return events
+
+
+class StartRunRequest(BaseModel):
+    case_id: str
+    memory_on: bool = False
+    max_steps: int = 8
+
+
+def _default_executor(state):
+    """Real executor: env-configured LLM, retry transport, record mode."""
+
+    def execute(case_id: str, config: dict, run_id: str) -> None:
+        from hindsight.agents.orchestrator import run_research
+        from hindsight.llm.client import LLMConfig, openai_transport
+        from hindsight.llm.recording import RecordingLLMClient
+        from hindsight.llm.retry import with_retry
+        from hindsight.schemas import RunConfig
+
+        cfg = LLMConfig.from_env()
+        llm = RecordingLLMClient(
+            transport=with_retry(openai_transport(cfg)),
+            db_path=state.root / "llm_calls.sqlite",
+            model=cfg.model,
+        )
+
+        def work():
+            try:
+                run_research(
+                    case_dir=state.datasets / case_id,
+                    config=RunConfig(model=cfg.model, **config),
+                    llm=llm,
+                    store=state.store,
+                    runs_root=state.runs_root,
+                    run_id=run_id,
+                )
+            except Exception as exc:  # noqa: BLE001 - background thread must not die silently
+                state.store.upsert_run(run_id, case_id, json.dumps(config), "failed",
+                                       scores_json=json.dumps({"status": "crashed", "error": str(exc)[:500]}))
+
+        threading.Thread(target=work, daemon=True).start()
+
+    return execute
+
+
+@router.post("/api/runs")
+def start_run(body: StartRunRequest, request: Request):
+    state = request.app.state.hindsight
+    if not (state.datasets / body.case_id / "meta.json").exists():
+        raise HTTPException(status_code=404, detail=f"unknown case {body.case_id}")
+    run_id = _new_run_id(body.case_id)
+    config = {"memory_on": body.memory_on, "max_steps": body.max_steps}
+    state.store.upsert_run(run_id, body.case_id, json.dumps(config), "queued")
+    executor = state.run_executor or _default_executor(state)
+    executor(body.case_id, config, run_id)
+    return {"run_id": run_id}
+
+
+@router.websocket("/api/runs/{run_id}/stream")
+async def stream_run(ws: WebSocket, run_id: str):
+    await ws.accept()
+    state = ws.app.state.hindsight
+    trace = state.runs_root / run_id / "trace.jsonl"
+    sent = 0
+    for _ in range(1500):  # ~10 min ceiling at 0.4s
+        if trace.exists():
+            lines = trace.read_text(encoding="utf-8").splitlines()
+            for line in lines[sent:]:
+                if line.strip():
+                    await ws.send_text(line)
+            sent = len(lines)
+        rows = [r for r in state.store.get_runs() if r["run_id"] == run_id]
+        status = rows[0]["status"] if rows else "unknown"
+        if status in ("done", "failed") :
+            # drain any lines written between the read above and the status flip
+            if trace.exists():
+                lines = trace.read_text(encoding="utf-8").splitlines()
+                for line in lines[sent:]:
+                    if line.strip():
+                        await ws.send_text(line)
+                sent = len(lines)
+            await ws.send_text(json.dumps({"type": "status", "payload": {"status": status}}))
+            break
+        await asyncio.sleep(0.4)
+    await ws.close()
