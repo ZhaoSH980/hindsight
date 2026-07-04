@@ -698,11 +698,22 @@ Rules:
 - Every claim cites at least one evidence chunk_id from the provided evidence blocks.
 - direction semantics: at-horizon-end — the claim is judged on the closing price of the \
 Nth trading day after the as-of date, not on any intraday path.
+- magnitude semantics: uses the same horizon-end return r as direction; the claim is a \
+hit iff r*100 falls inside [low_pct, high_pct] (closed interval). It is NOT a price \
+range over the period.
+- volatility semantics: the realized daily log-return volatility over your claim's \
+horizon window is compared against same-length rolling windows from the prior ~252 \
+trading days; "above" percentile p predicts unusually turbulent price action for this \
+stock, "below" predicts unusually calm.
 - confidence is used for calibration scoring (Brier). Do not inflate it.
 Example claim: {"claim_id": "c1", "statement": "NVDA closes >=5% above the as-of price \
 on the 20th trading day after as-of", "type": "direction", "ticker": "NVDA", \
 "horizon_days": 20, "prediction": {"direction": "up", "threshold_pct": 5.0}, \
 "confidence": 0.62, "evidence": ["q4_recap::001"]}
+Example magnitude claim: {"claim_id": "c2", "statement": "NVDA's 20-trading-day \
+return lands between -2% and +8%", "type": "magnitude", "ticker": "NVDA", \
+"horizon_days": 20, "prediction": {"low_pct": -2.0, "high_pct": 8.0}, \
+"confidence": 0.55, "evidence": ["q4_recap::001"]}
 """
 
 CRITIC_SEMANTIC_SYSTEM = """\
