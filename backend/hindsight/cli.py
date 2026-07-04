@@ -56,9 +56,42 @@ def main() -> None:
     p = sub.add_parser("dry-run", help="sandboxed retrieval + market data, no LLM")
     p.add_argument("--case", required=True, help="path to datasets/<case_id>")
     p.add_argument("--query", default="latest guidance and demand outlook")
+
+    pr = sub.add_parser("run", help="full research run against a case")
+    pr.add_argument("--case", required=True)
+    pr.add_argument("--memory", action="store_true")
+    pr.add_argument("--max-steps", type=int, default=8)
+    pr.add_argument("--runs-root", default="runs")
+    pr.add_argument("--db", default="hindsight.db")
+    pr.add_argument("--offline", action="store_true")
+
     args = ap.parse_args()
     if args.command == "dry-run":
         dry_run(Path(args.case), args.query)
+    if args.command == "run":
+        from hindsight.agents.orchestrator import run_research
+        from hindsight.llm.client import LLMConfig, openai_transport
+        from hindsight.llm.recording import RecordingLLMClient
+        from hindsight.llm.retry import with_retry
+        from hindsight.schemas import RunConfig
+        from hindsight.store.db import Store
+
+        cfg = LLMConfig.from_env()
+        llm = RecordingLLMClient(
+            transport=with_retry(openai_transport(cfg)),
+            db_path=Path("llm_calls.sqlite"),
+            model=cfg.model,
+            offline=True if args.offline else None,
+        )
+        result = run_research(
+            case_dir=Path(args.case),
+            config=RunConfig(model=cfg.model, memory_on=args.memory, max_steps=args.max_steps),
+            llm=llm,
+            store=Store(Path(args.db)),
+            runs_root=Path(args.runs_root),
+        )
+        print(f"run {result.run_id} -> {result.run_dir}")
+        print(json.dumps(result.scores, indent=1, ensure_ascii=False))
 
 
 if __name__ == "__main__":
