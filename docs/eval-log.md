@@ -38,3 +38,50 @@ the receipts for "evaluation as the primary mechanism to guide behavior".
   function calling for D2. If a later D2 integration run surfaces
   inconsistent `tool_calls` behavior under load, re-probe with a longer
   inter-call delay to control for the rate limit observed here.
+
+## D2 — first live NVDA run (2026-07-04)
+
+- Run 1 (record mode): `run_nvda_fy26q1_20260704_074410_b3e722`, 14 metered
+  calls (probe 1, planner 5, analyst 3, critic 3, judge 2), no 429s hit (call
+  timestamps show no 15/30/60s gaps). Contamination probe was clean ("I do
+  not know what happened to NVDA... after May 22, 2025").
+- **`tool_calls` shape check (task requirement A):** inspected
+  `llm_calls.sqlite` for all 5 planner responses carrying `tools`. Real
+  xf-yun/GLM-5.2 `tool_calls` entries are `{"id": "call_...", "function":
+  {"name": "...", "arguments": "..."}, "type": "function", "index": 0}` —
+  i.e. they carry an extra `"index"` field (list position) beyond the
+  `id`/`type`/`function` triple the test stubs (`llm_stubs.tool_call_response`)
+  produce. This did **not** cause any API error: `planner.py` never reads or
+  depends on `index`, and both the `openai` SDK client-side validation and
+  the xf-yun server accepted the verbatim echo of the full `tool_calls` list
+  (including `index`) back in the next request's `messages`. No parsing/echo
+  fix was needed — noting the observed shape only, per the task's
+  no-error branch.
+- **Quality bug found and fixed (task requirement C):** the memo was
+  `unverified` after exhausting all 3 attempts (2 retries). The semantic
+  critic — a real LLM, not a stub — correctly and consistently flagged the
+  same root cause on attempts 0, 1, and 2: the analyst's `direction` claim
+  (e.g. "closes >=3% up over 5d") and its `magnitude` claim (e.g. "return in
+  [-7%, +2%]") are graded off the *same* horizon-end return `r`, but their
+  predicted ranges overlapped/disagreed on sign, making the pair jointly
+  incoherent as a single view of one `r`. `ANALYST_SYSTEM` in
+  `backend/hindsight/agents/prompts.py` documented direction and magnitude
+  semantics individually but never stated that claims sharing a horizon must
+  be mutually consistent about the one `r` that actually happens.
+  - Before: example magnitude claim was `[-2%, +8%]` alongside a `direction:
+    up >=5%` example — internally inconsistent as written (a "-2%" outcome
+    would satisfy the magnitude claim but fail the direction claim), modeling
+    exactly the failure mode the critic kept catching.
+  - After: added an explicit "MUTUAL CONSISTENCY" rule — claims on the same
+    `horizon_days` are graded off one shared `r`; a magnitude band must sit
+    entirely on the same side of a direction claim's threshold (no overlap
+    below/above it). Replaced the magnitude example with one that is
+    consistent with the direction example (`[+5%, +15%]` fully at/above the
+    direction's `+5%` threshold).
+  - Scores before (run 1, pre-fix): `unverified: true`, `n_gradable: 0`,
+    3 semantic-critic rejections, memo otherwise well-grounded (3 claims, 1
+    direction, all citing real chunk ids, grounding_rate 1.0).
+  - Full test suite re-run after the edit: 138 passed (no regressions; the
+    edit only adds prose to `ANALYST_SYSTEM`, which `test_prompts.py` checks
+    by substring presence, not exact match).
+  - See run 2 below for scores after the fix.
