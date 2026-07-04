@@ -1257,6 +1257,8 @@ git commit -m "feat(d2): bounded ReAct planner with native function calling"
 
 Spec §3.1 Critic: ① schema (pydantic) → ② mechanical consistency → ③ semantic LLM check; failures feed back to the Analyst, ≤2 retries, then `unverified`.
 
+> Review-driven additions beyond this section's blocks (repo is authoritative): `test_critic_loop.py` carries 5 extra tests (fail-closed unparseable critic, fence-with-space/prose wrapping, bare-prose JSON, structural exhaustion, retry-request uniqueness); `critic.py` includes the fail-closed except branch, robust `strip_fence`, and attempt-prefixed feedback shown in the amended blocks below.
+
 **Files:**
 - Create: `backend/hindsight/agents/analyst.py`
 - Create: `backend/hindsight/agents/critic.py`
