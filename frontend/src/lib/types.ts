@@ -49,3 +49,37 @@ export interface Scores {
 export interface RunDetail extends RunSummary { memo_md: string | null; claims: Claim[] }
 
 export interface TraceEvent { type: string; agent: string; payload: Record<string, unknown>; tokens: number; ts: string }
+
+export interface SuiteSummary {
+  suite_id: string;
+  started_at: string | null;
+  cases: string[];
+  configs: string[];
+  status: string;
+}
+
+// A suite's runs come straight from the store (raw SQLite row shape) —
+// unlike /api/runs, this endpoint does NOT pre-parse config_json/scores_json.
+export interface SuiteRunRow {
+  run_id: string;
+  case_id: string;
+  suite_id: string | null;
+  status: string;
+  created_at: string;
+  config_json?: string | null;
+  scores_json?: string | null;
+}
+
+export interface SuiteStatus {
+  suite_id: string;
+  runs: SuiteRunRow[];
+  summary: {
+    suite_id: string;
+    started_at?: string;
+    cases?: string[];
+    configs?: string[];
+    status?: string;
+    results?: Record<string, Record<string, Scores>>;
+  } | null;
+  known: boolean;
+}

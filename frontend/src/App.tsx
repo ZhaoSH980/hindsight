@@ -3,6 +3,7 @@ import { useLang } from "./lib/i18n";
 import Studio from "./pages/Studio";
 import TraceExplorer from "./pages/TraceExplorer";
 import EvalDashboard from "./pages/EvalDashboard";
+import Leaderboard from "./pages/Leaderboard";
 
 function navClass({ isActive }: { isActive: boolean }) {
   return `px-3 py-1.5 rounded-md text-sm transition-colors ${
@@ -26,6 +27,9 @@ function Nav() {
       <NavLink to="/runs/_" className={navClass}>
         {t("evals")}
       </NavLink>
+      <NavLink to="/leaderboard" className={navClass}>
+        {t("leaderboard")}
+      </NavLink>
       <button
         type="button"
         onClick={() => setLang(lang === "en" ? "zh" : "en")}
@@ -46,6 +50,7 @@ export default function App() {
           <Route path="/" element={<Studio />} />
           <Route path="/runs/:runId/trace" element={<TraceExplorer />} />
           <Route path="/runs/:runId" element={<EvalDashboard />} />
+          <Route path="/leaderboard" element={<Leaderboard />} />
         </Routes>
       </div>
     </BrowserRouter>

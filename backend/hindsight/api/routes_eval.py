@@ -70,6 +70,29 @@ def start_suite(body: StartSuiteRequest, request: Request):
     return {"suite_id": suite_id}
 
 
+@router.get("/api/eval/suites")
+def list_suites(request: Request):
+    state = request.app.state.hindsight
+    suites_dir = state.runs_root / "suites"
+    out = []
+    if suites_dir.exists():
+        for p in sorted(suites_dir.glob("*.json")):
+            try:
+                s = json.loads(p.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                continue
+            out.append(
+                {
+                    "suite_id": s.get("suite_id", p.stem),
+                    "started_at": s.get("started_at"),
+                    "cases": s.get("cases", []),
+                    "configs": s.get("configs", []),
+                    "status": s.get("status", "ok"),
+                }
+            )
+    return out
+
+
 @router.get("/api/eval/suites/{suite_id}")
 def suite_status(suite_id: str, request: Request):
     state = request.app.state.hindsight

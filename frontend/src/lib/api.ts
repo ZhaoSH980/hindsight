@@ -1,4 +1,4 @@
-import type { Bar, CaseMeta, RunDetail, RunSummary, TraceEvent } from "./types";
+import type { Bar, CaseMeta, RunDetail, RunSummary, SuiteStatus, SuiteSummary, TraceEvent } from "./types";
 
 async function get<T>(url: string): Promise<T> {
   const r = await fetch(url);
@@ -12,6 +12,8 @@ export const api = {
   runs: () => get<RunSummary[]>("/api/runs"),
   run: (runId: string) => get<RunDetail>(`/api/runs/${runId}`),
   trace: (runId: string) => get<TraceEvent[]>(`/api/runs/${runId}/trace`),
+  suites: () => get<SuiteSummary[]>("/api/eval/suites"),
+  suite: (suiteId: string) => get<SuiteStatus>(`/api/eval/suites/${suiteId}`),
   startRun: async (caseId: string, memoryOn: boolean, maxSteps: number) => {
     const r = await fetch("/api/runs", {
       method: "POST",

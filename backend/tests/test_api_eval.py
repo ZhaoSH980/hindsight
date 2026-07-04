@@ -97,3 +97,21 @@ def test_unknown_suite_flagged(api_root):
     client = TestClient(create_app(repo_root=api_root))
     status = client.get("/api/eval/suites/garbage").json()
     assert status["known"] is False
+
+
+def test_list_suites(api_root):
+    out = api_root / "runs" / "suites"
+    out.mkdir(parents=True)
+    (out / "s1.json").write_text(
+        json.dumps({"suite_id": "s1", "started_at": "t", "cases": ["c"], "configs": ["base"]}),
+        encoding="utf-8",
+    )
+    (out / "junk.json").write_text("{broken", encoding="utf-8")
+    client = TestClient(create_app(repo_root=api_root))
+    suites = client.get("/api/eval/suites").json()
+    assert [s["suite_id"] for s in suites] == ["s1"]  # broken file skipped
+
+
+def test_list_suites_empty(api_root):
+    client = TestClient(create_app(repo_root=api_root))
+    assert client.get("/api/eval/suites").json() == []
