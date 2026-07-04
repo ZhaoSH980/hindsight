@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from datetime import timedelta
 from pathlib import Path
 
@@ -48,6 +49,8 @@ def dry_run(case_dir: Path, query: str) -> None:
 
 
 def main() -> None:
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8")
     ap = argparse.ArgumentParser(prog="hindsight")
     sub = ap.add_subparsers(dest="command", required=True)
     p = sub.add_parser("dry-run", help="sandboxed retrieval + market data, no LLM")
