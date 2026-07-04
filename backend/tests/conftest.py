@@ -53,3 +53,15 @@ def case_dir(tmp_path) -> Path:
     (d / "docs" / "past.md").write_text(DOC_PAST, encoding="utf-8")
     (d / "docs" / "future.md").write_text(DOC_FUTURE, encoding="utf-8")
     return d
+
+
+@pytest.fixture
+def api_root(case_dir, tmp_path) -> Path:
+    """A fake repo root: datasets/<case>, empty runs/, fresh hindsight.db."""
+    import shutil
+
+    root = tmp_path / "approot"
+    (root / "datasets").mkdir(parents=True)
+    shutil.copytree(case_dir, root / "datasets" / case_dir.name)
+    (root / "runs").mkdir()
+    return root
