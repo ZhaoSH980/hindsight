@@ -2973,7 +2973,7 @@ def run_research(
     pr.add_argument("--offline", action="store_true")
 ```
 
-and the dispatch branch:
+and the dispatch branch (note `_anchor`: a module-level helper resolving relative CLI paths against the repo root — `_REPO_ROOT = Path(__file__).resolve().parents[2]` — so runs/dbs land in the same place regardless of invocation CWD; absolute paths pass through; `dry-run --case` uses it too):
 
 ```python
     if args.command == "run":
@@ -2987,16 +2987,16 @@ and the dispatch branch:
         cfg = LLMConfig.from_env()
         llm = RecordingLLMClient(
             transport=with_retry(openai_transport(cfg)),
-            db_path=Path("llm_calls.sqlite"),
+            db_path=_anchor("llm_calls.sqlite"),
             model=cfg.model,
             offline=True if args.offline else None,
         )
         result = run_research(
-            case_dir=Path(args.case),
+            case_dir=_anchor(args.case),
             config=RunConfig(model=cfg.model, memory_on=args.memory, max_steps=args.max_steps),
             llm=llm,
-            store=Store(Path(args.db)),
-            runs_root=Path(args.runs_root),
+            store=Store(_anchor(args.db)),
+            runs_root=_anchor(args.runs_root),
         )
         print(f"run {result.run_id} -> {result.run_dir}")
         print(json.dumps(result.scores, indent=1, ensure_ascii=False))
@@ -3175,7 +3175,7 @@ dispatch branch (mirrors `run`, building the llm once):
         cfg = LLMConfig.from_env()
         llm = RecordingLLMClient(
             transport=with_retry(openai_transport(cfg)),
-            db_path=Path("llm_calls.sqlite"),
+            db_path=_anchor("llm_calls.sqlite"),
             model=cfg.model,
             offline=True if args.offline else None,
         )
@@ -3184,11 +3184,11 @@ dispatch branch (mirrors `run`, building the llm once):
             preset = PRESETS[name.strip()]
             configs[name.strip()] = preset.model_copy(update={"model": cfg.model})
         suite_id = run_suite(
-            [Path(p.strip()) for p in args.cases.split(",")],
+            [_anchor(p.strip()) for p in args.cases.split(",")],
             configs,
             llm=llm,
-            store=Store(Path(args.db)),
-            runs_root=Path(args.runs_root),
+            store=Store(_anchor(args.db)),
+            runs_root=_anchor(args.runs_root),
         )
         print(f"suite {suite_id} complete -> {Path(args.runs_root) / 'suites' / (suite_id + '.json')}")
 ```
