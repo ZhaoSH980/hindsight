@@ -128,7 +128,7 @@ export default function Studio() {
   const [wizardNotice, setWizardNotice] = useState<string | null>(null);
 
   const { events, status } = useRunStream(runId);
-  const feedEndRef = useRef<HTMLDivElement | null>(null);
+  const feedRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!memoLangTouched) setMemoLang(lang);
@@ -139,7 +139,10 @@ export default function Studio() {
   }, []);
 
   useEffect(() => {
-    feedEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+    // scroll only the feed container — scrollIntoView would drag the whole
+    // page down every 1.5s while the user is reading elsewhere
+    const el = feedRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
   }, [events]);
 
   useEffect(() => {
@@ -228,7 +231,7 @@ export default function Studio() {
               onCancel={() => setWizardOpen(false)}
               onCreated={(caseId, windowOpen) => {
                 setWizardOpen(false);
-                setWizardNotice(windowOpen ? t("wizWindowOpen") : null);
+                setWizardNotice(windowOpen ? "created_window_open" : "created");
                 api.cases().then((cs) => {
                   setCases(cs);
                   const created = cs.find((c) => c.case_id === caseId);
@@ -240,7 +243,8 @@ export default function Studio() {
         )}
         {wizardNotice && (
           <div className="mb-3 border-l-2 border-l-amber pl-3 text-xs text-slate-300">
-            {t("wizCreated")} — {wizardNotice}
+            {t("wizCreated")}
+            {wizardNotice === "created_window_open" && ` — ${t("wizWindowOpen")}`}
           </div>
         )}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -358,14 +362,13 @@ export default function Studio() {
                 <h3 className="hud-label">{t("liveFeed")}</h3>
                 <p className="text-[10px] text-muted mt-1">{t("liveFeedHint")}</p>
               </div>
-              <div className="flex-1 overflow-y-auto">
+              <div ref={feedRef} className="flex-1 overflow-y-auto">
                 {events.length === 0 && !running && (
                   <p className="text-xs text-muted">{t("waitingForRun")}</p>
                 )}
                 {events.map((evt, i) => (
                   <EventLine key={i} evt={evt} />
                 ))}
-                <div ref={feedEndRef} />
               </div>
             </section>
 

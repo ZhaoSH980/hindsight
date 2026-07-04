@@ -65,3 +65,18 @@ def test_unknown_run_404(api_root):
     client = TestClient(create_app(repo_root=api_root))
     assert client.get("/api/runs/nope").status_code == 404
     assert client.get("/api/runs/nope/trace").status_code == 404
+
+
+def test_start_run_validates_at_the_door(api_root):
+    """Bad language / max_steps / traversal case_id must 422 before any run
+    row exists — not birth a row that crashes in the background."""
+    client = TestClient(create_app(repo_root=api_root))
+    for payload in (
+        {"case_id": "fixture_case", "language": "fr"},
+        {"case_id": "fixture_case", "max_steps": 0},
+        {"case_id": "fixture_case", "max_steps": 33},
+        {"case_id": "../evil", "language": "en"},
+    ):
+        r = client.post("/api/runs", json=payload)
+        assert r.status_code == 422, payload
+    assert client.get("/api/runs").json() == []

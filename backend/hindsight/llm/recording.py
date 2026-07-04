@@ -74,15 +74,17 @@ class RecordingLLMClient:
             row = self._conn.execute(
                 "SELECT response_json FROM llm_calls WHERE hash = ?", (key,)
             ).fetchone()
+            if row:
+                self.cache_hits += 1  # counters share the lock: chat() is a concurrent API
         if row:
-            self.cache_hits += 1
             return json.loads(row[0])
         if self.offline:
             raise ReplayMissError(
                 f"offline replay miss for request hash {key}; "
                 "re-run in record mode to capture it"
             )
-        self.cache_misses += 1
+        with self._lock:
+            self.cache_misses += 1
         response = self._transport(request)
         with self._lock:
             self._conn.execute(

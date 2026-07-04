@@ -4,12 +4,11 @@ const dict = {
   en: {
     studio: "Research Studio", trace: "Trace Explorer", evals: "Eval Dashboard",
     run: "Run research", running: "Running…", reveal: "Reveal the future",
-    revealed: "Future revealed", memory: "Experience memory", maxSteps: "Max steps",
+    revealed: "Future revealed", maxSteps: "Max steps",
     claims: "Claims", memo: "Research memo", hit: "HIT", miss: "MISS",
     ungradable: "UNGRADABLE", failed: "Validation failed — no memo was produced",
     unverified: "Unverified: the semantic critic never approved this memo; claims are not scored",
-    probe: "Contamination probe", calibration: "Calibration", costs: "Token costs",
-    auditLog: "Sandbox audit log", allEvents: "All events", asOf: "as-of",
+    asOf: "as-of",
     theFuture: "the future does not exist yet",
     selectCase: "Select a case", docs: "docs", liveFeed: "Live feed",
     waitingForRun: "Start a run to see the agent think, step by step.",
@@ -23,7 +22,7 @@ const dict = {
     filterAll: "All", filterPlan: "Plan", filterTool: "Tool", filterValidation: "Validation",
     filterAudit: "Audit", filterScore: "Score",
     noEvents: "No events recorded for this run.",
-    payload: "Payload", tokens: "tokens", expand: "Expand", collapse: "Collapse",
+    tokens: "tokens",
     tool: "Tool", params: "Params", dataMaxDate: "Data max date", note: "Note",
     denied: "DENIED lookahead",
     costFooter: "Token costs by agent", agent: "Agent", calls: "Calls",
@@ -42,7 +41,6 @@ const dict = {
     pickARun: "Pick a run", recentRuns: "Recent runs",
     noRunsYet: "No runs yet — start one from the Research Studio.",
     noClaims: "No claims recorded for this run.",
-    noCalibration: "No calibration data for this run.",
     leaderboard: "Leaderboard",
     pickASuite: "Pick a suite", recentSuites: "Recent suites",
     noSuitesYet: "No suites yet — run backend/hindsight/cli.py suite to produce one.",
@@ -55,7 +53,6 @@ const dict = {
     scatterX: "total tokens", scatterY: "hit rate",
     noSuiteSelected: "Select a suite above to see its results.",
     suiteNotFound: "Suite not found.",
-    statusOk: "ok",
 
     // ——— narrative layer ———
     heroTitle: "Send a research agent back in time.",
@@ -128,7 +125,7 @@ const dict = {
     edgarHint: "Filing dates are stamped by the SEC itself — the one automatable source whose dates cannot lie. News articles still need manual curation.",
     edgarSearch: "Find filings", edgarSearching: "Searching EDGAR…",
     edgarImport: "Import selected", edgarImporting: "Importing…",
-    edgarNone: "No filings found before the as-of date.",
+    edgarNone: "No filings found before the as-of date (the search covers EDGAR's most recent ~1000 filings).",
     edgarNeedTickerDate: "Enter ticker and as-of date first.",
 
     // ——— confidence vs outcome (calibration replacement) ———
@@ -141,12 +138,11 @@ const dict = {
   zh: {
     studio: "研究台", trace: "轨迹回放", evals: "评估看板",
     run: "开始研究", running: "运行中…", reveal: "揭示未来",
-    revealed: "未来已揭示", memory: "经验记忆", maxSteps: "最大步数",
+    revealed: "未来已揭示", maxSteps: "最大步数",
     claims: "可证伪声明", memo: "研究备忘录", hit: "命中", miss: "未中",
     ungradable: "不可评分", failed: "校验失败——未产出备忘录",
     unverified: "未验证：语义审查未通过，声明不计分",
-    probe: "污染探针", calibration: "校准", costs: "Token 成本",
-    auditLog: "沙箱审计日志", allEvents: "全部事件", asOf: "研究基准日",
+    asOf: "研究基准日",
     theFuture: "未来尚不存在",
     selectCase: "选择案例", docs: "份文档", liveFeed: "实时动态",
     waitingForRun: "开始一次运行，逐步查看智能体的思考过程。",
@@ -160,7 +156,7 @@ const dict = {
     filterAll: "全部", filterPlan: "计划", filterTool: "工具", filterValidation: "校验",
     filterAudit: "审计", filterScore: "评分",
     noEvents: "本次运行没有记录任何事件。",
-    payload: "载荷", tokens: "tokens", expand: "展开", collapse: "收起",
+    tokens: "tokens",
     tool: "工具", params: "参数", dataMaxDate: "数据截止日期", note: "备注",
     denied: "拒绝：越界查看未来",
     costFooter: "按智能体统计的 Token 成本", agent: "智能体", calls: "调用次数",
@@ -179,7 +175,6 @@ const dict = {
     pickARun: "选择一次运行", recentRuns: "最近的运行",
     noRunsYet: "暂无运行——请从研究台发起一次运行。",
     noClaims: "本次运行没有记录任何声明。",
-    noCalibration: "本次运行没有校准数据。",
     leaderboard: "排行榜",
     pickASuite: "选择一个评测套件", recentSuites: "最近的套件",
     noSuitesYet: "暂无套件——运行 backend/hindsight/cli.py suite 以生成一个。",
@@ -192,7 +187,6 @@ const dict = {
     scatterX: "总 token 数", scatterY: "命中率",
     noSuiteSelected: "请在上方选择一个套件以查看结果。",
     suiteNotFound: "未找到该套件。",
-    statusOk: "正常",
 
     // ——— 叙事层 ———
     heroTitle: "把研究智能体送回过去",
@@ -265,7 +259,7 @@ const dict = {
     edgarHint: "申报日期由 SEC 官方盖章——这是唯一日期不会说谎的可自动化来源。新闻类文档仍需人工甄别。",
     edgarSearch: "查询申报文件", edgarSearching: "正在查询 EDGAR…",
     edgarImport: "导入所选", edgarImporting: "导入中…",
-    edgarNone: "基准日之前没有找到申报文件。",
+    edgarNone: "基准日之前没有找到申报文件（查询范围为 EDGAR 最近约 1000 条申报）。",
     edgarNeedTickerDate: "请先填写股票代码和研究基准日。",
 
     // ——— 置信度 vs 结果（替代校准曲线）———

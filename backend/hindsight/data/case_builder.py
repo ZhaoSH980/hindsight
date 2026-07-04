@@ -24,7 +24,8 @@ from hindsight.data.models import Bar
 # volatility percentile plus the baseline hunt (orchestrator fetches as_of-800d)
 _LOOKBACK_DAYS = 800
 _SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9_]{2,48}$")
-_TICKER_RE = re.compile(r"^[A-Z][A-Z0-9.\-]{0,9}$")
+# digit-leading symbols are real markets (0700.HK, 600519.SS) — allow them
+_TICKER_RE = re.compile(r"^[A-Z0-9][A-Z0-9.\-]{0,9}$")
 
 
 class BarsFetcher(Protocol):
@@ -36,10 +37,12 @@ class NewDoc(BaseModel):
 
     title: str = Field(min_length=3, max_length=200)
     published_at: date
-    source: str = "user-supplied"
-    url: str = ""
-    doc_type: str = "news"
-    text: str = Field(min_length=100)  # a corpus of one-liners defeats retrieval
+    source: str = Field(default="user-supplied", max_length=100)
+    url: str = Field(default="", max_length=500)
+    doc_type: str = Field(default="news", max_length=32)
+    # floor: a corpus of one-liners defeats retrieval; ceiling: comfortably
+    # above the EDGAR importer's 40k cap, but no request-body bombs
+    text: str = Field(min_length=100, max_length=60_000)
 
 
 class NewCaseRequest(BaseModel):
@@ -73,10 +76,6 @@ class CaseBuildError(ValueError):
     """User-fixable problem with the submitted case (maps to HTTP 400)."""
 
 
-class CaseExistsError(CaseBuildError):
-    """case_id already taken (maps to HTTP 409)."""
-
-
 def _slugify(text: str, limit: int = 40) -> str:
     s = re.sub(r"[^a-z0-9]+", "_", text.lower()).strip("_")
     return s[:limit] or "doc"
@@ -92,10 +91,28 @@ def derive_case_id(datasets_root: Path, ticker: str, as_of: date) -> str:
     return case_id
 
 
+def _claim_case_dir(datasets_root: Path, ticker: str, as_of: date) -> tuple[str, Path]:
+    """Atomically reserve a case directory: mkdir itself is the claim, so two
+    concurrent requests for the same ticker+date can never share (or destroy)
+    one directory — the loser just gets the next suffix."""
+    base = f"{_slugify(ticker)}_{as_of.strftime('%Y%m%d')}"
+    case_id = base
+    n = 2
+    while True:
+        case_dir = datasets_root / case_id
+        try:
+            (case_dir / "docs").mkdir(parents=True)
+            return case_id, case_dir
+        except FileExistsError:
+            case_id = f"{base}_{n}"
+            n += 1
+
+
 def _doc_markdown(doc: NewDoc) -> str:
     # frontmatter fields mirror rag/ingest.load_documents expectations
     def esc(s: str) -> str:
-        return s.replace("\n", " ").replace('"', "'").strip()
+        # backslash would start a YAML escape inside double quotes — neutralize
+        return s.replace("\\", "/").replace("\n", " ").replace('"', "'").strip()
 
     return (
         "---\n"
@@ -148,10 +165,8 @@ def build_case(
         raise CaseBuildError(f"market data for {req.ticker!r} has no bar on or before as_of")
     bars_after = sum(1 for b in bars if b.date > req.as_of)
 
-    case_id = derive_case_id(datasets_root, req.ticker, req.as_of)
-    case_dir = datasets_root / case_id
+    case_id, case_dir = _claim_case_dir(datasets_root, req.ticker, req.as_of)
     try:
-        (case_dir / "docs").mkdir(parents=True)
         meta = {
             "case_id": case_id,
             "title": req.title,

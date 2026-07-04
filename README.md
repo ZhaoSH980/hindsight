@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <a href="backend/tests"><img src="https://img.shields.io/badge/tests-171%20passed-brightgreen" alt="tests"/></a>
+  <a href="https://github.com/ZhaoSH980/hindsight/actions/workflows/ci.yml"><img src="https://github.com/ZhaoSH980/hindsight/actions/workflows/ci.yml/badge.svg" alt="ci"/></a>
   <a href="docs/demo-script.md"><img src="https://img.shields.io/badge/demo-offline%2C%20no%20API%20key-blue" alt="offline demo"/></a>
   <a href="docs/eval-log.md"><img src="https://img.shields.io/badge/built%20in-4%20days-8a2be2" alt="built in 4 days"/></a>
 </p>
@@ -16,7 +16,7 @@
   English | <a href="README.zh.md">中文版</a>
 </p>
 
-> Built in 4 days as an interview showcase — see [docs/eval-log.md](docs/eval-log.md) for the evaluation-driven development trail (every prompt and architecture change with before/after scores). Badges are static text until this repo has a CI-connected remote; the test count is verifiable locally with `pytest -q`.
+> Built in 4 days as an interview showcase — see [docs/eval-log.md](docs/eval-log.md) for the evaluation-driven development trail (every prompt and architecture change with before/after scores). The CI badge above is live: GitHub Actions runs the full backend suite on every push, and the same suite is verifiable locally with `pytest -q`.
 
 ---
 
@@ -50,14 +50,32 @@ Every tool call goes through the sandbox gate, which stamps and audits the reque
 
 The fastest path to seeing the whole system needs **no API key at all** — it replays committed, recorded runs.
 
-> **Windows one-click:** double-click **`demo.bat`** (offline single-server demo at :8000) or **`dev.bat`** (dev mode: backend auto-reload at :8000 + Vite HMR at :5173). Both self-check prerequisites and install/build on first run.
+> **Windows one-click:** double-click **`demo.bat`** (offline single-server demo at :8000) or **`dev.bat`** (dev mode: backend auto-reload at :8000 + Vite HMR at :5173). Honest caveat: neither creates the backend venv for you — if it's missing they stop and print the exact command to create it (the same `python -m venv` + `pip install` lines below). Frontend dependencies/build they *do* install automatically on first run.
+
+**Windows (PowerShell):**
+
+```powershell
+# 1. Backend (from repo root)
+cd backend
+python -m venv .venv
+.venv\Scripts\python -m pip install -e ".[dev]"
+$env:HINDSIGHT_OFFLINE = "1"
+.venv\Scripts\python -m uvicorn hindsight.api.app:app --port 8000
+
+# 2. Frontend (separate terminal, from repo root)
+cd frontend
+npm install
+npm run dev
+```
+
+**macOS / Linux:**
 
 ```bash
 # 1. Backend (from repo root)
 cd backend
-.venv/Scripts/python -m pip install -e ".[dev]"
-$env:HINDSIGHT_OFFLINE = "1"   # PowerShell; use `export HINDSIGHT_OFFLINE=1` on bash
-.venv/Scripts/python -m uvicorn hindsight.api.app:app --port 8000
+python3 -m venv .venv
+.venv/bin/python -m pip install -e ".[dev]"
+HINDSIGHT_OFFLINE=1 .venv/bin/python -m uvicorn hindsight.api.app:app --port 8000
 
 # 2. Frontend (separate terminal, from repo root)
 cd frontend
@@ -74,9 +92,26 @@ Both dev servers are also wired into `.claude/launch.json` (backend runs with `H
 | | |
 |---|---|
 | ![Research Studio — case picker, price history that ends at the as-of line, and a live agent feed](docs/assets/studio.png) | ![Trace Explorer — every plan step, tool call, and validation event with token counts](docs/assets/trace-explorer.png) |
-| **Research Studio** — pick a case; the price chart simply stops at the amber `as_of` line ("the future does not exist yet"). | **Trace Explorer** — the full audited trace: plan steps, tool calls/results, critic validation, scores. |
-| ![Eval Dashboard — score cards, calibration chart, per-claim grading with attribution tags](docs/assets/eval-dashboard.png) | ![Leaderboard — case-by-config matrix with paired deltas and a quality-vs-cost scatter](docs/assets/leaderboard.png) |
-| **Eval Dashboard** — hit rate, Brier, grounding, calibration (with per-bucket `n`), per-claim verdicts and failure attribution, contamination probe. | **Leaderboard** — the real suite matrix: base vs memory per case, paired deltas, quality-vs-cost scatter. |
+| **Research Studio** — pick a case; the price chart simply stops at the amber `as_of` line ("the future does not exist yet"). A live RunFlow pipeline diagram lights up each stage (planner → analyst → critic → scoring) as the run progresses — rewrite-loop counter, sandbox-guard chip and all — next to a narrated, localized live feed. | **Trace Explorer** — the full audited trace: plan steps, tool calls/results, critic validation, scores. |
+| ![Eval Dashboard — score cards, per-claim confidence strip, per-claim grading with attribution tags](docs/assets/eval-dashboard.png) | ![Leaderboard — case-by-config matrix with paired deltas and a quality-vs-cost scatter](docs/assets/leaderboard.png) |
+| **Eval Dashboard** — hit rate, Brier, grounding, a per-claim confidence-vs-outcome strip (with an honesty note on why no calibration curve is drawn at n=3–5), per-claim verdicts and failure attribution, contamination probe. | **Leaderboard** — the real suite matrix: base vs memory per case, paired deltas, quality-vs-cost scatter. |
+
+*(Screenshots show an earlier iteration of the UI; the current build has a darker sci-fi theme, a live pipeline diagram, and the case wizard.)*
+
+## Create your own case
+
+The committed NVDA/SMCI cases were authored by hand; the Studio now has a **case wizard** so you don't have to be. Give it a ticker, an `as_of` date, an outcome window, bilingual title/description metadata, and paste in the documents the agent is allowed to see. The wizard then:
+
+- **freezes real market bars automatically** (via yfinance) into the same `bars.json` snapshot format the graders use — no hand-curation of price data;
+- **rejects, at the door, any document dated after `as_of`** — the anti-lookahead rule is enforced at authoring time, not just at retrieval time;
+- refuses politely in offline mode (case creation needs live market data; the replay demo does not).
+
+For filings there's a **one-click SEC EDGAR import**: pick from the company's 10-K / 10-Q / 8-K filings dated before `as_of` and the wizard fetches them (for 8-Ks it prefers the ex-99 press-release exhibit, which is the part analysts actually read). URLs are rebuilt server-side from the accession number rather than trusted from the client (SSRF-proof), with an SEC-compliant user agent. This is the answer to "how does the corpus scale past two cases": SEC filing dates are stamped by the regulator, which makes EDGAR the one automatable source whose dates *cannot lie* — exactly the property the anti-lookahead corpus needs. Three honest boundaries: the importer covers EDGAR's "recent" window (roughly the ~1000 most recent filings); news/analysis documents still need manual curation; and the wizard blocks **date** fraud, not **content** fraud — the truthfulness of a pasted document's text stays on the author.
+
+## Bilingual runs & replay provenance
+
+- A run's memo language is a config switch (`language: en | zh`): zh runs produce the memo, claims and `memo.md` headings in Chinese, while the English prompts remain **byte-identical** to before the feature existed — locked by a test, so the replay cache and every committed English run are provably unaffected. Committed zh demo runs replay fully offline too.
+- Every run shows a **provenance badge** — ⚡ replayed vs 🌐 live, with cache-hit and live-call counts from the per-run `llm_provenance` record — so a run that completes in two seconds is *explained* (record/replay determinism), not mysterious.
 
 ## The three anti-lookahead channels
 
@@ -86,7 +121,7 @@ The sandbox's job is to make it structurally impossible for the agent to see the
 - **Market bars** — the price/volume tool refuses any request whose range extends past `as_of`, raising `LookaheadError` rather than silently truncating.
 - **Experience memory** — the cross-run memory recall gates on `outcome_window_end <= as_of` *and* excludes the current case (leave-one-out), so a case's own outcome can never leak back into its own run, and a suite only ever reads memory cards that existed before the suite started.
 
-All three are asserted directly, per channel, in `backend/tests/test_sandbox_leakage.py` (11 tests) — the file that CI must always keep green. The fourth channel — what the model already knows from pretraining — cannot be closed by a sandbox; it is surfaced honestly by a per-run contamination probe instead (see [docs/evaluation-methodology.md](docs/evaluation-methodology.md) §3).
+All three are asserted directly, per channel, in `backend/tests/test_sandbox_leakage.py` — the file that CI must always keep green. The fourth channel — what the model already knows from pretraining — cannot be closed by a sandbox; it is surfaced honestly by a per-run contamination probe instead (see [docs/evaluation-methodology.md](docs/evaluation-methodology.md) §3).
 
 ## Evaluation
 
@@ -94,9 +129,9 @@ Three tracks, computed after a run completes (the "future" already exists in a b
 
 | Track | What it measures |
 |---|---|
-| **A. Outcome** | Mechanical grading of each claim (direction / magnitude / volatility) against realized bars — hit rate, Brier score, a calibration chart (bucketed, with sample size `n` per bucket, never a smoothed line) |
+| **A. Outcome** | Mechanical grading of each claim (direction / magnitude / volatility) against realized bars — hit rate, Brier score, and a per-claim confidence-vs-outcome strip in the UI (the bucketed calibration table with per-bucket `n` still lands in `scores.json`; no curve is ever drawn over a run's 3–5 claims) |
 | **B. Process + attribution** | An independent LLM judge scores grounding rate, reasoning consistency, and retrieval sufficiency, and tags every **missed** claim with `evidence_missing` / `misread_evidence` / `reasonable_but_wrong` |
-| **C. Cost** | Token ledger per agent per step, call counts, and cost-per-hit-claim |
+| **C. Cost** | Per-agent prompt/completion token counts and call counts; total tokens serve as the cost proxy on the leaderboard scatter |
 
 Plus a **contamination probe** per case: a bare prompt asking the model directly "what happened to `TICKER` after `as_of`?" — logged and shown next to the scores as an honesty check, not folded into them. Both cases' probes come back clean ("I do not know what happened…").
 
@@ -143,7 +178,7 @@ hindsight/
 │   │   ├── llm/                # OpenAI-compatible client + record/replay
 │   │   ├── store/            # SQLite (runs, experiences, llm_calls)
 │   │   └── api/               # FastAPI app, routers, WebSocket stream, suite endpoints
-│   └── tests/                # 171 tests: sandbox leakage, grading, schema, replay, API
+│   └── tests/                # full suite: sandbox leakage, grading, schema, replay, API
 ├── frontend/                # Vite + React + TS + Tailwind + Recharts, dark quant theme
 │   └── src/pages/          # Studio, TraceExplorer, EvalDashboard, Leaderboard
 ├── datasets/                  # <case_id>/{meta.json, bars.json, docs/*.md} — frozen snapshots
@@ -169,3 +204,7 @@ hindsight/
 | [docs/design-decisions.md](docs/design-decisions.md) | Architecture rationale, tradeoffs, the case-count-vs-confidence discussion |
 | [docs/demo-script.md](docs/demo-script.md) | 10-minute offline demo walkthrough with failure-mode drills |
 | [docs/future-work.md](docs/future-work.md) | Conscious scope decisions and non-blocking findings from the final review |
+
+## License
+
+MIT — see [LICENSE](LICENSE).

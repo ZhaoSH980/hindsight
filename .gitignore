@@ -23,6 +23,9 @@ frontend/dist/
 backend/.cache/
 data_cache/
 
+# local runs are ignored; curated demo runs are committed with git add -f
+runs/run_*/
+
 # IDE / OS
 .idea/
 .vscode/

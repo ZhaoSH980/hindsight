@@ -83,11 +83,14 @@ export function CaseWizard({ onCreated, onCancel }: Props) {
           text: doc.text,
         });
       }
-      // fill empty slots first, then append
+      // fill truly-empty slots first (ALL fields blank — never clobber a
+      // half-typed doc), then append
       setDocs((ds) => {
         const merged = [...ds];
+        const isBlank = (d: DocDraft) =>
+          !d.title && !d.text && !d.published_at && !d.source && !d.url;
         for (const doc of fetched) {
-          const empty = merged.findIndex((d) => !d.title && !d.text);
+          const empty = merged.findIndex(isBlank);
           if (empty >= 0) merged[empty] = doc;
           else merged.push(doc);
         }
@@ -167,12 +170,13 @@ export function CaseWizard({ onCreated, onCancel }: Props) {
         <label className={labelCls}>
           {t("wizAsOf")}
           <input type="date" className={`${inputCls} font-mono`} value={asOf}
+            max={new Date(Date.now() - 86400000).toISOString().slice(0, 10)}
             onChange={(e) => setAsOf(e.target.value)} />
         </label>
         <label className={labelCls}>
           {t("wizWindow")}
           <input type="number" min={1} max={250} className={`${inputCls} num`} value={windowDays}
-            onChange={(e) => setWindowDays(Number(e.target.value) || 40)} />
+            onChange={(e) => setWindowDays(Math.min(250, Math.max(1, Number(e.target.value) || 40)))} />
         </label>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

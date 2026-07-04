@@ -4,8 +4,10 @@ Recorded at the D4 wrap-up (tag `d4-complete`). Two kinds of entries:
 **scope decisions** made deliberately during the 4-day build (with the
 rationale that made them safe to defer), and **minor findings** from the
 final whole-repo review that did not warrant blocking the tag. Nothing here
-is a known-broken behavior; the test suite (171) is green and every README /
-methodology claim traces to a committed artifact.
+is a known-broken behavior; the full backend suite is green (`pytest -q`)
+and every README / methodology claim traces to a committed artifact.
+Entries resolved by later work are marked **done** in place rather than
+deleted, so the decision trail stays readable.
 
 ## Conscious scope decisions
 
@@ -18,6 +20,11 @@ methodology claim traces to a committed artifact.
   and the Leaderboard are N-case by construction; when a third case lands
   in `datasets/`, `--cases a,b,c` scales with zero code change. The
   methodology doc's small-N framing already assumes the tighter N.
+  *Update:* the Studio's case wizard + one-click EDGAR import now automate
+  the mechanical parts of exactly this work — bar freezing, as-of
+  validation at the door, and filing sourcing with regulator-stamped dates.
+  The remaining cost of a TSLA (or any) case is the part that *should*
+  stay manual: fact-checking the narrative documents.
 - **Demo GIF skipped.** Static screenshots of all four pages shipped in
   `docs/assets/` and the rehearsed walkthrough lives in
   `docs/demo-script.md`; a GIF adds polish, not information. Skipped
@@ -62,23 +69,19 @@ methodology claim traces to a committed artifact.
 
 ## Minor findings from the final review (non-blocking)
 
-- **Crashed-partial run row shows `running` forever.**
-  `run_nvda_fy26q1_20260704_075320_922d45` (the D2 recording crash kept
-  deliberately as a failure-tolerance artifact) still has status `running`
-  in the committed `hindsight.db`, so the Eval Dashboard's run list shows a
-  permanently running 2026-07-04 row. Honest, but a `stale`/`crashed`
-  sweep (e.g. flag `running` rows older than N hours at API startup) would
-  read better. The run is documented as a crashed partial in
+- **Crashed-partial run row shows `running` forever — done.** Exactly the
+  sweep proposed here now exists: at API startup, orphaned `queued`/
+  `running` rows (runs execute in server daemon threads, so none can
+  survive a restart) are marked `failed`. The D2 crashed partial
+  (`run_nvda_fy26q1_20260704_075320_922d45`) remains documented in
   `docs/judge-meta-eval.md`.
 - **Frontend ships one 615 kB JS chunk.** Vite warns at build time;
   Recharts dominates. Route-level `import()` splitting (Leaderboard and
   EvalDashboard are the only Recharts consumers) would cut initial load
   roughly in half. Cosmetic for a local demo.
-- **Trace Explorer nav placeholder is a dead end.** The nav's "Trace
-  Explorer" link points at `/runs/_/trace`, which renders only "Run not
-  found." until a run is chosen via Studio or the Eval Dashboard list. An
-  empty state that lists recent runs (like `/runs/_` does) would be
-  friendlier.
+- **Trace Explorer nav placeholder is a dead end — done.** The UI redesign
+  added a run picker, so the nav link now lands on a usable run chooser
+  instead of "Run not found."
 - **`HEAD /` returns 405.** The SPA fallback registers GET only; HEAD
   probes (some uptime checkers, some tooling) get 405 instead of 200.
   One-line fix (`methods=["GET", "HEAD"]`) if it ever matters.
@@ -88,3 +91,30 @@ methodology claim traces to a committed artifact.
   re-run the judge on a memo whose citations are deliberately shuffled to
   not support the claims, and check it flags them. Costs a handful of
   metered calls; design is in `docs/judge-meta-eval.md`.
+
+## Opened by the wizard / UI-redesign wave
+
+New items that only became meaningful (or practical) once the case wizard,
+EDGAR import, and redesigned dashboard landed:
+
+- **EDGAR pagination beyond the "recent" window.** The importer reads
+  EDGAR's recent-filings feed, which covers roughly the ~1000 most recent
+  filings per company — plenty for recent as_of dates, but a case set in,
+  say, 2018 for a filing-heavy company would need the full-index/paginated
+  API. The server-side URL rebuild and UA handling carry over unchanged.
+- **Naive baseline config as a leaderboard row.** A no-research (or
+  retrieval-free) config run on every case would anchor the leaderboard:
+  any config that can't beat "guess from the prompt" is measurably not
+  researching. Also the cheapest mitigation for claim-difficulty gaming
+  (below).
+- **Claim-difficulty scoring.** Today `threshold_pct > 0` is the only
+  floor, so trivially easy claims could inflate hit rate unscored
+  (methodology §2 now names this limitation). Candidate mechanics:
+  difficulty-stratified reporting, a minimum-threshold floor in the critic,
+  or scoring claims against the ticker's realized volatility so "up ≥0.1%"
+  earns roughly nothing.
+- **Per-call latency and provider-priced cost in the ledger.** The cost
+  track deliberately records only per-agent token/call counts, with total
+  tokens as the leaderboard's cost proxy. Wall-clock latency per call and a
+  priced-cost column (per-model rates) would complete track C — and make a
+  cost-per-hit-claim ratio honest to compute.

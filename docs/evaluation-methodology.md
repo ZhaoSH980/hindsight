@@ -65,9 +65,15 @@ only: `n_claims`, `n_gradable`, `n_hit`, `hit_rate`, **Brier score**
 (mean squared error between each claim's stated `confidence` and its 0/1
 outcome), and a **calibration table** bucketed into five confidence bands
 (`[0,0.2) … [0.8,1.0]`), each bucket carrying its own sample count `n` and
-average confidence/hit-rate — deliberately a bucketed scatter with visible
-`n`, not a smoothed reliability curve, so a bucket with `n=1` reads as `n=1`
-rather than as a confident point on a line (spec §3.4-A).
+average confidence/hit-rate — deliberately a bucketed table with visible
+`n`, never a smoothed reliability curve, so a bucket with `n=1` reads as
+`n=1` rather than as a confident point on a line (spec §3.4-A). That table
+is what `aggregate()` writes into `scores.json`. The **UI goes one step
+further and renders no buckets at all**: the Eval Dashboard draws a
+per-claim ConfidenceStrip — every claim plotted individually at its stated
+confidence, colored by hit/miss — with an explicit note that bucketed
+calibration needs dozens of claims and a single run has 3–5, so each claim
+is shown rather than any aggregate shape being implied.
 
 ### B. Process + failure attribution (LLM judge)
 
@@ -96,10 +102,15 @@ process metrics are absent rather than defaulted to a value.
 ### C. Cost
 
 A token ledger (`CostLedger`, referenced from `judge.py`/`contamination.py`
-`ledger.add(...)` calls) tracks prompt/completion tokens per agent per call
-(`planner`, `researcher` implicitly via tool calls, `analyst`, `critic`,
-`judge`, `probe`), from which call counts, latency, and provider-priced cost
-are derived, plus a cost-per-hit-claim ratio.
+`ledger.add(...)` calls) tracks prompt/completion token counts and call
+counts per agent (`planner`, `analyst`, `critic`, `judge`, `probe` — the
+Researcher stage is deterministic and makes no LLM calls). That is the
+entire track: **no latency is measured, no provider-priced cost is
+computed, and there is no cost-per-hit-claim ratio**. The Leaderboard's
+quality-vs-cost scatter uses **total tokens** as its cost proxy — an
+honest proxy given that all compared runs use the same model and pricing.
+Per-call latency, provider-priced cost, and a cost-per-hit-claim ratio are
+named as future work (`docs/future-work.md`), not claimed as shipped.
 
 A **contamination probe** (`contamination.py`) runs once per case: a bare,
 temperature-0 prompt asking the model directly what happened to the ticker
@@ -138,12 +149,40 @@ plainly as in the spec, not softened.
   *catches* narrative-following, not a general research accuracy rate — the
   README states this plainly, and it is restated here so it cannot be
   mistaken for an unbiased case draw.
-- **Calibration buckets carry `n` for exactly this reason.** The five
-  confidence buckets in `aggregate()`'s `calibration` list each report their
-  own sample count. A bucket with `n=1` or `n=0` (`avg_confidence`/`hit_rate`
-  reported as `None` when empty) must be read as a single data point or a
-  gap, not as a smoothed reliability estimate — the calibration chart is
-  deliberately a bucketed scatter, never a smoothed line (spec §3.4-A).
+- **Calibration is reported in two deliberately different layers.** In the
+  data layer, `aggregate()` still emits the five-bucket calibration table
+  into `scores.json`, each bucket carrying its own sample count `n`
+  (`avg_confidence`/`hit_rate` reported as `None` when a bucket is empty) —
+  a bucket with `n=1` must be read as a single data point, not a
+  reliability estimate, and no smoothed line is ever derived from it (spec
+  §3.4-A). In the presentation layer, the UI does not chart those buckets
+  at all: the Eval Dashboard renders a per-claim **ConfidenceStrip** (every
+  claim at its stated confidence, colored hit/miss) plus a note saying why —
+  bucketed calibration is meaningful over dozens of claims, and a single
+  run has 3–5. Showing every claim individually is the small-n-honest
+  rendering of the same underlying numbers.
+- **Corpus-composition hindsight bias.** The author curated *which*
+  documents exist in each case's corpus while already knowing the outcome.
+  Per-fact dating is verified (every statement in every doc is checked to
+  be true at its stated publication date), but the *mix* — how many bullish
+  versus bearish contemporaneous voices made the cut — is discretionary,
+  and an author who knows SMCI collapsed can (even unconsciously) tilt the
+  shelf the agent reads from. The mitigation path is mechanical inclusion
+  rules that remove the discretion: e.g. *all* EDGAR filings in the window
+  via the importer, plus a fixed top-N of contemporaneous notes selected by
+  a rule rather than by taste. This became practical rather than
+  aspirational once the EDGAR importer shipped; it is not yet applied to
+  the committed cases.
+- **Claim-difficulty gaming is unscored.** The agent authors its own
+  claims, and the schema only requires `threshold_pct > 0` — so a strategy
+  of emitting trivially easy claims ("up ≥0.1% in 40 days") could inflate
+  hit rate without any research skill. Nothing in the current grading
+  penalizes this: hit rate and Brier are difficulty-blind. Honest reading:
+  compare configs on the *same* case (paired deltas), where both sides face
+  the same temptation. Named mitigations, none implemented yet: a naive
+  baseline config as a permanent leaderboard row (what does a no-research
+  agent score?), difficulty-stratified reporting, and a minimum-threshold
+  floor enforced by the critic.
 - **Paired deltas over absolute ranks.** The Leaderboard compares
   same-case, same-config-family deltas (`Δhit_rate`, `Δbrier` vs. a `base`
   config on that same case) rather than ranking configs by absolute score
@@ -156,8 +195,8 @@ plainly as in the spec, not softened.
 
 The time sandbox (spec §3.2) makes it structurally impossible for the agent
 to see the future through three tool-layer doors, and each is asserted
-directly by `backend/tests/test_sandbox_leakage.py` — **11 tests, CI-required
-green**:
+directly by named tests in `backend/tests/test_sandbox_leakage.py` — the
+file CI must always keep green:
 
 | Channel | Guarantee | Tests |
 |---|---|---|
@@ -165,7 +204,7 @@ green**:
 | **Market bars** | The price tool raises `LookaheadError` for any request whose range extends past `as_of`, rather than silently truncating; denials are themselves audited. | `test_market_range_ending_after_as_of_raises`, `test_market_range_up_to_as_of_allowed`, `test_market_writes_audit_entry`, `test_denied_market_access_is_audited`, `test_source_error_is_audited` |
 | **Experience memory** | Cross-run recall gates on `outcome_window_end <= as_of` **and** excludes the current case (leave-one-out); a suite additionally only reads cards that existed before the suite started (`created_at < suite.started_at`). | `test_memory_channel_hides_unclosed_windows`, `test_memory_channel_leave_one_out`, `test_memory_channel_respects_suite_snapshot` |
 
-`test_as_of_is_read_only` (the 11th test) additionally asserts `as_of` on
+`test_as_of_is_read_only` additionally asserts `as_of` on
 both sandboxed sources cannot be mutated after construction — the gate's
 input can't be tampered with from application code either.
 
@@ -211,6 +250,21 @@ the order the spec states them:
    not know what happened to SMCI... after February 26, 2025" (`docs/eval-log.md`,
    D2 case-3 validation run) — repeated again clean across all runs in the
    D4 suite ("Both contamination probes stayed clean throughout").
+
+**What is the model's training cutoff?** The honest answer: unknown. The
+provider (xf-yun MaaS) does not publish an official training cutoff for
+`astron-code-latest`, so mitigation #1 above cannot be applied with
+documentation — only inferred. Both committed cases' probes (as_of
+2025-02-26 and 2025-05-22) returned clean "I don't know" answers, which is
+*consistent with* a cutoff before mid-2025, but that is inference from
+probe behavior, not a documented fact, and it is exactly the kind of claim
+this project refuses to state as if it were checked. The consequence is
+the existing rule applied more broadly: absolute outcome scores on these
+cases should be read primarily as pipeline-correctness evidence, with the
+paired-delta comparisons carrying the analytical weight. The durable
+mitigation is structural rather than forensic — author new cases whose
+`as_of` postdates the model's release, which the case wizard now makes
+cheap to do.
 
 **What a clean probe does and does not prove.** It demonstrates the model
 did not produce the realized outcome when asked directly and bluntly in a
@@ -321,13 +375,13 @@ flag on either committed case specifically.
 | Baseline P0, trading-day counting, direction/magnitude/volatility rules, `hit`/`miss`/`ungradable` | `backend/hindsight/eval/outcome_grader.py` (`_baseline_index`, `grade_claim`); spec §3.3 rules 1-6 |
 | `MIN_VOL_SAMPLES = 20`, `HISTORY_BARS = 252` | `backend/hindsight/eval/outcome_grader.py` |
 | Float-boundary `math.isclose` tolerance on direction/magnitude thresholds | `backend/hindsight/eval/outcome_grader.py` inline comments |
-| Calibration buckets carry `n`, never a smoothed line | `backend/hindsight/eval/outcome_grader.py` `aggregate()`; spec §3.4-A |
+| Calibration table in `scores.json` carries per-bucket `n`, never a smoothed line; UI renders the per-claim strip instead | `backend/hindsight/eval/outcome_grader.py` `aggregate()`; `frontend/src/components/ConfidenceStrip.tsx`; spec §3.4-A |
 | Judge schema (`grounding`, `reasoning_consistency`, `retrieval_sufficiency`, `attributions`), 2-attempt retry, hallucinated-attribution filtering | `backend/hindsight/eval/judge.py` |
 | Contamination probe design (bare prompt, temperature 0, +1 call/case) | `backend/hindsight/eval/contamination.py`; spec §3.2 |
 | Judge runs after track A; self-preference bias framing; paired deltas over absolute ranks | Spec §3.4, §3.6 |
 | Small-N / correlated-claims / SMCI-deliberate-selection framing | Spec §3.4, §4.1 |
 | SMCI case selection rationale and verified pre-as_of rally / post-as_of drawdown numbers | `docs/eval-log.md` "D2 — case 3: SMCI falsification case" |
-| Three anti-lookahead channels, 11 leakage tests | `backend/tests/test_sandbox_leakage.py` |
+| Three anti-lookahead channels, per-channel leakage tests | `backend/tests/test_sandbox_leakage.py` |
 | Memory asymmetry: SMCI 0 lessons calls, NVDA lessons block in all 8 planner calls, byte-identical SMCI memory run, worse NVDA memory Brier (0.30063 vs 0.26125) | `docs/eval-log.md` "D4 — evaluation suite" → "Memory asymmetry check" (row partition corrected at D4 wrap-up) |
 | Contamination probes clean on both NVDA and SMCI | `docs/eval-log.md` "D2 — first live NVDA run", "D2 — case 3" |
 | Judge self-preference mitigation via paired deltas | Spec §3.4 |
@@ -337,4 +391,4 @@ flag on either committed case specifically.
 | Byte-identical offline replay (`--offline` A/B) | `docs/eval-log.md` "D2 — case 3" → "Offline replay proof" |
 | Independent byte-identical replay corroboration (SMCI memory run = cache hits) | `docs/eval-log.md` "D4 — evaluation suite" → "Memory asymmetry check" / "CAVEAT confirmed" |
 | Prompt-as-code, mutual-consistency fix and critic rubric fix with before/after scores | `docs/eval-log.md` "D2 — first live NVDA run" (runs 1, 2b, 3) |
-| Full backend suite count (171 passed) | Verified locally: `cd backend && .venv/Scripts/python -m pytest -q` |
+| Full backend suite passes offline | Verified locally: `cd backend && .venv/Scripts/python -m pytest -q`; enforced in CI on every push |

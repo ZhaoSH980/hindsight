@@ -169,3 +169,30 @@ def test_run_id_can_be_preassigned(case_dir, tmp_path):
     )
     assert result.run_id == "run_preassigned_001"
     assert result.run_dir.name == "run_preassigned_001"
+
+
+def test_crash_marks_run_failed_before_reraise(tmp_path, case_dir):
+    """A mid-run exception (e.g. LLM retries exhausted mid-suite) must not
+    leave the row stuck on 'running' — run_research marks it failed itself."""
+    import pytest
+
+    from hindsight.agents.orchestrator import run_research
+    from hindsight.schemas import RunConfig
+    from hindsight.store.db import Store
+
+    class ExplodingLLM:
+        offline = True
+        cache_hits = 0
+        cache_misses = 0
+
+        def chat(self, **kwargs):
+            raise RuntimeError("boom mid-run")
+
+    store = Store(tmp_path / "t.db")
+    with pytest.raises(RuntimeError, match="boom"):
+        run_research(case_dir, RunConfig(model="m"), llm=ExplodingLLM(),
+                     store=store, runs_root=tmp_path / "runs", run_id="r_crash")
+    rows = {r["run_id"]: r for r in store.get_runs()}
+    assert rows["r_crash"]["status"] == "failed"
+    import json
+    assert "boom" in json.loads(rows["r_crash"]["scores_json"])["error"]

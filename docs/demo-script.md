@@ -14,6 +14,10 @@ itself part of the pitch — determinism is a feature, show it off.
 One process serves the API **and** the built frontend at `:8000`. Fewest
 moving parts; survives with no Node running.
 
+On Windows, double-clicking **`demo.bat`** at the repo root is Option A in
+one click (offline, builds the frontend on first run; requires the backend
+venv to exist — it prints the exact creation command if not).
+
 ```bash
 # once, or whenever frontend/src changed:
 npm run build --prefix frontend
@@ -40,7 +44,8 @@ replay-cache miss rather than touching the network.
 
 `.claude/launch.json` defines both servers for one-click tooling launch
 (backend on `:8000` with `HINDSIGHT_OFFLINE=1`, Vite dev server on `:5173`).
-Manually:
+On Windows, **`dev.bat`** at the repo root launches the same pair in two
+windows (same venv caveat as `demo.bat`). Manually:
 
 ```bash
 HINDSIGHT_OFFLINE=1 backend/.venv/Scripts/python -m uvicorn hindsight.api.app:app --port 8000
@@ -64,7 +69,7 @@ git status              # must be clean
 
 ### Preflight (2 minutes, morning of)
 
-- [ ] `cd backend && .venv/Scripts/python -m pytest -q` → **171 passed**
+- [ ] `cd backend && .venv/Scripts/python -m pytest -q` → expect: **all tests pass**
 - [ ] Start Option A; open `:8000`; both cases visible in the Studio
 - [ ] `/leaderboard` shows `suite_c3b22b4b`
 - [ ] Reset state (above) so the run you do live is the first of the day
@@ -82,10 +87,24 @@ Open the Studio on **NVDA**. Point at the price chart: it just *stops* at
 the amber `as_of` line (2025-05-22). Say the line: **"the future does not
 exist yet"** — it's rendered under the chart.
 
-Click **Run research**. The live feed streams the real agent trace (plan
-steps, tool calls, sandbox audits) — replayed deterministically from the
-recorded run, so it cannot die on stage. Memo lands with 4 falsifiable,
-dated claims, each with confidence and cited evidence chunks.
+Click **Run research**. While the narrated live feed streams the real agent
+trace (plan steps, tool calls, sandbox audits), walk the **RunFlow pipeline
+diagram** above it: each stage lights up as the run reaches it (planner →
+analyst → critic → scoring), the rewrite-loop counter ticks if the critic
+sends the memo back, and the sandbox-guard chip counts audits as they land.
+Replayed deterministically from the recorded run, so it cannot die on
+stage. Memo lands with 4 falsifiable, dated claims, each with confidence
+and cited evidence chunks.
+
+Then point at the **provenance badge** on the run: ⚡ replayed, 0 live
+calls. Say out loud *why* it was instant — every LLM call was served from
+the record/replay cache, byte-for-byte deterministic; nothing was faked,
+and the badge is how the UI proves it rather than asking you to trust it.
+
+*Optional (30s): flip the memo language to 中文 and rerun. The zh replay is
+committed too, so it completes offline in seconds — with a Chinese memo,
+Chinese claims, and Chinese `memo.md` headings, while the English prompt
+path stays byte-identical (a test locks that).*
 
 Then the moment: **"The outcome window has closed."** Click **Reveal the
 future**. The realized price path draws in green past the amber line, and
@@ -114,8 +133,14 @@ From the Eval Dashboard's run list (or "View full trace"), open the NVDA
 Same run's dashboard. Walk the cards: hit rate 25%, Brier 0.301, grounding
 100%, judge scores 4/5. Then the two honesty artifacts:
 
-- **Calibration chart**: bucketed scatter with `n=` labels — no smoothed
-  line over 4 points, ever.
+- **ConfidenceStrip**: every claim plotted individually at its stated
+  confidence — green for hit, red for miss — with the honesty callout right
+  next to it: a bucketed calibration curve needs dozens of claims and a
+  single run has 3–5, so the UI shows each claim instead of drawing a line
+  that would imply statistics it doesn't have. Narrate this as a deliberate
+  honesty upgrade: earlier iterations drew a bucketed chart here; showing
+  the raw claims is the more defensible move at this sample size (the
+  bucketed table, with per-bucket `n`, still lands in `scores.json`).
 - **Claims table**: every miss carries an attribution —
   `reasonable_but_wrong` (process sound, market disagreed) vs
   `evidence_missing` vs `misread_evidence`. That's the answer to "why did
@@ -142,7 +167,23 @@ If asked "how was this built": `docs/eval-log.md` is the development trail —
 two prompt fixes were made *because* graded runs failed, each with
 before/after scores (the mutual-consistency rule; the critic rubric rewrite).
 
-### Beat 5 — Limitations Q&A (~2 min, invite it)
+### Beat 5 — How this scales past two cases (case wizard, ~1 min)
+
+The obvious skeptic question is "two cases — nice demo, where does case 30
+come from?" Answer it before it's asked: open the Studio's **New case**
+wizard. Fill in a ticker and an as-of date, show that pasting a document
+dated *after* as-of is rejected at the door (the anti-lookahead rule
+enforced at authoring time), and that real bars are frozen automatically.
+Then the punchline: click the **SEC EDGAR import**, and the company's
+10-K/10-Q/8-K filings before as-of appear as one-click imports. Say the
+key sentence: SEC filing dates are stamped by the regulator — the one
+automatable source whose dates cannot lie, which is exactly the property
+this corpus needs. Be honest about the boundary: news docs still need
+manual curation, and the wizard blocks date fraud, not content fraud.
+(Offline mode: the wizard politely refuses — creation needs live data;
+just show the form and narrate.)
+
+### Beat 6 — Limitations Q&A (~2 min, invite it)
 
 Volunteer these before being asked; the honest answers are the showcase.
 

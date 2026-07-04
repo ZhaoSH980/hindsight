@@ -113,9 +113,37 @@ def run_research(
     suite_started_at: str | None = None,
     run_id: str | None = None,
 ) -> RunResult:
+    """Run one case end to end. On ANY crash the run's row is marked failed
+    before re-raising — otherwise a mid-suite exception would leave the row
+    stuck on 'running' until the next server restart sweeps it."""
     case = load_case(Path(case_dir))
-    as_of = case.meta.as_of
     run_id = run_id or _new_run_id(case.meta.case_id)
+    try:
+        return _run_research_inner(
+            case, config, llm=llm, store=store, runs_root=runs_root,
+            suite_id=suite_id, suite_started_at=suite_started_at, run_id=run_id,
+        )
+    except Exception as exc:
+        store.upsert_run(
+            run_id, case.meta.case_id, config.model_dump_json(), "failed",
+            scores_json=json.dumps({"status": "crashed", "error": str(exc)[:500]}),
+            suite_id=suite_id,
+        )
+        raise
+
+
+def _run_research_inner(
+    case,
+    config: RunConfig,
+    *,
+    llm: RecordingLLMClient,
+    store: Store,
+    runs_root: Path,
+    suite_id: str | None,
+    suite_started_at: str | None,
+    run_id: str,
+) -> RunResult:
+    as_of = case.meta.as_of
     run_dir = Path(runs_root) / run_id
     trace = TraceRecorder(run_dir=run_dir)
     ledger = CostLedger()

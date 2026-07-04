@@ -13,6 +13,9 @@ export function PriceChart({ bars, asOf, revealed }: Props) {
     past: b.date <= asOf ? b.close : null,
     future: b.date >= asOf ? (revealed ? b.close : null) : null,
   }));
+  // the x-axis is categorical over bar dates: if as-of falls on a non-trading
+  // day recharts silently drops the ReferenceLine — snap to the last bar <= as-of
+  const asOfX = [...bars].reverse().find((b) => b.date <= asOf)?.date ?? asOf;
   return (
     <div className="panel p-3 h-72 relative">
       <ResponsiveContainer>
@@ -24,7 +27,7 @@ export function PriceChart({ bars, asOf, revealed }: Props) {
             contentStyle={{ background: "#0b111e", border: "1px solid #1c2740", borderRadius: 8 }}
             labelStyle={{ color: "#7d8aa5" }}
           />
-          <ReferenceLine x={asOf} stroke="#fbbf24" strokeDasharray="4 4"
+          <ReferenceLine x={asOfX} stroke="#fbbf24" strokeDasharray="4 4"
             label={{ value: `${t("asOf")} ${asOf}`, fill: "#fbbf24", fontSize: 10, position: "insideTopRight" }} />
           <Area dataKey="past" stroke="#22d3ee" fill="#22d3ee" fillOpacity={0.08} strokeWidth={1.5} dot={false} isAnimationActive={false} />
           <Area dataKey="future" stroke="#34d399" fill="#34d399" fillOpacity={0.08} strokeWidth={1.5} dot={false} isAnimationActive={true} animationDuration={1200} />

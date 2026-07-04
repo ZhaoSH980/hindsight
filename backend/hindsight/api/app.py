@@ -14,6 +14,9 @@ from hindsight.api.deps import make_state
 def create_app(repo_root: Path | None = None) -> FastAPI:
     app = FastAPI(title="Hindsight API")
     app.state.hindsight = make_state(repo_root)
+    # runs execute in this process's daemon threads — any row still marked
+    # queued/running at startup was orphaned by a previous shutdown
+    app.state.hindsight.store.sweep_orphaned_runs()
     app.add_middleware(
         CORSMiddleware,
         allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],

@@ -43,3 +43,29 @@ def test_experience_window_closes_exactly_on_as_of(tmp_path):
     s = Store(tmp_path / "h.db")
     s.insert_experience("e1", "case_a", "r1", "2025-03-01", "2025-05-22", "NVDA", "{}")
     assert s.query_experiences(as_of="2025-05-22", exclude_case_id="other")
+
+
+def test_sweep_orphaned_runs(tmp_path):
+    """After a server restart, queued/running rows are orphans by definition
+    (runs execute in the dead process's daemon threads) — sweep marks them
+    failed without touching finished runs."""
+    import json
+
+    from hindsight.store.db import Store
+
+    s = Store(tmp_path / "t.db")
+    s.upsert_run("r_done", "c", "{}", "done", scores_json='{"ok": 1}')
+    s.upsert_run("r_running", "c", "{}", "running")
+    s.upsert_run("r_queued", "c", "{}", "queued")
+
+    assert s.sweep_orphaned_runs() == 2
+    by_id = {r["run_id"]: r for r in s.get_runs()}
+    assert by_id["r_done"]["status"] == "done"
+    assert by_id["r_running"]["status"] == "failed"
+    assert by_id["r_queued"]["status"] == "failed"
+    note = json.loads(by_id["r_running"]["scores_json"])
+    assert "orphaned" in note["error"]
+    # finished run keeps its original scores
+    assert json.loads(by_id["r_done"]["scores_json"]) == {"ok": 1}
+    # idempotent
+    assert s.sweep_orphaned_runs() == 0

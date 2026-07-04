@@ -6,6 +6,7 @@ run-dir files are authoritative for details (spec §4.3).
 """
 from __future__ import annotations
 
+import json
 import sqlite3
 import threading
 from datetime import datetime, timezone
@@ -56,6 +57,20 @@ class Store:
                 (run_id, case_id, suite_id, config_json, status, scores_json, now_iso()),
             )
             self._conn.commit()
+
+    def sweep_orphaned_runs(self) -> int:
+        """Mark queued/running rows as failed. Runs execute in daemon threads
+        of the server process, so after a (re)start any such row is by
+        definition an orphan that would otherwise show 'running' forever."""
+        note = json.dumps({"status": "crashed", "error": "orphaned by server restart"})
+        with self._lock:
+            cur = self._conn.execute(
+                "UPDATE runs SET status='failed', scores_json=COALESCE(scores_json, ?)"
+                " WHERE status IN ('queued', 'running')",
+                (note,),
+            )
+            self._conn.commit()
+        return cur.rowcount
 
     def get_runs(self, suite_id: str | None = None) -> list[dict[str, Any]]:
         with self._lock:

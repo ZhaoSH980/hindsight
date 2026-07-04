@@ -40,15 +40,19 @@ export function ConfidenceStrip({ claims }: Props) {
     }))
     .sort((a, b) => a.x - b.x);
 
-  // Label lanes: above the axis by default; when two markers crowd each other
-  // horizontally, flip alternating labels below the axis to avoid overlap.
+  // Label lanes: above the axis by default. Track the last occupied x per
+  // lane so a cluster of 3+ near-equal confidences (agents love repeating
+  // 0.6) can't collide two same-lane labels — pick whichever lane has room,
+  // else the one with the most room.
   const lanes: Array<1 | -1> = [];
-  graded.forEach((m, i) => {
-    if (i > 0 && m.x - graded[i - 1].x < CROWD_PX) {
-      lanes.push(lanes[i - 1] === 1 ? -1 : 1);
-    } else {
-      lanes.push(1);
-    }
+  const lastX: Record<1 | -1, number> = { 1: -Infinity, [-1]: -Infinity };
+  graded.forEach((m) => {
+    const lane: 1 | -1 =
+      m.x - lastX[1] >= CROWD_PX ? 1
+      : m.x - lastX[-1] >= CROWD_PX ? -1
+      : m.x - lastX[1] >= m.x - lastX[-1] ? 1 : -1;
+    lanes.push(lane);
+    lastX[lane] = m.x;
   });
 
   // no claims at all (e.g. failed run) vs. claims awaiting their reveal —

@@ -7,7 +7,7 @@
 </p>
 
 <p align="center">
-  <a href="backend/tests"><img src="https://img.shields.io/badge/tests-171%20passed-brightgreen" alt="tests"/></a>
+  <a href="https://github.com/ZhaoSH980/hindsight/actions/workflows/ci.yml"><img src="https://github.com/ZhaoSH980/hindsight/actions/workflows/ci.yml/badge.svg" alt="ci"/></a>
   <a href="docs/demo-script.md"><img src="https://img.shields.io/badge/demo-%E7%A6%BB%E7%BA%BF%E6%BC%94%E7%A4%BA%EF%BC%8C%E6%97%A0%E9%9C%80%20API%20key-blue" alt="offline demo"/></a>
   <a href="docs/eval-log.md"><img src="https://img.shields.io/badge/built%20in-4%20days-8a2be2" alt="built in 4 days"/></a>
 </p>
@@ -16,7 +16,7 @@
   <a href="README.md">English</a> | 中文版
 </p>
 
-> 本项目是一个 4 天内完成的面试展示项目 —— 完整的"评估驱动开发"过程记录在 [docs/eval-log.md](docs/eval-log.md)（每一次 prompt / 架构改动都附带前后分数对比）。徽章目前是静态文本，接入 CI 远端后才会换成真实徽章；测试数量可在本地用 `pytest -q` 直接验证。
+> 本项目是一个 4 天内完成的面试展示项目 —— 完整的"评估驱动开发"过程记录在 [docs/eval-log.md](docs/eval-log.md)（每一次 prompt / 架构改动都附带前后分数对比）。上方的 CI 徽章是真实的：GitHub Actions 在每次 push 时运行完整后端测试套件，本地用 `pytest -q` 可以跑同一套测试验证。
 
 ---
 
@@ -50,14 +50,32 @@ flowchart LR
 
 想最快看到整个系统跑起来，**完全不需要 API key** —— 直接回放仓库里已提交的录制运行即可。
 
-> **Windows 一键启动**：双击 **`demo.bat`**（离线单进程演示，:8000）或 **`dev.bat`**（开发模式：后端热重载 :8000 + 前端 Vite HMR :5173）。两者都会自检依赖，首次运行自动安装/构建。
+> **Windows 一键启动**：双击 **`demo.bat`**（离线单进程演示，:8000）或 **`dev.bat`**（开发模式：后端热重载 :8000 + 前端 Vite HMR :5173）。说句实话：它们**不会**替你创建后端 venv —— 缺 venv 时会停下来并打印出创建命令（就是下面那两行 `python -m venv` + `pip install`）；前端依赖/构建则确实会在首次运行时自动安装。
+
+**Windows（PowerShell）：**
+
+```powershell
+# 1. 后端（在仓库根目录）
+cd backend
+python -m venv .venv
+.venv\Scripts\python -m pip install -e ".[dev]"
+$env:HINDSIGHT_OFFLINE = "1"
+.venv\Scripts\python -m uvicorn hindsight.api.app:app --port 8000
+
+# 2. 前端（另开一个终端，在仓库根目录）
+cd frontend
+npm install
+npm run dev
+```
+
+**macOS / Linux：**
 
 ```bash
 # 1. 后端（在仓库根目录）
 cd backend
-.venv/Scripts/python -m pip install -e ".[dev]"
-$env:HINDSIGHT_OFFLINE = "1"   # PowerShell；bash 下用 `export HINDSIGHT_OFFLINE=1`
-.venv/Scripts/python -m uvicorn hindsight.api.app:app --port 8000
+python3 -m venv .venv
+.venv/bin/python -m pip install -e ".[dev]"
+HINDSIGHT_OFFLINE=1 .venv/bin/python -m uvicorn hindsight.api.app:app --port 8000
 
 # 2. 前端（另开一个终端，在仓库根目录）
 cd frontend
@@ -74,9 +92,26 @@ npm run dev
 | | |
 |---|---|
 | ![Research Studio —— 选 case、截止到 as-of 的价格历史、智能体实时输出](docs/assets/studio.png) | ![Trace Explorer —— 每一个计划步骤、工具调用与校验事件，附 token 计数](docs/assets/trace-explorer.png) |
-| **Research Studio** —— 选择 case；价格曲线在琥珀色的 `as_of` 线处戛然而止（"未来尚不存在"）。 | **Trace Explorer** —— 完整的审计轨迹：计划步骤、工具调用与结果、Critic 校验、评分。 |
-| ![Eval Dashboard —— 分数卡片、校准图、逐条论断评分与归因标签](docs/assets/eval-dashboard.png) | ![Leaderboard —— case × 配置矩阵、配对差值、质量-成本散点图](docs/assets/leaderboard.png) |
-| **Eval Dashboard** —— hit rate、Brier、grounding、校准图（每个分桶标注 `n`）、逐条论断判定与失败归因、污染探针。 | **Leaderboard** —— 真实评估套件矩阵：各 case 的 base vs memory、配对差值、质量-成本散点图。 |
+| **Research Studio** —— 选择 case；价格曲线在琥珀色的 `as_of` 线处戛然而止（"未来尚不存在"）。运行时，RunFlow 流水线图实时点亮各阶段（planner → analyst → critic → 评分），带重写循环计数和沙箱守卫芯片，旁边是本地化的解说式实时输出流。 | **Trace Explorer** —— 完整的审计轨迹：计划步骤、工具调用与结果、Critic 校验、评分。 |
+| ![Eval Dashboard —— 分数卡片、逐条论断置信度条带、逐条论断评分与归因标签](docs/assets/eval-dashboard.png) | ![Leaderboard —— case × 配置矩阵、配对差值、质量-成本散点图](docs/assets/leaderboard.png) |
+| **Eval Dashboard** —— hit rate、Brier、grounding、逐条论断的"置信度 vs 结局"条带（附一条诚实说明：单次运行只有 3–5 条论断，为什么不画校准曲线）、逐条论断判定与失败归因、污染探针。 | **Leaderboard** —— 真实评估套件矩阵：各 case 的 base vs memory、配对差值、质量-成本散点图。 |
+
+*（截图为较早版本的界面；当前版本采用更深的科幻风主题，并新增了实时流水线图和 case 创建向导。）*
+
+## 创建你自己的案例
+
+仓库里的 NVDA / SMCI 两个 case 是手工编写的；现在 Studio 内置了 **case 创建向导**，你不必再手工来。给它一个股票代码、一个 `as_of` 日期、一个结果窗口、双语标题/描述元数据，再粘贴智能体被允许看到的文档，向导会：
+
+- **自动冻结真实行情K线**（通过 yfinance），生成与评分器使用的完全相同的 `bars.json` 快照格式 —— 价格数据无需手工整理；
+- **在入口处直接拒绝任何日期晚于 `as_of` 的文档** —— 防偷看规则在写 case 的时候就强制执行，而不是等到检索时才生效；
+- 在离线模式下礼貌拒绝（创建 case 需要拉取真实行情，回放演示则不需要）。
+
+对财报文件，还有**一键 SEC EDGAR 导入**：从该公司 `as_of` 之前的 10-K / 10-Q / 8-K 中勾选，向导自动抓取（8-K 会优先取 ex-99 新闻稿附件 —— 那才是分析师真正读的部分）。URL 由服务端根据 accession number 重建，而不是信任客户端传来的地址（杜绝 SSRF），并使用符合 SEC 规范的 user agent。这就是"语料库如何扩展到两个 case 之外"的答案：SEC 的申报日期由监管方盖章，EDGAR 因此是唯一一个**日期不可能撒谎**、又能自动化接入的数据源 —— 恰好是防偷看语料库最需要的性质。三条诚实的边界：导入目前只覆盖 EDGAR 的"最近"窗口（约最近 1000 份申报）；新闻类文档仍需手工甄选；向导挡得住**日期**造假，挡不住**内容**造假 —— 粘贴文档的内容真实性仍由作者负责。
+
+## 双语运行与回放来源
+
+- 备忘录语言是一个配置开关（`language: en | zh`）：中文运行的备忘录、论断和 `memo.md` 标题全部为中文，而英文 prompt 与该功能存在之前**逐字节一致** —— 由测试锁定，因此回放缓存和所有已提交的英文运行可证明地不受影响。已提交的中文演示运行同样可以完全离线回放。
+- 每次运行都展示一个**来源徽章** —— ⚡ 回放 vs 🌐 实时，附缓存命中数与实时调用数（来自每次运行的 `llm_provenance` 记录）—— 一次两秒就完成的运行是*有解释的*（record/replay 确定性），而不是神秘的。
 
 ## 三条防"偷看未来"通道
 
@@ -86,7 +121,7 @@ npm run dev
 - **行情K线** —— 行情/成交量工具会拒绝任何时间范围越过 `as_of` 的请求，直接抛出 `LookaheadError`，而不是悄悄截断。
 - **经验记忆** —— 跨运行的记忆召回同时要求 `outcome_window_end <= as_of` **且**排除当前 case（leave-one-out），因此一个 case 自己的结局永远不可能泄漏回它自己的运行；一次套件运行也只会读到套件启动之前就已存在的记忆卡片。
 
-这三条通道在 `backend/tests/test_sandbox_leakage.py`（11 个测试）中逐条直接断言 —— 这是 CI 必须永远保持绿色的文件。第四条通道 —— 模型预训练时已经"知道"的东西 —— 沙箱关不掉，只能诚实地暴露：每次运行都会执行一次污染探针（详见 [docs/evaluation-methodology.md](docs/evaluation-methodology.md) §3）。
+这三条通道在 `backend/tests/test_sandbox_leakage.py` 中逐条直接断言 —— 这是 CI 必须永远保持绿色的文件。第四条通道 —— 模型预训练时已经"知道"的东西 —— 沙箱关不掉，只能诚实地暴露：每次运行都会执行一次污染探针（详见 [docs/evaluation-methodology.md](docs/evaluation-methodology.md) §3）。
 
 ## 评估
 
@@ -94,9 +129,9 @@ npm run dev
 
 | 轨道 | 衡量什么 |
 |---|---|
-| **A. 结果** | 对每条论断（方向 / 幅度 / 波动率）用真实K线做机械化评分 —— hit rate、Brier score、校准图（分桶展示，每桶标注样本量 `n`，绝不画平滑曲线） |
+| **A. 结果** | 对每条论断（方向 / 幅度 / 波动率）用真实K线做机械化评分 —— hit rate、Brier score，界面上展示逐条论断的"置信度 vs 结局"条带（分桶校准表连同每桶的 `n` 仍会写入 `scores.json`；单次运行只有 3–5 条论断，绝不在其上画曲线） |
 | **B. 过程 + 归因** | 独立的 LLM judge 评估 grounding rate、推理一致性、检索充分性，并给每条**未命中**的论断打上归因标签：`evidence_missing` / `misread_evidence` / `reasonable_but_wrong` |
-| **C. 成本** | 按智能体、按步骤的 token 账本、调用次数、每条命中论断的成本 |
+| **C. 成本** | 按智能体统计的 prompt/completion token 数与调用次数；Leaderboard 散点图以总 token 数作为成本代理 |
 
 另有每个 case 一次的**污染探针**：用一条裸 prompt 直接问模型"`TICKER` 在 `as_of` 之后发生了什么？"—— 结果记录在案并与分数并列展示，作为诚实性检查，不计入分数。两个 case 的探针结果都是干净的（"我不知道之后发生了什么……"）。
 
@@ -143,7 +178,7 @@ hindsight/
 │   │   ├── llm/                # OpenAI 兼容客户端 + record/replay
 │   │   ├── store/            # SQLite（runs、experiences、llm_calls）
 │   │   └── api/               # FastAPI 应用、路由、WebSocket 流、套件端点
-│   └── tests/                # 171 个测试：沙箱泄漏、评分、schema、回放、API
+│   └── tests/                # 完整测试套件：沙箱泄漏、评分、schema、回放、API
 ├── frontend/                # Vite + React + TS + Tailwind + Recharts，深色量化风主题
 │   └── src/pages/          # Studio、TraceExplorer、EvalDashboard、Leaderboard
 ├── datasets/                  # <case_id>/{meta.json, bars.json, docs/*.md} —— 冻结快照
@@ -169,3 +204,7 @@ hindsight/
 | [docs/design-decisions.md](docs/design-decisions.md) | 架构取舍、case 数量与置信度的权衡讨论 |
 | [docs/demo-script.md](docs/demo-script.md) | 10 分钟离线演示动线与故障预案 |
 | [docs/future-work.md](docs/future-work.md) | 有意为之的范围取舍与终审中不阻塞发布的遗留项 |
+
+## 许可证
+
+MIT —— 见 [LICENSE](LICENSE)。

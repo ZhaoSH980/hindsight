@@ -42,14 +42,26 @@ alternatives considered, and the reason the alternative lost.
 | Free-form multi-agent chat (AutoGen-style group chat) | Non-deterministic turn order makes record/replay and config-vs-config comparison impossible. Cost is unbounded. Debugging is archaeology. |
 | Single-shot CoT | No tool access — cannot do research at all. Useful only as a contamination probe (we do use it for that). |
 
-## 2. Multi-agent split: four roles, one process
+## 2. Multi-agent split: three LLM roles + one deliberately deterministic stage
 
-Four agents (Planner / Researcher / Analyst / Critic) share one LLM backend
-and differ only in system prompt and tool allowlist. The split is by
-**failure mode**, not by anthropomorphism:
+Three LLM roles (Planner / Analyst / Critic) share one LLM backend and
+differ only in system prompt and tool allowlist. The Researcher stage is
+**deliberately not an LLM**: it is a deterministic `EvidenceManager` (its
+own docstring says so) that executes the planner's retrieval decisions and
+normalizes the evidence pool. This is the stronger version of the split,
+not a compromise — retrieval is the one stage whose job is mechanical
+(fetch, dedupe, stamp through the sandbox gate), so making it deterministic
+buys reproducibility and removes a whole class of "the researcher
+paraphrased the source" failure modes for free. Whether retrieval was
+*sufficient* is still judged — by the evaluation judge's
+`retrieval_sufficiency` score — rather than by burning an LLM role on
+narrating its own retrieval. The split is by **failure mode**, not by
+anthropomorphism:
 
 - Planner owns *direction* errors (researching the wrong thing),
-- Researcher owns *retrieval* errors (missing or misreading sources),
+- the Researcher stage owns *retrieval* errors (missing sources — surfaced
+  by `retrieval_sufficiency` and `evidence_missing`, since the
+  deterministic stage itself cannot misread anything),
 - Analyst owns *synthesis* errors (claims not supported by evidence),
 - Critic owns *format and consistency* errors.
 

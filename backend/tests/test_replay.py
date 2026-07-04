@@ -180,3 +180,5 @@ def test_concurrent_chats_all_recorded(tmp_path):
     for t in threads:
         t.join()
     assert len(calls) == 8  # all distinct requests reached the transport, none crashed
+    assert c.cache_misses == 8  # counters share the lock — no lost increments
+    assert c.cache_hits == 0

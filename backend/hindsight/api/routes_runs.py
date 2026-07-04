@@ -11,8 +11,10 @@ router = APIRouter()
 import asyncio
 import threading
 
+from typing import Literal
+
 from fastapi import WebSocket
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from hindsight.agents.orchestrator import _new_run_id
 
@@ -76,10 +78,12 @@ def run_trace(run_id: str, request: Request):
 
 
 class StartRunRequest(BaseModel):
-    case_id: str
+    # mirror RunConfig's constraints here so bad requests 422 at the door
+    # instead of birthing a run row that instantly crashes in the background
+    case_id: str = Field(pattern=r"^[a-z0-9][a-z0-9_]*$")
     memory_on: bool = False
-    max_steps: int = 8
-    language: str = "en"
+    max_steps: int = Field(default=8, gt=0, le=32)
+    language: Literal["en", "zh"] = "en"
 
 
 def _default_executor(state):

@@ -159,3 +159,50 @@ def test_post_cases_blocked_offline(api_root, monkeypatch):
     })
     assert r.status_code == 400
     assert "offline" in r.json()["detail"]
+
+
+def test_concurrent_creation_never_shares_a_directory(tmp_path):
+    """Two simultaneous builds of the same ticker+date must land in two
+    distinct directories — mkdir is the atomic claim (TOCTOU regression)."""
+    import threading
+
+    results, errors = [], []
+
+    def create():
+        try:
+            results.append(build_case(tmp_path, make_req(), bars_fetcher=fake_bars,
+                                      today=lambda: date(2026, 7, 5)))
+        except Exception as exc:  # noqa: BLE001
+            errors.append(exc)
+
+    threads = [threading.Thread(target=create) for _ in range(2)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    assert not errors
+    ids = {r["case_id"] for r in results}
+    assert len(ids) == 2
+    for cid in ids:
+        assert (tmp_path / cid / "meta.json").exists()
+
+
+def test_backslash_in_title_survives_frontmatter():
+    req = make_req(docs=[{**DOC, "title": r"smart\dumb money note"}, DOC2])
+    import tempfile
+    from pathlib import Path
+
+    with tempfile.TemporaryDirectory() as td:
+        res = build_case(Path(td), req, bars_fetcher=fake_bars,
+                         today=lambda: date(2026, 7, 5))
+        assert res["n_docs"] == 2  # round-trip load passed -> YAML stayed valid
+
+
+def test_digit_leading_tickers_accepted():
+    assert make_req(ticker="0700.HK").ticker == "0700.HK"
+    assert make_req(ticker="600519.SS").ticker == "600519.SS"
+
+
+def test_oversized_doc_rejected():
+    with pytest.raises(ValueError):
+        make_req(docs=[DOC, {**DOC2, "text": "x" * 60_001}])

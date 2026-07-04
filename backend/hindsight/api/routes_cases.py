@@ -9,13 +9,14 @@ from datetime import date
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 
+import re
+
 from hindsight.data import edgar
-from hindsight.data.case_builder import (
-    CaseBuildError,
-    CaseExistsError,
-    NewCaseRequest,
-    build_case,
-)
+from hindsight.data.case_builder import CaseBuildError, NewCaseRequest, build_case
+
+# the only shape case ids can ever take (derive_case_id emits slugs) — also
+# the traversal guard for every route that joins case_id into a path
+_CASE_ID_RE = re.compile(r"^[a-z0-9][a-z0-9_]*$")
 
 router = APIRouter()
 
@@ -50,8 +51,6 @@ def create_case(body: NewCaseRequest, request: Request):
     fetcher = getattr(state, "bars_fetcher", None)  # test seam; None -> yfinance
     try:
         result = build_case(state.datasets, body, bars_fetcher=fetcher)
-    except CaseExistsError as exc:
-        raise HTTPException(status_code=409, detail=str(exc)) from exc
     except CaseBuildError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     except Exception as exc:  # yfinance/network failures -> upstream error, not a 500
@@ -106,6 +105,8 @@ def edgar_fetch(body: EdgarFetchRequest, request: Request):
 @router.get("/api/cases/{case_id}/bars")
 def case_bars(case_id: str, request: Request):
     state = request.app.state.hindsight
+    if not _CASE_ID_RE.match(case_id):  # traversal guard before any path join
+        raise HTTPException(status_code=404, detail=f"unknown case {case_id!r}")
     bars_path = state.datasets / case_id / "bars.json"
     if not bars_path.exists():
         raise HTTPException(status_code=404, detail=f"unknown case {case_id}")
