@@ -59,3 +59,41 @@ def test_experiences_endpoint(api_root):
     client = TestClient(create_app(repo_root=api_root))
     cards = client.get("/api/experiences").json()
     assert cards[0]["exp_id"] == "e1"
+
+
+def test_suite_executor_crash_writes_sentinel(api_root):
+    app = create_app(repo_root=api_root)
+
+    def crashing_executor(case_ids, presets, suite_id):
+        import threading
+
+        def work():
+            try:
+                raise RuntimeError("boom mid-suite")
+            except Exception as exc:
+                out = api_root / "runs" / "suites" / f"{suite_id}.json"
+                out.parent.mkdir(parents=True, exist_ok=True)
+                out.write_text(
+                    json.dumps({"suite_id": suite_id, "status": "crashed", "error": str(exc)}),
+                    encoding="utf-8",
+                )
+
+        threading.Thread(target=work).start()
+
+    app.state.hindsight.suite_executor = crashing_executor
+    client = TestClient(app)
+    suite_id = client.post(
+        "/api/eval/suites", json={"case_ids": ["fixture_case"], "presets": ["base"]}
+    ).json()["suite_id"]
+    import time
+
+    time.sleep(0.3)
+    status = client.get(f"/api/eval/suites/{suite_id}").json()
+    assert status["summary"]["status"] == "crashed"
+    assert status["known"] is True
+
+
+def test_unknown_suite_flagged(api_root):
+    client = TestClient(create_app(repo_root=api_root))
+    status = client.get("/api/eval/suites/garbage").json()
+    assert status["known"] is False

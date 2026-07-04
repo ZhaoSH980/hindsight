@@ -35,14 +35,23 @@ def _default_suite_executor(state):
         configs = {name: PRESETS[name].model_copy(update={"model": cfg.model}) for name in presets}
 
         def work():
-            run_suite(
-                [state.datasets / cid for cid in case_ids],
-                configs,
-                llm=llm,
-                store=state.store,
-                runs_root=state.runs_root,
-                suite_id=suite_id,
-            )
+            try:
+                run_suite(
+                    [state.datasets / cid for cid in case_ids],
+                    configs,
+                    llm=llm,
+                    store=state.store,
+                    runs_root=state.runs_root,
+                    suite_id=suite_id,
+                )
+            except Exception as exc:  # noqa: BLE001 - background thread must not die silently
+                out = state.runs_root / "suites" / f"{suite_id}.json"
+                out.parent.mkdir(parents=True, exist_ok=True)
+                out.write_text(
+                    json.dumps({"suite_id": suite_id, "status": "crashed",
+                                "error": str(exc)[:500]}),
+                    encoding="utf-8",
+                )
 
         threading.Thread(target=work, daemon=True).start()
 
@@ -71,7 +80,12 @@ def suite_status(suite_id: str, request: Request):
         if summary_path.exists()
         else None
     )
-    return {"suite_id": suite_id, "runs": runs, "summary": summary}
+    return {
+        "suite_id": suite_id,
+        "runs": runs,
+        "summary": summary,
+        "known": bool(runs) or summary is not None,
+    }
 
 
 @router.get("/api/leaderboard")
@@ -99,5 +113,8 @@ def leaderboard(suite_id: str, request: Request):
 @router.get("/api/experiences")
 def experiences(request: Request):
     state = request.app.state.hindsight
+    # deliberately ungated BROWSE path: returns every card ever written.
+    # The anti-lookahead gate lives in ExperienceRetriever.retrieve (agent path);
+    # nothing agent-facing reads this HTTP route.
     rows = state.store.query_experiences("9999-12-31", exclude_case_id="__none__")
     return [json.loads(r["card_json"]) for r in rows]
