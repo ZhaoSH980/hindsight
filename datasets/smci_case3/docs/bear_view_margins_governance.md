@@ -2,7 +2,7 @@
 title: "The bear case: margins, dilution, and a governance discount that may be deserved"
 source: curated summary of public reporting
 published_at: 2025-02-24
-url: https://www.benzinga.com/24/12/42460199/jpmorgan-reiterates-underweight-rating-on-supermicro-maintains-the-lowest-target-price-among-the-17-tracked-analysts
+url: https://www.cnbc.com/2025/02/12/jpmorgan-says-super-micro-computer-is-still-a-sell-despite-companys-lofty-revenue-forecast.html
 doc_type: opinion
 ---
 # The bear case: margins, dilution, and a governance discount that may be deserved
@@ -15,4 +15,4 @@ The balance sheet tells its own story: last week the company closed $700 million
 
 Then governance. Filing by February 25 removes the delisting scenario, but it does not remove what caused it: Ernst & Young resigned rather than sign these books, writing it was "unwilling to be associated with the financial statements prepared by management." The special committee found no evidence of fraud, yet still recommended replacing the CFO — a search that remains open. A Justice Department probe reported by the Wall Street Journal in September has not been resolved. And any 10-K filed under these circumstances is likely to carry extensive internal-control disclosures.
 
-JPMorgan's server analysts remain Underweight with a Street-low $23 target, noting they have seen "no significant movement of orders" that would validate the acceleration story. At roughly twice that price, the market is paying turnaround multiples for a company whose last audited financial statements — the fiscal 2023 annual report — are eighteen months old.
+JPMorgan's server analysts looked at the same February 11 update and stayed Underweight — lifting their target to $35 from a Street-low $23, but writing that it is "likely too early to underwrite" a more positive outlook given limited visibility into next-generation GPU supply constraints and a much tougher competitive backdrop for the coming AI-server cycle. This is the same desk that in December saw "no significant movement of orders" to validate the acceleration story. At $56, the market is paying roughly 60% above even that raised target for a company whose last audited financial statements — the fiscal 2023 annual report — are eighteen months old.
