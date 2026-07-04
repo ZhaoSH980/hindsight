@@ -1182,7 +1182,9 @@ def run_planner(
     ]
     tools = registry.openai_specs()
     for step in range(max_steps):
-        resp = llm.chat(messages=messages, tools=tools, temperature=temperature)
+        # list(messages): freeze this request's view — the live list keeps growing
+        # and passing it by reference would alias recorded requests to the final state
+        resp = llm.chat(messages=list(messages), tools=tools, temperature=temperature)
         usage = resp.get("usage") or {}
         ledger.add(
             "planner", usage.get("prompt_tokens", 0), usage.get("completion_tokens", 0)
