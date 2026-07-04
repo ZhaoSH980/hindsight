@@ -174,17 +174,18 @@ observed asymmetry in the committed suite. Verified directly against
 `llm_calls.sqlite`'s recorded request bodies (`docs/eval-log.md`, "D4 —
 evaluation suite" → "Memory asymmetry check"):
 
-- On **SMCI** (`as_of` 2025-02-26), **0 of 7** new metered planner/agent
-  calls in the memory run's window contained the injected lessons block —
-  correct, because the only candidate card (from `nvda_fy26q1`, whose
-  `outcome_window_end` is 2025-07-22) closes *after* SMCI's `as_of` and is
-  gated out. SMCI's memory run replayed byte-identical to its base run (same
-  `memo.md`/`claims.json` sha256; all 10 logical calls served from the
-  record/replay cache — 0 new network calls for that run).
-- On **NVDA** (`as_of` 2025-05-22), **8 of 13** new metered calls did carry
-  the lessons block, because SMCI's `outcome_window_end` (2025-04-24) closes
-  before NVDA's `as_of` and leave-one-out doesn't touch a different case's
-  card. The injected text is quoted verbatim in the eval log. The
+- On **SMCI** (`as_of` 2025-02-26), **none** of the memory run's calls
+  contained the injected lessons block — correct, because the only candidate
+  card (from `nvda_fy26q1`, whose `outcome_window_end` is 2025-07-22) closes
+  *after* SMCI's `as_of` and is gated out. SMCI's memory run replayed
+  byte-identical to its base run (same `memo.md`/`claims.json` sha256; all 10
+  logical calls served from the record/replay cache — 0 new network calls for
+  that run).
+- On **NVDA** (`as_of` 2025-05-22), **all 8 planner calls** — 8 of the run's
+  13 logical calls (12 hit the network as new `llm_calls.sqlite` rows; the
+  contamination probe replayed from cache) — did carry the lessons block,
+  because SMCI's `outcome_window_end` (2025-04-24) closes before NVDA's
+  `as_of` and leave-one-out doesn't touch a different case's card. The injected text is quoted verbatim in the eval log. The
   memory-primed NVDA run's Brier (0.30063) was in fact *worse* than base's
   (0.26125) — reported as an honest, un-cherry-picked result, not adjusted
   or hidden (see §2's small-N caveat: N=1 per config is not enough to claim
@@ -327,7 +328,7 @@ flag on either committed case specifically.
 | Small-N / correlated-claims / SMCI-deliberate-selection framing | Spec §3.4, §4.1 |
 | SMCI case selection rationale and verified pre-as_of rally / post-as_of drawdown numbers | `docs/eval-log.md` "D2 — case 3: SMCI falsification case" |
 | Three anti-lookahead channels, 11 leakage tests | `backend/tests/test_sandbox_leakage.py` |
-| Memory asymmetry: SMCI 0/7, NVDA 8/13, byte-identical SMCI memory run, worse NVDA memory Brier (0.30063 vs 0.26125) | `docs/eval-log.md` "D4 — evaluation suite" → "Memory asymmetry check" |
+| Memory asymmetry: SMCI 0 lessons calls, NVDA lessons block in all 8 planner calls, byte-identical SMCI memory run, worse NVDA memory Brier (0.30063 vs 0.26125) | `docs/eval-log.md` "D4 — evaluation suite" → "Memory asymmetry check" (row partition corrected at D4 wrap-up) |
 | Contamination probes clean on both NVDA and SMCI | `docs/eval-log.md` "D2 — first live NVDA run", "D2 — case 3" |
 | Judge self-preference mitigation via paired deltas | Spec §3.4 |
 | Judge meta-eval: 26/26 = 100% agreement, provenance caveat, false-positive-only caveat, 7 unique reports / 10 scored runs | `docs/judge-meta-eval.md` |

@@ -270,14 +270,28 @@ actual user-message brief), not just the trace, by grepping for the literal
 marker string `"Lessons from previously graded research"` and partitioning
 calls by `created_at` into each run's time window:
 
-- **`smci_case3` memory run** (7 new metered calls in its window):
-  **0/7** calls contain the lessons block. Expected: at SMCI's `as_of`
+- **`smci_case3` memory run**: **0** of its calls contain the lessons
+  block — the run made **0 new network calls** at all (all 10 logical calls
+  were cache hits; see CAVEAT below). Expected: at SMCI's `as_of`
   (2025-02-26), the only candidate experience cards would have to come from
   `nvda_fy26q1` runs, whose `outcome_window_end` (2025-07-22) is *after*
   SMCI's `as_of` — the time gate correctly excludes them. No cards passed
   the gate, so the planner brief was byte-identical to the base run's.
-- **`nvda_fy26q1` memory run** (13 new metered calls in its window):
-  **8/13** calls contain the lessons block. Expected: SMCI's
+  *(Correction, D4 wrap-up review: this bullet originally read "7 new
+  metered calls in its window, 0/7 with lessons" — a `created_at` window
+  partition that had actually captured rows belonging to the concurrent
+  nvda/base run, which started the same second. Re-partitioned by agent
+  system prompt: the smci/memory run wrote no rows. The conclusion — zero
+  lessons injected at SMCI's as_of — is unchanged and now rests on the
+  stronger byte-identical/cache-hit evidence.)*
+- **`nvda_fy26q1` memory run** (13 logical calls, of which 12 hit the
+  network as new rows — the contamination probe replayed from cache):
+  **all 8 planner calls** contain the lessons block; the probe/analyst/
+  critic/judge calls do not (only the planner receives the brief).
+  *(Correction, D4 wrap-up review: originally "13 new metered calls in its
+  window, 8/13 with lessons" — same window-partition slip; the 13th row was
+  nvda/base's second judge call at 11:03:56, and the probe never hit the
+  network. The 8-planner-calls figure is unchanged.)* Expected: SMCI's
   `outcome_window_end` (2025-04-24) is well before NVDA's `as_of`
   (2025-05-22), so SMCI's experience card(s) legally pass the gate and
   leave-one-out (`exclude_case_id=nvda_fy26q1`) doesn't touch them. The
