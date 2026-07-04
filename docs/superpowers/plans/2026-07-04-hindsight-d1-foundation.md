@@ -2454,6 +2454,7 @@ git tag d1-complete
 ## Deferred to later plans (explicit, so nothing silently drops)
 
 - **D2 plan**: agents (planner ReAct loop in the probe-decided mode, researcher, analyst, critic), orchestrator, outcome grader implementing spec §3.3 判定语义, LLM judge + failure attribution, experience library (+ memory-channel leakage tests), contamination probe, eval suite runner, `runs/` demo recording, case-3 candidate validation.
+- **D2 review-carryover (from D1 task reviews)**: ① the orchestrator MUST wrap `registry.call` in a catch-all try/except returning `json.dumps({"error": str(exc)})` so the ReAct loop can self-correct — covers uncaught `OverflowError` (`9**9**9`), `RecursionError` (huge expressions), and `TypeError` (unexpected/missing kwargs from LLM JSON), plus a test for each; ② corpus_search excerpts should append a `"..."` truncation marker when text exceeds 700 chars; ③ chunker heading-only tiny chunks (a heading immediately followed by another heading becomes a 3-char chunk) — merge-forward polish if retrieval quality suffers.
 - **D3 plan**: FastAPI routes + WebSocket per spec §5, React frontend (Studio / Trace / Eval pages), README skeleton.
 - **D4 plan**: Leaderboard page, datasets 2-3, judge meta-eval labeling, GIF + bilingual README, offline rehearsal.
 
