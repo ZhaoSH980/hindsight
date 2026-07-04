@@ -1287,7 +1287,8 @@ export function CalibrationChart({ buckets }: { buckets: Bucket[] }) {
             label={{ value: "hit rate", fill: "#8b98ad", fontSize: 10, angle: -90, position: "insideLeft" }} />
           <ReferenceLine segment={[{ x: 0, y: 0 }, { x: 1, y: 1 }]} stroke="#8b98ad" strokeDasharray="4 4" />
           <Tooltip contentStyle={{ background: "#11161f", border: "1px solid #1f2937" }}
-            formatter={(v: number) => v.toFixed(2)} />
+            formatter={(v: number | string | readonly (number | string)[] | undefined) =>
+              typeof v === "number" ? v.toFixed(2) : v} />
           <Scatter data={pts} fill="#38bdf8" shape={(p: any) => (
             <g>
               <circle cx={p.cx} cy={p.cy} r={4 + Math.min(p.payload.n, 6)} fill="#38bdf8" fillOpacity={0.7} />
