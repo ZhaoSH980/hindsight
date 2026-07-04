@@ -50,6 +50,8 @@ Every tool call goes through the sandbox gate, which stamps and audits the reque
 
 The fastest path to seeing the whole system needs **no API key at all** — it replays committed, recorded runs.
 
+> **Windows one-click:** double-click **`demo.bat`** (offline single-server demo at :8000) or **`dev.bat`** (dev mode: backend auto-reload at :8000 + Vite HMR at :5173). Both self-check prerequisites and install/build on first run.
+
 ```bash
 # 1. Backend (from repo root)
 cd backend
