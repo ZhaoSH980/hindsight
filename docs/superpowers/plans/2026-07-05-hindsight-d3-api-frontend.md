@@ -1308,6 +1308,18 @@ export function CalibrationChart({ buckets }: { buckets: Bucket[] }) {
 }
 ```
 
+- [ ] **Step 2b: SPA fallback (T2-review carryover)** — `StaticFiles(html=True)` serves `index.html` only at `/`; direct navigation/refresh on client routes (e.g. `/runs/xyz`) 404s. In `app.py`, replace the static mount with a mount plus a catch-all: keep the mount for `/assets`, and add
+
+```python
+        from fastapi.responses import FileResponse
+
+        @app.get("/{full_path:path}")
+        def spa_fallback(full_path: str):
+            return FileResponse(dist / "index.html")
+```
+
+registered AFTER all API routers (path routes win over the catch-all only if declared earlier — verify `/api/cases` still resolves and `/runs/anything` returns index.html). Also wrap `list_cases`'s per-file `json.loads` in try/except-continue (T2-review resilience note) with one test: a broken meta.json in a stray case dir must not 500 the whole list.
+
 - [ ] **Step 3: Full verification**
   - `cd backend && .venv/Scripts/python -m pytest -q` → report exact count (≈157; trust arithmetic)
   - `cd frontend && npm run build` → exit 0; then confirm `uvicorn hindsight.api.app:app` serves the built frontend at `/` (static mount)
