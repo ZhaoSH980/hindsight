@@ -35,3 +35,22 @@ def test_cost_ledger_accumulates_per_agent():
     assert s["planner"] == {"prompt_tokens": 150, "completion_tokens": 30, "calls": 2}
     assert s["analyst"]["calls"] == 1
     assert ledger.total_tokens() == 460
+
+
+def test_recorder_appends_across_instances(tmp_path):
+    TraceRecorder(run_dir=tmp_path).emit(
+        TraceEvent(type="plan_step", agent="a", payload={})
+    )
+    TraceRecorder(run_dir=tmp_path).emit(
+        TraceEvent(type="plan_step", agent="b", payload={})
+    )
+    lines = (tmp_path / "trace.jsonl").read_text(encoding="utf-8").strip().splitlines()
+    assert [json.loads(l)["agent"] for l in lines] == ["a", "b"]
+
+
+def test_trace_file_uses_lf_only(tmp_path):
+    rec = TraceRecorder(run_dir=tmp_path)
+    rec.emit(TraceEvent(type="plan_step", agent="a", payload={"x": "中文"}))
+    raw = (tmp_path / "trace.jsonl").read_bytes()
+    assert b"\r\n" not in raw
+    assert raw.endswith(b"\n")

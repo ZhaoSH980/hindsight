@@ -54,6 +54,7 @@ class RecordingLLMClient:
         temperature: float = 0.2,
         **params: Any,
     ) -> dict[str, Any]:
+        temperature = float(temperature)  # int/float must hash to the same replay key
         request: dict[str, Any] = {
             "model": self.model,
             "messages": messages,

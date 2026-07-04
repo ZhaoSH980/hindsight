@@ -62,3 +62,49 @@ def test_key_varies_with_params(tmp_path):
     r2 = c.chat(messages=[{"role": "user", "content": "hi"}], temperature=0.9)
     assert r1["choices"][0]["message"]["content"] == "a"
     assert r2["choices"][0]["message"]["content"] == "b"
+
+
+def test_temperature_int_float_same_key(tmp_path):
+    calls = []
+
+    def transport(request):
+        calls.append(request)
+        return fake_response("t")
+
+    c = RecordingLLMClient(transport=transport, db_path=tmp_path / "db.sqlite", model="m1")
+    c.chat(messages=[{"role": "user", "content": "hi"}], temperature=0)
+    c.chat(messages=[{"role": "user", "content": "hi"}], temperature=0.0)
+    assert len(calls) == 1
+
+
+def test_cjk_content_replays_equal(tmp_path):
+    db = tmp_path / "db.sqlite"
+    c1 = RecordingLLMClient(
+        transport=lambda r: fake_response("英伟达数据中心需求强劲，Blackwell 供不应求。"),
+        db_path=db,
+        model="m1",
+    )
+    r1 = c1.chat(messages=[{"role": "user", "content": "中文测试 ± émojis 🚀"}])
+    c2 = RecordingLLMClient(
+        transport=lambda r: (_ for _ in ()).throw(AssertionError("offline")),
+        db_path=db,
+        model="m1",
+        offline=True,
+    )
+    r2 = c2.chat(messages=[{"role": "user", "content": "中文测试 ± émojis 🚀"}])
+    assert r2 == r1
+
+
+def test_tools_order_changes_key(tmp_path):
+    calls = []
+
+    def transport(request):
+        calls.append(request)
+        return fake_response(f"call-{len(calls)}")
+
+    c = RecordingLLMClient(transport=transport, db_path=tmp_path / "db.sqlite", model="m1")
+    tools_a = [{"name": "search"}, {"name": "calc"}]
+    tools_b = [{"name": "calc"}, {"name": "search"}]
+    c.chat(messages=[{"role": "user", "content": "hi"}], tools=tools_a)
+    c.chat(messages=[{"role": "user", "content": "hi"}], tools=tools_b)
+    assert len(calls) == 2

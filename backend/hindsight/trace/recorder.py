@@ -15,5 +15,5 @@ class TraceRecorder:
 
     def emit(self, event: TraceEvent) -> None:
         self.events.append(event)
-        with self._path.open("a", encoding="utf-8") as f:
+        with self._path.open("a", encoding="utf-8", newline="\n") as f:
             f.write(event.model_dump_json() + "\n")
