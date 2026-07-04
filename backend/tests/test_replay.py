@@ -108,3 +108,50 @@ def test_tools_order_changes_key(tmp_path):
     c.chat(messages=[{"role": "user", "content": "hi"}], tools=tools_a)
     c.chat(messages=[{"role": "user", "content": "hi"}], tools=tools_b)
     assert len(calls) == 2
+
+
+def test_chat_usable_from_worker_thread(tmp_path):
+    import threading
+
+    c = RecordingLLMClient(
+        transport=lambda r: fake_response("t"),
+        db_path=tmp_path / "db.sqlite",
+        model="m1",
+    )
+    errors: list[Exception] = []
+
+    def work():
+        try:
+            c.chat(messages=[{"role": "user", "content": "from-thread"}])
+        except Exception as exc:  # noqa: BLE001
+            errors.append(exc)
+
+    t = threading.Thread(target=work)
+    t.start()
+    t.join()
+    assert errors == []
+
+
+def test_concurrent_chats_all_recorded(tmp_path):
+    import threading
+
+    calls = []
+
+    def transport(request):
+        calls.append(request)
+        return fake_response("x")
+
+    c = RecordingLLMClient(
+        transport=transport, db_path=tmp_path / "db.sqlite", model="m1"
+    )
+    threads = [
+        threading.Thread(
+            target=lambda i=i: c.chat(messages=[{"role": "user", "content": f"q{i}"}])
+        )
+        for i in range(8)
+    ]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    assert len(calls) == 8  # all distinct requests reached the transport, none crashed

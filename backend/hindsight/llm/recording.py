@@ -10,6 +10,7 @@ import hashlib
 import json
 import os
 import sqlite3
+import threading
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -34,7 +35,8 @@ class RecordingLLMClient:
         if offline is None:
             offline = os.environ.get("HINDSIGHT_OFFLINE", "") == "1"
         self.offline = offline
-        self._conn = sqlite3.connect(db_path)
+        self._conn = sqlite3.connect(db_path, check_same_thread=False)
+        self._lock = threading.Lock()
         self._conn.execute(
             "CREATE TABLE IF NOT EXISTS llm_calls ("
             " hash TEXT PRIMARY KEY, request_json TEXT NOT NULL,"
@@ -64,9 +66,10 @@ class RecordingLLMClient:
         if tools is not None:
             request["tools"] = tools
         key = self._key(request)
-        row = self._conn.execute(
-            "SELECT response_json FROM llm_calls WHERE hash = ?", (key,)
-        ).fetchone()
+        with self._lock:
+            row = self._conn.execute(
+                "SELECT response_json FROM llm_calls WHERE hash = ?", (key,)
+            ).fetchone()
         if row:
             return json.loads(row[0])
         if self.offline:
@@ -75,14 +78,15 @@ class RecordingLLMClient:
                 "re-run in record mode to capture it"
             )
         response = self._transport(request)
-        self._conn.execute(
-            "INSERT OR REPLACE INTO llm_calls VALUES (?, ?, ?, ?)",
-            (
-                key,
-                json.dumps(request, ensure_ascii=False),
-                json.dumps(response, ensure_ascii=False),
-                datetime.now(timezone.utc).isoformat(timespec="seconds"),
-            ),
-        )
-        self._conn.commit()
+        with self._lock:
+            self._conn.execute(
+                "INSERT OR REPLACE INTO llm_calls VALUES (?, ?, ?, ?)",
+                (
+                    key,
+                    json.dumps(request, ensure_ascii=False),
+                    json.dumps(response, ensure_ascii=False),
+                    datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                ),
+            )
+            self._conn.commit()
         return response
