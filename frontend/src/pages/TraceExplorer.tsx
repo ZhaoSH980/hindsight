@@ -4,6 +4,7 @@ import { api } from "../lib/api";
 import { useLang } from "../lib/i18n";
 import { num } from "../lib/format";
 import { EventRow } from "../components/EventRow";
+import { RunPicker } from "../components/RunPicker";
 import type { RunDetail, TraceEvent } from "../lib/types";
 
 type FilterKey = "all" | "plan_step" | "tool" | "validation" | "audit" | "score";
@@ -94,11 +95,16 @@ export default function TraceExplorer() {
   );
 
   if (!runId || runId === "_") {
-    return <div className="p-6 text-muted text-sm">{t("runNotFound")}</div>;
+    return <RunPicker linkTo={(id) => `/runs/${id}/trace`} />;
   }
 
   if (notFound) {
-    return <div className="p-6 text-down text-sm">{t("runNotFound")}</div>;
+    return (
+      <div className="p-6 flex flex-col gap-3">
+        <p className="text-down text-sm">{t("runNotFound")}</p>
+        <RunPicker linkTo={(id) => `/runs/${id}/trace`} />
+      </div>
+    );
   }
 
   return (

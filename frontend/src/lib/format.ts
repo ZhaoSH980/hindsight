@@ -10,5 +10,8 @@ export function num(x: number | null | undefined, digits = 0): string {
 
 export function shortId(runId: string | null | undefined, len = 8): string {
   if (!runId) return "—";
-  return runId.length <= len ? runId : `${runId.slice(0, len)}…`;
+  if (runId.length <= len) return runId;
+  // keep the tail — run ids share a long case/date prefix and differ at the end
+  const tail = runId.slice(-6);
+  return `${runId.slice(0, Math.max(4, len - tail.length - 1))}…${tail}`;
 }

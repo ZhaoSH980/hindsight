@@ -2,11 +2,12 @@ import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { api } from "../lib/api";
 import { useLang } from "../lib/i18n";
-import { pct, shortId } from "../lib/format";
+import { pct } from "../lib/format";
 import { ScoreCards } from "../components/ScoreCards";
 import { CalibrationChart } from "../components/CalibrationChart";
 import { AttributionBadge } from "../components/AttributionBadge";
-import type { Claim, RunDetail, RunSummary } from "../lib/types";
+import { RunPicker } from "../components/RunPicker";
+import type { Claim, RunDetail } from "../lib/types";
 
 const TYPE_KEY: Record<Claim["type"], "typeDirection" | "typeMagnitude" | "typeVolatility"> = {
   direction: "typeDirection",
@@ -19,53 +20,6 @@ const STATUS_STYLE: Record<string, string> = {
   miss: "bg-down/15 text-down border-down/40",
   ungradable: "bg-ink-700 text-muted border-line",
 };
-
-function RunPicker() {
-  const { t } = useLang();
-  const [runs, setRuns] = useState<RunSummary[]>([]);
-
-  useEffect(() => {
-    api.runs().then(setRuns).catch(() => setRuns([]));
-  }, []);
-
-  return (
-    <div className="p-6 flex flex-col gap-3">
-      <h2 className="text-sm font-mono text-muted">{t("pickARun")}</h2>
-      {runs.length === 0 ? (
-        <p className="text-xs text-muted">{t("noRunsYet")}</p>
-      ) : (
-        <div className="flex flex-col gap-2">
-          <span className="text-[10px] font-mono text-muted">{t("recentRuns")}</span>
-          {runs
-            .slice()
-            .reverse()
-            .map((r) => (
-              <Link
-                key={r.run_id}
-                to={`/runs/${r.run_id}`}
-                className="panel p-3 flex flex-wrap items-center gap-3 hover:border-accent/60 transition-colors"
-              >
-                <span className="font-mono text-xs text-accent">{shortId(r.run_id, 24)}</span>
-                <span className="text-xs text-slate-300">{r.case_id}</span>
-                <span
-                  className={`rounded border px-1.5 py-0.5 font-mono text-[10px] ${
-                    r.status === "done"
-                      ? "bg-up/15 text-up border-up/40"
-                      : r.status === "failed"
-                        ? "bg-down/15 text-down border-down/40"
-                        : "bg-ink-700 text-muted border-line"
-                  }`}
-                >
-                  {r.status}
-                </span>
-                <span className="text-[10px] text-muted font-mono ml-auto">{r.created_at}</span>
-              </Link>
-            ))}
-        </div>
-      )}
-    </div>
-  );
-}
 
 export default function EvalDashboard() {
   const { t } = useLang();
@@ -94,14 +48,14 @@ export default function EvalDashboard() {
   const claimsSorted = useMemo(() => detail?.claims ?? [], [detail]);
 
   if (!runId || runId === "_") {
-    return <RunPicker />;
+    return <RunPicker linkTo={(id) => `/runs/${id}`} />;
   }
 
   if (notFound) {
     return (
       <div className="p-6 flex flex-col gap-3">
         <p className="text-down text-sm">{t("runNotFound")}</p>
-        <RunPicker />
+        <RunPicker linkTo={(id) => `/runs/${id}`} />
       </div>
     );
   }

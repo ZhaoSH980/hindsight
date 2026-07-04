@@ -13,7 +13,7 @@ const dict = {
     theFuture: "the future does not exist yet",
     selectCase: "Select a case", docs: "docs", liveFeed: "Live feed",
     waitingForRun: "Start a run to see the agent think, step by step.",
-    viewTrace: "View full trace", noMemo: "No memo for this run.",
+    viewTrace: "View full trace", viewEval: "View evaluation", noMemo: "No memo for this run.",
     memoryOnLabel: "Memory on", memoryOffLabel: "Memory off",
     revealHint: "The outcome window has closed. See what actually happened.",
     confidence: "confidence",
@@ -70,7 +70,7 @@ const dict = {
     theFuture: "未来尚不存在",
     selectCase: "选择案例", docs: "份文档", liveFeed: "实时动态",
     waitingForRun: "开始一次运行，逐步查看智能体的思考过程。",
-    viewTrace: "查看完整轨迹", noMemo: "本次运行没有备忘录。",
+    viewTrace: "查看完整轨迹", viewEval: "查看评分详情", noMemo: "本次运行没有备忘录。",
     memoryOnLabel: "记忆已开启", memoryOffLabel: "记忆已关闭",
     revealHint: "结果窗口已结束。看看实际发生了什么。",
     confidence: "置信度",
@@ -124,8 +124,28 @@ const LangCtx = createContext<{ lang: Lang; setLang: (l: Lang) => void; t: (k: K
   { lang: "en", setLang: () => {}, t: (k) => k }
 );
 
+const LANG_STORAGE_KEY = "hindsight.lang";
+
+function initialLang(): Lang {
+  try {
+    const saved = window.localStorage.getItem(LANG_STORAGE_KEY);
+    if (saved === "en" || saved === "zh") return saved;
+  } catch {
+    // storage unavailable (private mode etc.) — fall back to default
+  }
+  return "en";
+}
+
 export function LangProvider({ children }: { children: ReactNode }) {
-  const [lang, setLang] = useState<Lang>("en");
+  const [lang, setLangState] = useState<Lang>(initialLang);
+  const setLang = (l: Lang) => {
+    setLangState(l);
+    try {
+      window.localStorage.setItem(LANG_STORAGE_KEY, l);
+    } catch {
+      // best-effort persistence only
+    }
+  };
   const t = (k: Key) => dict[lang][k];
   return <LangCtx.Provider value={{ lang, setLang, t }}>{children}</LangCtx.Provider>;
 }

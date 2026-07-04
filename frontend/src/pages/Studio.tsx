@@ -194,6 +194,16 @@ export default function Studio() {
           {/* 5. Memo + claims + reveal */}
           {isDone && detail && (
             <section className="flex flex-col gap-4">
+              {runId && (
+                <div className="flex gap-4">
+                  <Link to={`/runs/${runId}/trace`} className="text-xs text-accent underline">
+                    {t("viewTrace")}
+                  </Link>
+                  <Link to={`/runs/${runId}`} className="text-xs text-accent underline">
+                    {t("viewEval")}
+                  </Link>
+                </div>
+              )}
               {detail.scores?.unverified && (
                 <div className="panel border-amber/50 p-3 text-amber text-sm">{t("unverified")}</div>
               )}
