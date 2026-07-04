@@ -121,7 +121,7 @@ def produce_memo(
                     payload={"attempt": attempt, "layer": "structural", "errors": errors[:6]},
                 )
             )
-            feedback = "\n".join(errors[:6])
+            feedback = f"(attempt {attempt + 1}) " + "\n".join(errors[:6])
             continue
         last_structurally_valid = memo
         ok, problems = semantic_check(llm, memo, evidence_chunks, temperature, ledger)
@@ -134,5 +134,5 @@ def produce_memo(
         )
         if ok:
             return memo, False
-        feedback = "\n".join(problems[:6])
+        feedback = f"(attempt {attempt + 1}) " + "\n".join(problems[:6])
     return last_structurally_valid, True  # unverified (or None if never structural)

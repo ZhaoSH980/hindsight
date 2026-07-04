@@ -162,3 +162,22 @@ def test_structural_exhaustion_returns_none(tmp_path):
     memo, unverified, t = run_loop([content_response("{broken")] * 3, tmp_path)
     assert memo is None
     assert unverified is True
+
+
+def test_retry_requests_are_unique_for_fresh_sampling(tmp_path):
+    from llm_stubs import ScriptedTransport
+
+    transport = ScriptedTransport([content_response("{broken")] * 3)
+    llm = RecordingLLMClient(
+        transport=transport, db_path=tmp_path / "llm.sqlite", model="m1"
+    )
+    produce_memo(
+        llm=llm,
+        evidence_chunks=[CHUNK],
+        case=META,
+        market_summary="{}",
+        temperature=0.0,
+        trace=TraceRecorder(run_dir=tmp_path),
+        ledger=CostLedger(),
+    )
+    assert len(transport.requests) == 3  # every retry reached the transport
