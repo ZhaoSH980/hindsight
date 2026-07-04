@@ -91,6 +91,25 @@ def test_safe_call_unknown_tool_returns_error_json(registry):
     assert "KeyError" in json.loads(out)["error"]
 
 
+def test_safe_call_survives_broken_exception_str(registry):
+    from hindsight.tools.registry import ToolSpec, safe_call
+
+    class Evil(Exception):
+        def __str__(self):
+            raise RuntimeError("boom")
+
+    def evil_tool() -> str:
+        raise Evil()
+
+    reg2 = ToolRegistry()
+    reg2.register(
+        ToolSpec(name="evil", description="d", parameters={"type": "object", "properties": {}}, fn=evil_tool)
+    )
+    out = safe_call(reg2, "evil", {})
+    payload = json.loads(out)
+    assert payload["error"].startswith("Evil:")
+
+
 def test_excerpt_truncation_marker(registry):
     from datetime import date as _date
 
