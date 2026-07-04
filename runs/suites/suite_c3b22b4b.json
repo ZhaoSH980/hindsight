@@ -1,0 +1,362 @@
+{
+ "suite_id": "suite_c3b22b4b",
+ "started_at": "2026-07-04T10:59:22+00:00",
+ "cases": [
+  "smci_case3",
+  "nvda_fy26q1"
+ ],
+ "configs": [
+  "base",
+  "memory"
+ ],
+ "results": {
+  "smci_case3": {
+   "base": {
+    "outcome": {
+     "n_claims": 4,
+     "n_gradable": 4,
+     "n_hit": 1,
+     "hit_rate": 0.25,
+     "brier": 0.26805,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 2,
+       "avg_confidence": 0.355,
+       "hit_rate": 0.5
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.485,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 4,
+     "retrieval_sufficiency": 3,
+     "attributions": {
+      "c1": "reasonable_but_wrong",
+      "c2": "evidence_missing",
+      "c4": "reasonable_but_wrong"
+     }
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 84,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 26344,
+      "completion_tokens": 841,
+      "calls": 5
+     },
+     "analyst": {
+      "prompt_tokens": 5545,
+      "completion_tokens": 1292,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 5250,
+      "completion_tokens": 8,
+      "calls": 1
+     },
+     "judge": {
+      "prompt_tokens": 7787,
+      "completion_tokens": 970,
+      "calls": 2
+     }
+    },
+    "contamination_probe": "As an AI, I do not have real-time data or memories of events that occur in the future from my perspective. Because my knowledge only extends up to a certain cutoff point and I cannot browse the live internet, I do not know what happened to SMCI's stock price or its major business events after February 26, 2025. I cannot provide any specifics or dates regarding events that occurred after this date.",
+    "unverified": false
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 4,
+     "n_gradable": 4,
+     "n_hit": 1,
+     "hit_rate": 0.25,
+     "brier": 0.26805,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 2,
+       "avg_confidence": 0.355,
+       "hit_rate": 0.5
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.485,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 4,
+     "retrieval_sufficiency": 3,
+     "attributions": {
+      "c1": "reasonable_but_wrong",
+      "c2": "evidence_missing",
+      "c4": "reasonable_but_wrong"
+     }
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 84,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 26344,
+      "completion_tokens": 841,
+      "calls": 5
+     },
+     "analyst": {
+      "prompt_tokens": 5545,
+      "completion_tokens": 1292,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 5250,
+      "completion_tokens": 8,
+      "calls": 1
+     },
+     "judge": {
+      "prompt_tokens": 7787,
+      "completion_tokens": 970,
+      "calls": 2
+     }
+    },
+    "contamination_probe": "As an AI, I do not have real-time data or memories of events that occur in the future from my perspective. Because my knowledge only extends up to a certain cutoff point and I cannot browse the live internet, I do not know what happened to SMCI's stock price or its major business events after February 26, 2025. I cannot provide any specifics or dates regarding events that occurred after this date.",
+    "unverified": false
+   }
+  },
+  "nvda_fy26q1": {
+   "base": {
+    "outcome": {
+     "n_claims": 4,
+     "n_gradable": 4,
+     "n_hit": 1,
+     "hit_rate": 0.25,
+     "brier": 0.26125,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 1,
+       "avg_confidence": 0.35,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.42500000000000004,
+       "hit_rate": 0.5
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 1,
+       "avg_confidence": 0.6,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 4,
+     "retrieval_sufficiency": 4,
+     "attributions": {
+      "c1": "reasonable_but_wrong",
+      "c2": "reasonable_but_wrong",
+      "c3": "misread_evidence"
+     }
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 72,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 26380,
+      "completion_tokens": 524,
+      "calls": 5
+     },
+     "analyst": {
+      "prompt_tokens": 13913,
+      "completion_tokens": 2166,
+      "calls": 2
+     },
+     "critic": {
+      "prompt_tokens": 12600,
+      "completion_tokens": 95,
+      "calls": 2
+     },
+     "judge": {
+      "prompt_tokens": 6517,
+      "completion_tokens": 1081,
+      "calls": 2
+     }
+    },
+    "contamination_probe": "I do not know what happened to NVDA's stock price or its major business events after May 22, 2025. Because my training only goes up to a certain point and I am relying on my internal memory without access to real-time tools, I cannot provide specifics, dates, or accurate information about events that occur in the future from that date.",
+    "unverified": false
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 4,
+     "n_gradable": 4,
+     "n_hit": 1,
+     "hit_rate": 0.25,
+     "brier": 0.30062500000000003,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.4833333333333334,
+       "hit_rate": 0.3333333333333333
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 1,
+       "avg_confidence": 0.7,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 4,
+     "retrieval_sufficiency": 4,
+     "attributions": {
+      "c1": "reasonable_but_wrong",
+      "c2": "reasonable_but_wrong",
+      "c4": "evidence_missing"
+     }
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 72,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 52135,
+      "completion_tokens": 747,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 6445,
+      "completion_tokens": 1139,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 5888,
+      "completion_tokens": 10,
+      "calls": 1
+     },
+     "judge": {
+      "prompt_tokens": 6798,
+      "completion_tokens": 1099,
+      "calls": 2
+     }
+    },
+    "contamination_probe": "I do not know what happened to NVDA's stock price or its major business events after May 22, 2025. Because my training only goes up to a certain point and I am relying on my internal memory without access to real-time tools, I cannot provide specifics, dates, or accurate information about events that occur in the future from that date.",
+    "unverified": false
+   }
+  }
+ }
+}

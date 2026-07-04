@@ -234,3 +234,117 @@ offered exactly such a window — no ticker swap needed.
   test deliberately dropped — that is case 1's job) → full suite 141 passed.
 - Live-call budget: 1 record run (12 calls) + 1 free offline replay — well
   under the ~6-run allowance; no 429 stalls observed.
+
+## D4 — evaluation suite (2026-07-04)
+
+First real `EvalSuite` run — the data source for the Leaderboard page.
+Command: `backend/.venv/Scripts/python -m hindsight.cli suite --cases
+datasets/smci_case3,datasets/nvda_fy26q1 --presets base,memory`, launched
+from the repo root. Completed in a single pass (no crash, no re-launch
+needed) in ~6.5 minutes wall clock (10:59:22 -> 11:05:45 UTC), well inside
+the "several minutes, up to ~30-40 with 429 waits" estimate — no 429s were
+actually hit this run.
+
+- **suite_id: `suite_c3b22b4b`** — `runs/suites/suite_c3b22b4b.json`.
+  Cases auto-sorted ascending by `as_of` as designed: `smci_case3`
+  (2025-02-26) before `nvda_fy26q1` (2025-05-22).
+
+### Per-run outcomes
+
+| # | run_id | case | config | status | n_gradable | hit_rate | brier | grounding_rate | reasoning | retrieval |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | `run_smci_case3_20260704_105922_28a79f` | smci_case3 | base | done, `unverified:false` | 4/4 | 0.25 | 0.26805 | 1.0 | 4 | 3 |
+| 2 | `run_smci_case3_20260704_110057_faa55c` | smci_case3 | memory | done, `unverified:false` | 4/4 | 0.25 | 0.26805 | 1.0 | 4 | 3 |
+| 3 | `run_nvda_fy26q1_20260704_110057_5107e6` | nvda_fy26q1 | base | done, `unverified:false` | 4/4 | 0.25 | 0.26125 | 1.0 | 4 | 4 |
+| 4 | `run_nvda_fy26q1_20260704_110357_439805` | nvda_fy26q1 | memory | done, `unverified:false` | 4/4 | 0.25 | 0.30063 | 1.0 | 4 | 4 |
+
+All 4 runs passed the critic on the first analyst attempt and cleared the
+full acceptance bar (`unverified: false` for every run — no re-launches were
+needed). Both contamination probes stayed clean throughout ("I do not know
+what happened to \[ticker\]... after \[as_of\]").
+
+### Memory asymmetry check (showcase material)
+
+Verified directly against `llm_calls.sqlite` `request_json` (the planner's
+actual user-message brief), not just the trace, by grepping for the literal
+marker string `"Lessons from previously graded research"` and partitioning
+calls by `created_at` into each run's time window:
+
+- **`smci_case3` memory run** (7 new metered calls in its window):
+  **0/7** calls contain the lessons block. Expected: at SMCI's `as_of`
+  (2025-02-26), the only candidate experience cards would have to come from
+  `nvda_fy26q1` runs, whose `outcome_window_end` (2025-07-22) is *after*
+  SMCI's `as_of` — the time gate correctly excludes them. No cards passed
+  the gate, so the planner brief was byte-identical to the base run's.
+- **`nvda_fy26q1` memory run** (13 new metered calls in its window):
+  **8/13** calls contain the lessons block. Expected: SMCI's
+  `outcome_window_end` (2025-04-24) is well before NVDA's `as_of`
+  (2025-05-22), so SMCI's experience card(s) legally pass the gate and
+  leave-one-out (`exclude_case_id=nvda_fy26q1`) doesn't touch them. The
+  exact injected text (verbatim from the first planner call at
+  `2026-07-04T11:03:59Z`):
+  > Lessons from previously graded research (older cases whose outcomes are
+  > already known as of your research date):
+  > - \[smci_case3\] SMCI turnaround servers ai-capex SMCI after the delayed
+  >   10-K filing rally (Feb 2025) — 4 claims, 1 hit (1/4 claims hit).
+  >   Lesson (reasonable_but_wrong): Missed claims were mostly
+  >   reasonable_but_wrong; adjust research accordingly.
+  >
+  > (rendered twice — the retriever's `top_k=3` BM25 ranking returned both
+  > the base-run and memory-run SMCI experience cards as distinct top hits,
+  > since their `features_text` is identical and both passed the gate.)
+- **CAVEAT confirmed:** SMCI base vs memory is **byte-identical** end to
+  end — `memo.md` and `claims.json` sha256 match exactly, and all 10 logical
+  calls in the memory run's cost ledger were record/replay cache hits (0 new
+  rows in `llm_calls.sqlite` for that run). This is *correct* behavior, not
+  a bug: identical prompts (no cards passed the gate) hash to the same
+  request key, so the replay layer serves the recorded response for free.
+  It also means the SMCI-memory row cost nothing extra in metered calls.
+- **Qualitative effect on NVDA:** the memory-primed run's claim set differs
+  from base's — same hit_rate (0.25, 1/4) but a different claim structure.
+  Base's hitting claim was a 20-day direction call (`c4`, "up >=5%", conf
+  0.4, realized +8.54%); memory's hitting claim was a 40-day direction call
+  (`c3`, "up >=5%", conf 0.5, realized +25.76%) — a longer horizon than any
+  base claim used, plausibly reflecting the SMCI lesson nudging the analyst
+  toward less confidence in the tight 5-day claims (which still missed
+  identically in both: `c1`/`c2`, +1.73% realized vs both claims' >=3%
+  bars) and toward hedging with a longer window instead. Memory's brier
+  (0.30063) is *worse* than base's (0.26125) despite the horizon change,
+  because it raised confidence on both a still-missing 5-day volatility
+  claim (`c4`, conf 0.7, vs base's `c3` conf 0.6, both miss) and the
+  overlapping 5-day pair (conf 0.55/0.4 vs base's 0.45/0.35) — i.e. the
+  lesson changed *what* was claimed and *how confidently*, not whether the
+  tight-horizon claims stopped missing. This is an honest, un-cherry-picked
+  result: memory demonstrably changed the planner's brief and the analyst's
+  output (asymmetrically, exactly per the time-gate design), but one run of
+  N=1 per config is not enough signal to claim memory improves or hurts
+  calibration — see the forthcoming evaluation-methodology doc's
+  small-N framing.
+
+### Total calls
+
+- **30 new metered LLM calls** across the whole suite (`llm_calls.sqlite`
+  rows with `created_at >= 2026-07-04T10:59:22Z`, the suite's snapshot
+  timestamp, verified against the table's pre/post row counts: 36 -> 66)
+  — under the ~50-65 estimate, the gap explained by cache hits: the
+  smci_case3/memory run replayed all 10 of its logical calls for free
+  (byte-identical to smci_case3/base, per the asymmetry check above), and a
+  handful of smci_case3/base's and nvda_fy26q1/base's own logical calls
+  (e.g. the contamination probe, whose prompt depends only on
+  ticker+as_of) also hit cache rows already recorded by the D2/D3 runs of
+  the same cases committed earlier this project.
+- Per-run logical call counts from each run's `cost` ledger (includes cache
+  hits, i.e. what the agents *logically* invoked, not what hit the network):
+  smci/base 10 (probe 1, planner 5, analyst 1, critic 1, judge 2);
+  smci/memory 10, all 10 replayed from cache — 0 new network calls;
+  nvda/base 12 (probe 1, planner 5, analyst 2, critic 2, judge 2);
+  nvda/memory 13 (probe 1, planner 8, analyst 1, critic 1, judge 2). Sum of
+  logical calls: 45; actual new rows written to `llm_calls.sqlite`: 30.
+- No process crashes, no 429 waits observed, no re-launch needed — the
+  suite completed cleanly end to end in one pass.
+
+### Tests
+
+No backend code touched for this task; full suite re-confirmed green
+immediately before launch: `backend/.venv/Scripts/python -m pytest -q` ->
+**168 passed**.

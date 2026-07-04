@@ -1,0 +1,86 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "SMCI closes at least 5% above the as-of price ($51.11) on the 20th trading day after as-of, supported by institutional re-rating and Blackwell ramp momentum",
+  "type": "direction",
+  "ticker": "SMCI",
+  "horizon_days": 20,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 5.0
+  },
+  "confidence": 0.42,
+  "evidence": [
+   "bull_thesis_turnaround::000",
+   "bull_thesis_turnaround::001",
+   "10k_filed_compliance::000",
+   "blackwell_dlc_production::000"
+  ],
+  "status": "miss",
+  "realized_return_pct": -27.528858397185285,
+  "detail": "horizon-end return -27.53% vs up 5.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "SMCI's 20-trading-day return falls between -10% and +4%, reflecting a pullback after the sharp rally as governance and margin concerns reassert",
+  "type": "magnitude",
+  "ticker": "SMCI",
+  "horizon_days": 20,
+  "prediction": {
+   "low_pct": -10.0,
+   "high_pct": 4.0
+  },
+  "confidence": 0.38,
+  "evidence": [
+   "bear_view_margins_governance::000",
+   "bear_view_margins_governance::001",
+   "q2_fy25_update::000",
+   "10k_filed_compliance::000"
+  ],
+  "status": "miss",
+  "realized_return_pct": -27.528858397185285,
+  "detail": "horizon-end return -27.53% vs [-10.0, 4.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "SMCI closes at least 8% below the as-of price ($51.11) on the 40th trading day after as-of, as the initial relief rally fades and margin/governance concerns weigh",
+  "type": "direction",
+  "ticker": "SMCI",
+  "horizon_days": 40,
+  "prediction": {
+   "direction": "down",
+   "threshold_pct": 8.0
+  },
+  "confidence": 0.33,
+  "evidence": [
+   "bear_view_margins_governance::000",
+   "bear_view_margins_governance::001",
+   "10k_filed_compliance::000",
+   "q2_fy25_update::000"
+  ],
+  "status": "hit",
+  "realized_return_pct": -29.93543152875988,
+  "detail": "horizon-end return -29.94% vs down 8.0%"
+ },
+ {
+  "claim_id": "c4",
+  "statement": "SMCI's realized daily log-return volatility over the 40-trading-day horizon ranks above the 80th percentile of same-length rolling windows from the prior year, reflecting continued turbulence from unresolved DOJ/SEC probes and the volatile relief rally dynamics",
+  "type": "volatility",
+  "ticker": "SMCI",
+  "horizon_days": 40,
+  "prediction": {
+   "relation": "above",
+   "percentile": 80.0
+  },
+  "confidence": 0.55,
+  "evidence": [
+   "10k_filed_compliance::000",
+   "bear_view_margins_governance::001",
+   "accounting_saga_recap::000",
+   "hyperscaler_capex_macro::000"
+  ],
+  "status": "miss",
+  "realized_return_pct": -29.93543152875988,
+  "detail": "realized vol 0.06939 vs p80 0.09054 (above)"
+ }
+]

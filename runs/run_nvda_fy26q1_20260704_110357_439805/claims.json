@@ -1,0 +1,85 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "NVDA closes at least 3% above the as-of price ($132.64) on the 5th trading day after as-of, capturing the immediate earnings reaction window",
+  "type": "direction",
+  "ticker": "NVDA",
+  "horizon_days": 5,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 3.0
+  },
+  "confidence": 0.55,
+  "evidence": [
+   "hyperscaler_capex::000",
+   "hyperscaler_capex::001",
+   "analyst_preview::000",
+   "blackwell_ramp::000"
+  ],
+  "status": "miss",
+  "realized_return_pct": 1.7315382877462815,
+  "detail": "horizon-end return +1.73% vs up 3.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "NVDA's 5-trading-day return lands between +3% and +12%, reflecting a positive but measured earnings reaction given the stock's recent rally",
+  "type": "magnitude",
+  "ticker": "NVDA",
+  "horizon_days": 5,
+  "prediction": {
+   "low_pct": 3.0,
+   "high_pct": 12.0
+  },
+  "confidence": 0.4,
+  "evidence": [
+   "hyperscaler_capex::000",
+   "analyst_preview::000",
+   "blackwell_ramp::001",
+   "q4_fy25_recap::001"
+  ],
+  "status": "miss",
+  "realized_return_pct": 1.7315382877462815,
+  "detail": "horizon-end return +1.73% vs [3.0, 12.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "NVDA closes at least 5% above the as-of price on the 40th trading day after as-of, reflecting sustained post-earnings strength as Blackwell ramp and confirmed capex budgets dominate the narrative",
+  "type": "direction",
+  "ticker": "NVDA",
+  "horizon_days": 40,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 5.0
+  },
+  "confidence": 0.5,
+  "evidence": [
+   "hyperscaler_capex::001",
+   "blackwell_ramp::000",
+   "analyst_preview::000",
+   "amd_competition::001"
+  ],
+  "status": "hit",
+  "realized_return_pct": 25.7559331891861,
+  "detail": "horizon-end return +25.76% vs up 5.0%"
+ },
+ {
+  "claim_id": "c4",
+  "statement": "NVDA's realized daily log-return volatility over the 5-trading-day window ending on the 5th trading day after as-of ranks above the 80th percentile of same-length rolling windows from the prior 252 days, reflecting elevated earnings-event turbulence",
+  "type": "volatility",
+  "ticker": "NVDA",
+  "horizon_days": 5,
+  "prediction": {
+   "relation": "above",
+   "percentile": 80.0
+  },
+  "confidence": 0.7,
+  "evidence": [
+   "h20_export_restriction::000",
+   "analyst_preview::000",
+   "ai_capex_skeptic::000"
+  ],
+  "status": "miss",
+  "realized_return_pct": 1.7315382877462815,
+  "detail": "realized vol 0.02449 vs p80 0.04555 (above)"
+ }
+]
