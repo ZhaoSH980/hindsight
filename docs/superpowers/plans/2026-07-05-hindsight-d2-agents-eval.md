@@ -3219,7 +3219,7 @@ git commit -m "feat(d2): SMCI falsification case with validated failure shape"
   - Two committed cases load; leakage tests cover documents + bars + memory channels
   - `docs/eval-log.md` has: probe entry (D1), ≥1 prompt-iteration or live-run entry, case-3 validation entry
   - `runs/` contains ≥2 committed recorded runs replayable offline
-- [ ] **Step 4: Update the D1 plan's carryover list** — mark items ①-⑪ done (they are implemented by Tasks 1-13); refresh the D3 list (RecordingLLMClient thread-bound sqlite; FastAPI + WS; frontend pages; suite paired-delta rendering).
+- [ ] **Step 4: Update the D1 plan's carryover list** — mark items ①-⑪ done (they are implemented by Tasks 1-13); refresh the D3 list (RecordingLLMClient thread-bound sqlite — note `Store` already ships `check_same_thread=False`+lock but serializes all reads through one coarse lock, acceptable for demo traffic; FastAPI + WS; frontend pages; suite paired-delta rendering).
 - [ ] **Step 5: Commit and tag**
 
 ```bash
