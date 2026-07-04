@@ -45,3 +45,25 @@ def test_presets_exist():
     assert set(PRESETS) == {"base", "memory", "tight"}
     assert PRESETS["memory"].memory_on is True
     assert PRESETS["tight"].context_budget == 2000
+
+
+def test_suite_id_can_be_preassigned(case_dir, tmp_path):
+    def fake_run(case_dir, config, *, llm, store, runs_root, suite_id, suite_started_at):
+        class R:
+            scores = {"outcome": {"hit_rate": 1.0}}
+            run_id = "r1"
+
+        return R()
+
+    store = Store(tmp_path / "h.db")
+    returned_id = run_suite(
+        [case_dir],
+        {"base": RunConfig(model="m")},
+        llm=None,
+        store=store,
+        runs_root=tmp_path / "runs",
+        run_fn=fake_run,
+        suite_id="suite_preassigned_001",
+    )
+    assert returned_id == "suite_preassigned_001"
+    assert (tmp_path / "runs" / "suites" / "suite_preassigned_001.json").exists()

@@ -30,8 +30,9 @@ def run_suite(
     store: Store,
     runs_root: Path,
     run_fn: Callable[..., Any] = run_research,
+    suite_id: str | None = None,
 ) -> str:
-    suite_id = f"suite_{uuid.uuid4().hex[:8]}"
+    suite_id = suite_id or f"suite_{uuid.uuid4().hex[:8]}"
     suite_started_at = now_iso()  # single snapshot BEFORE any run
     ordered = sorted(case_dirs, key=lambda d: load_case(Path(d)).meta.as_of)
     results: dict[str, dict[str, Any]] = {}

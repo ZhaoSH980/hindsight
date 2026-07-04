@@ -28,6 +28,10 @@ def create_app(repo_root: Path | None = None) -> FastAPI:
 
     app.include_router(runs_router)
 
+    from hindsight.api.routes_eval import router as eval_router
+
+    app.include_router(eval_router)
+
     dist = app.state.hindsight.root / "frontend" / "dist"
     if dist.exists():
         from fastapi.staticfiles import StaticFiles
