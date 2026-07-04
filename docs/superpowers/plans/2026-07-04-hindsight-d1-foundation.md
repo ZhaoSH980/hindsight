@@ -1381,7 +1381,7 @@ def make_corpus_tool(corpus: SandboxedCorpus) -> ToolSpec:
             "type": "object",
             "properties": {
                 "query": {"type": "string", "description": "keyword query"},
-                "top_k": {"type": "integer", "default": 5},
+                "top_k": {"type": "integer", "default": 5, "minimum": 1},
             },
             "required": ["query"],
         },
