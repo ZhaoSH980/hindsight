@@ -9,9 +9,11 @@ from hindsight.tools.registry import ToolSpec
 _EXCERPT_CHARS = 700
 
 
-def make_corpus_tool(corpus: SandboxedCorpus) -> ToolSpec:
+def make_corpus_tool(corpus: SandboxedCorpus, evidence_sink=None) -> ToolSpec:
     def corpus_search(query: str, top_k: int = 5) -> str:
         results = corpus.search(query, top_k=top_k)
+        if evidence_sink is not None:
+            evidence_sink.add_results(results)
         return json.dumps(
             {
                 "results": [
