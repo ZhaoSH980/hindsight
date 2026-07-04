@@ -56,6 +56,14 @@ def test_build_card_all_hits_lesson():
     assert "held" in card.lesson_text
 
 
+def test_build_card_all_ungradable_lesson():
+    card = build_card(
+        META, "r1", [make_graded(GradeStatus.ungradable)], make_report(), date(2025, 4, 15)
+    )
+    assert "No claims could be graded" in card.lesson_text
+    assert card.lesson_attribution is None
+
+
 def test_retriever_ranks_by_similarity(tmp_path):
     store = Store(tmp_path / "h.db")
     r = ExperienceRetriever(store)

@@ -59,13 +59,17 @@ def build_card(
     if misses and report is not None and report.attributions:
         counts = Counter(a.attribution for a in report.attributions)
         attribution = counts.most_common(1)[0][0]
-    if not misses:
+    gradable = [g for g in graded if g.status != GradeStatus.ungradable]
+    if not gradable:
+        lesson = "No claims could be graded (insufficient data); no lesson available."
+    elif not misses:
         lesson = "Calibration held: graded claims came true at the stated confidence."
     elif attribution:
         lesson = f"Missed claims were mostly {attribution}; adjust research accordingly."
     else:
         lesson = "Claims missed; no attribution available."
     return ExperienceCard(
+        # exp_id uniqueness relies on run_id being globally unique (uuid-suffixed in orchestrator)
         exp_id=f"exp_{run_id}",
         source_case_id=case.case_id,
         source_run_id=run_id,
@@ -109,6 +113,7 @@ class ExperienceRetriever:
         if not rows:
             return []
         cards = [ExperienceCard(**json.loads(r["card_json"])) for r in rows]
+        # no zero-score filter (unlike the corpus retriever): at 2-3-card scale, "no similar precedent, but here is what happened" is intentional Reflexion behavior
         index = BM25Okapi([_tokenize(c.features_text) for c in cards])
         scores = index.get_scores(_tokenize(features_text))
         ranked = sorted(zip(cards, scores), key=lambda p: p[1], reverse=True)

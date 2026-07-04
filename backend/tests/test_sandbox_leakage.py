@@ -147,3 +147,17 @@ def test_memory_channel_leave_one_out(tmp_path):
         "NVDA earnings", as_of=AS_OF, exclude_case_id="current"
     )
     assert got == []
+
+
+def test_memory_channel_respects_suite_snapshot(tmp_path):
+    from hindsight.memory.experience import ExperienceRetriever
+    from hindsight.store.db import Store
+
+    store = Store(tmp_path / "h.db")
+    _write_exp(store, "old_case", date(2025, 2, 1), date(2025, 3, 1))
+    snapshot_before_write = "2000-01-01T00:00:00+00:00"
+    got = ExperienceRetriever(store).retrieve(
+        "NVDA earnings", as_of=AS_OF, exclude_case_id="current",
+        created_before=snapshot_before_write,
+    )
+    assert got == []
