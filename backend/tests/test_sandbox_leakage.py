@@ -101,3 +101,49 @@ def test_as_of_is_read_only(market, corpus):
         market.as_of = date(2099, 1, 1)
     with pytest.raises(AttributeError):
         corpus.as_of = date(2099, 1, 1)
+
+
+def _write_exp(store, case_id, as_of, window_end, feats="NVDA earnings"):
+    from hindsight.memory.experience import ExperienceCard
+
+    card = ExperienceCard(
+        exp_id=f"e_{case_id}_{window_end}",
+        source_case_id=case_id,
+        source_run_id="r",
+        as_of=as_of,
+        outcome_window_end=window_end,
+        features_text=feats,
+        strategy_summary="s",
+        outcomes={},
+        lesson_text="l",
+    )
+    store.insert_experience(
+        card.exp_id, card.source_case_id, card.source_run_id,
+        card.as_of.isoformat(), card.outcome_window_end.isoformat(),
+        card.features_text, card.model_dump_json(),
+    )
+
+
+def test_memory_channel_hides_unclosed_windows(tmp_path):
+    from hindsight.memory.experience import ExperienceRetriever
+    from hindsight.store.db import Store
+
+    store = Store(tmp_path / "h.db")
+    _write_exp(store, "old_case", date(2025, 2, 1), date(2025, 3, 1))
+    _write_exp(store, "recent_case", date(2025, 5, 1), date(2025, 6, 30))  # window open at as_of
+    got = ExperienceRetriever(store).retrieve(
+        "NVDA earnings", as_of=AS_OF, exclude_case_id="current"
+    )
+    assert {c.source_case_id for c in got} == {"old_case"}
+
+
+def test_memory_channel_leave_one_out(tmp_path):
+    from hindsight.memory.experience import ExperienceRetriever
+    from hindsight.store.db import Store
+
+    store = Store(tmp_path / "h.db")
+    _write_exp(store, "current", date(2025, 2, 1), date(2025, 3, 1))
+    got = ExperienceRetriever(store).retrieve(
+        "NVDA earnings", as_of=AS_OF, exclude_case_id="current"
+    )
+    assert got == []
