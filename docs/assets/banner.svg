@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="220" viewBox="0 0 1200 220" role="img" aria-label="Hindsight — research agents, graded by the future.">
+  <defs>
+    <linearGradient id="futureFade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="0.55" stop-color="#ffffff" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.08"/>
+    </linearGradient>
+    <mask id="futureMask" maskUnits="userSpaceOnUse" x="780" y="0" width="420" height="220">
+      <rect x="780" y="0" width="420" height="220" fill="url(#futureFade)"/>
+    </mask>
+    <linearGradient id="pastArea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#22d3ee" stop-opacity="0.14"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- background -->
+  <rect width="1200" height="220" fill="#0a0e14"/>
+
+  <!-- faint horizontal gridlines -->
+  <g stroke="#1b2430" stroke-width="1">
+    <line x1="40" y1="150" x2="1160" y2="150"/>
+    <line x1="40" y1="180" x2="1160" y2="180"/>
+  </g>
+
+  <!-- area fill under the past line -->
+  <path d="M40 178 L110 168 L180 181 L250 160 L320 170 L400 152 L470 163 L550 146 L630 156 L700 141 L780 134 L780 214 L40 214 Z"
+        fill="url(#pastArea)"/>
+
+  <!-- past price line: solid cyan, ends at the as-of divider -->
+  <path d="M40 178 L110 168 L180 181 L250 160 L320 170 L400 152 L470 163 L550 146 L630 156 L700 141 L780 134"
+        fill="none" stroke="#22d3ee" stroke-width="2.5"
+        stroke-linejoin="round" stroke-linecap="round"/>
+
+  <!-- future price line: dashed green, fading behind the mask edge -->
+  <g mask="url(#futureMask)">
+    <path d="M780 134 L830 144 L885 120 L940 130 L1000 104 L1060 114 L1160 82"
+          fill="none" stroke="#34d399" stroke-width="2.5" stroke-dasharray="7 7"
+          stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M780 134 L840 150 L900 162 L970 152 L1040 168 L1160 158"
+          fill="none" stroke="#34d399" stroke-width="1.5" stroke-dasharray="4 8"
+          stroke-opacity="0.45" stroke-linejoin="round" stroke-linecap="round"/>
+  </g>
+
+  <!-- amber as-of divider -->
+  <line x1="780" y1="28" x2="780" y2="206" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="2 4"/>
+  <circle cx="780" cy="134" r="4" fill="#f59e0b"/>
+  <text x="792" y="42" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace"
+        font-size="13" letter-spacing="2" fill="#f59e0b">as_of</text>
+
+  <!-- wordmark -->
+  <text x="60" y="92" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace"
+        font-size="56" font-weight="700" letter-spacing="14" fill="#e6edf3">HINDSIGHT</text>
+  <text x="63" y="126" font-family="ui-monospace, 'Cascadia Mono', Consolas, monospace"
+        font-size="19" letter-spacing="1" fill="#8b98a5">Research agents, graded by the future.</text>
+</svg>
