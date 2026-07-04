@@ -1,5 +1,4 @@
 import json
-from datetime import date
 
 from llm_stubs import ScriptedTransport, content_response, tool_call_response
 
@@ -109,3 +108,46 @@ def test_validation_exhaustion_marks_failed(case_dir, tmp_path):
     )
     assert result.memo is None
     assert store.get_runs()[0]["status"] == "failed"
+
+
+SEMANTIC_BAD = json.dumps({"ok": False, "problems": ["not falsifiable"]})
+
+
+def test_unverified_path_persists_done_with_ungradable(case_dir, tmp_path):
+    script = (
+        [content_response("no post-date knowledge")]
+        + [
+            tool_call_response("corpus_search", {"query": "nvidia guidance"}),
+            tool_call_response("finish_research", {"reason": "enough"}, "c9"),
+        ]
+        + [
+            content_response(MEMO),
+            content_response(SEMANTIC_BAD),
+            content_response(MEMO.replace('"c1"', '"c2"')),
+            content_response(SEMANTIC_BAD),
+            content_response(MEMO.replace('"c1"', '"c3"')),
+            content_response(SEMANTIC_BAD),
+        ]
+        + [content_response(JUDGE)]
+    )
+    llm = RecordingLLMClient(
+        transport=ScriptedTransport(script),
+        db_path=tmp_path / "llm.sqlite",
+        model="m1",
+    )
+    store = Store(tmp_path / "h.db")
+    result = run_research(
+        case_dir=case_dir,
+        config=RunConfig(model="m1"),
+        llm=llm,
+        store=store,
+        runs_root=tmp_path / "runs",
+    )
+    assert result.unverified is True
+    assert store.get_runs()[0]["status"] == "done"  # distinct from failed_validation
+    claims = json.loads((result.run_dir / "claims.json").read_text(encoding="utf-8"))
+    assert claims and all(c["status"] == "ungradable" for c in claims)
+    card = json.loads(
+        store.query_experiences("9999-01-01", exclude_case_id="other")[0]["card_json"]
+    )
+    assert "No claims could be graded" in card["lesson_text"]

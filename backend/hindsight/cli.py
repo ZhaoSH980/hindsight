@@ -18,6 +18,14 @@ from hindsight.sandbox.audit import AuditLog
 from hindsight.sandbox.errors import LookaheadError
 from hindsight.sandbox.gate import SandboxedCorpus, SandboxedMarketData
 
+_REPO_ROOT = Path(__file__).resolve().parents[2]
+
+
+def _anchor(p: str) -> Path:
+    """Resolve relative CLI paths against the repo root, not the CWD."""
+    path = Path(p)
+    return path if path.is_absolute() else _REPO_ROOT / path
+
 
 def dry_run(case_dir: Path, query: str) -> None:
     case = load_case(case_dir)
@@ -67,7 +75,7 @@ def main() -> None:
 
     args = ap.parse_args()
     if args.command == "dry-run":
-        dry_run(Path(args.case), args.query)
+        dry_run(_anchor(args.case), args.query)
     if args.command == "run":
         from hindsight.agents.orchestrator import run_research
         from hindsight.llm.client import LLMConfig, openai_transport
@@ -79,16 +87,16 @@ def main() -> None:
         cfg = LLMConfig.from_env()
         llm = RecordingLLMClient(
             transport=with_retry(openai_transport(cfg)),
-            db_path=Path("llm_calls.sqlite"),
+            db_path=_anchor("llm_calls.sqlite"),
             model=cfg.model,
             offline=True if args.offline else None,
         )
         result = run_research(
-            case_dir=Path(args.case),
+            case_dir=_anchor(args.case),
             config=RunConfig(model=cfg.model, memory_on=args.memory, max_steps=args.max_steps),
             llm=llm,
-            store=Store(Path(args.db)),
-            runs_root=Path(args.runs_root),
+            store=Store(_anchor(args.db)),
+            runs_root=_anchor(args.runs_root),
         )
         print(f"run {result.run_id} -> {result.run_dir}")
         print(json.dumps(result.scores, indent=1, ensure_ascii=False))
