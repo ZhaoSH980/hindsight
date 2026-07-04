@@ -31,9 +31,12 @@ def main() -> None:
     bars = YFinanceSource().get_bars(
         ticker, date.fromisoformat(args.start), date.fromisoformat(args.end)
     )
+    import yfinance as yf
+
     payload = {
         "ticker": ticker,
         "auto_adjust": True,
+        "yfinance_version": yf.__version__,
         "fetched_at": datetime.now().isoformat(timespec="seconds"),
         "bars": [
             {

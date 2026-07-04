@@ -38,3 +38,28 @@ def test_unknown_ticker_raises(source):
 def test_bars_sorted_by_date(source):
     bars = source.get_bars("NVDA", date(2025, 1, 1), date(2026, 1, 1))
     assert [b.date for b in bars] == sorted(b.date for b in bars)
+
+
+def test_yfinance_source_flattens_and_inclusive_end(monkeypatch):
+    import pandas as pd
+    import yfinance as yf
+
+    from hindsight.data.market_source import YFinanceSource
+
+    captured = {}
+
+    def fake_download(ticker, start, end, progress, auto_adjust):
+        captured["end"] = end
+        idx = pd.DatetimeIndex([pd.Timestamp("2025-05-21"), pd.Timestamp("2025-05-22")])
+        cols = pd.MultiIndex.from_product(
+            [["Open", "High", "Low", "Close", "Volume"], [ticker]]
+        )
+        return pd.DataFrame(
+            [[1, 2, 0.5, 1.5, 100], [1.5, 2.5, 1, 2.0, 110]], index=idx, columns=cols
+        )
+
+    monkeypatch.setattr(yf, "download", fake_download)
+    bars = YFinanceSource().get_bars("NVDA", date(2025, 5, 21), date(2025, 5, 22))
+    assert captured["end"] == "2025-05-23"
+    assert [b.date.isoformat() for b in bars] == ["2025-05-21", "2025-05-22"]
+    assert bars[0].close == 1.5

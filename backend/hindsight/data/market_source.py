@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import json
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 from typing import Protocol
 
@@ -40,7 +40,7 @@ class YFinanceSource:
         df = yf.download(
             ticker,
             start=start.isoformat(),
-            end=end.isoformat(),
+            end=(end + timedelta(days=1)).isoformat(),  # yf.download end is exclusive; protocol is inclusive
             progress=False,
             auto_adjust=True,  # explicit: adjusted prices, never rely on defaults
         )
