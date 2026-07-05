@@ -9,15 +9,18 @@ import { HelpTip } from "../components/HelpTip";
 import { ProvenanceBadge } from "../components/ProvenanceBadge";
 import { CaseWizard } from "../components/CaseWizard";
 import { RunFlow } from "../components/RunFlow";
+import {
+  IconCompass, IconFile, IconFlag, IconSearch, IconShield, IconWrench,
+} from "../components/icons";
 import type { Bar, CaseMeta, RunDetail, TraceEvent } from "../lib/types";
 
-const TYPE_ICON: Record<string, string> = {
-  plan_step: "\u{1F9ED}", // compass
-  tool_call: "\u{1F527}", // wrench
-  tool_result: "\u{1F4C4}", // page
-  validation: "\u{1F6E1}", // shield
-  audit: "\u{1F50D}", // magnifying glass
-  score: "\u{1F3C1}", // checkered flag
+const TYPE_ICON: Record<string, (props: { size?: number; className?: string }) => JSX.Element> = {
+  plan_step: IconCompass,
+  tool_call: IconWrench,
+  tool_result: IconFile,
+  validation: IconShield,
+  audit: IconSearch,
+  score: IconFlag,
 };
 
 const STEPS = [
@@ -49,7 +52,7 @@ const TOOL_ACTION = {
  *  Explorer; this view is for humans watching the run. */
 function EventLine({ evt }: { evt: TraceEvent }) {
   const { t } = useLang();
-  const icon = TYPE_ICON[evt.type] ?? "•";
+  const Icon = TYPE_ICON[evt.type];
   const p = (evt.payload ?? {}) as Record<string, unknown>;
 
   let action = evt.type;
@@ -102,7 +105,7 @@ function EventLine({ evt }: { evt: TraceEvent }) {
   const agentKey = AGENT_KEY[evt.agent as keyof typeof AGENT_KEY];
   return (
     <div className={`animate-fade-up flex items-start gap-2 font-mono text-xs py-1 border-b border-line/60 last:border-0 ${danger ? "bg-down/10" : ""}`}>
-      <span className="shrink-0">{icon}</span>
+      <span className="mt-0.5 shrink-0 text-muted">{Icon ? <Icon size={13} /> : "•"}</span>
       <span className="text-muted w-14 shrink-0">{agentKey ? t(agentKey) : evt.agent}</span>
       <span className={`shrink-0 ${danger ? "text-down font-semibold" : "text-slate-200"}`}>{action}</span>
       {detail && <span className="text-muted truncate">{detail}</span>}
@@ -126,6 +129,7 @@ export default function Studio() {
   const [memoLangTouched, setMemoLangTouched] = useState(false);
   const [wizardOpen, setWizardOpen] = useState(false);
   const [wizardNotice, setWizardNotice] = useState<string | null>(null);
+  const [gridOpen, setGridOpen] = useState(false);
 
   const { events, status } = useRunStream(runId);
   const feedRef = useRef<HTMLDivElement | null>(null);
@@ -181,7 +185,7 @@ export default function Studio() {
       {/* 0. Hero — what is this thing? */}
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
         <div className="flex flex-col gap-3">
-          <h1 className="text-2xl lg:text-3xl font-semibold text-slate-100 glow-text leading-tight">
+          <h1 className="font-display text-3xl lg:text-4xl font-semibold text-slate-100 glow-text leading-tight">
             {t("heroTitle")}
           </h1>
           <p className="text-sm text-slate-300 leading-relaxed">{t("heroTagline")}</p>
@@ -247,8 +251,9 @@ export default function Studio() {
             {wizardNotice === "created_window_open" && ` — ${t("wizWindowOpen")}`}
           </div>
         )}
+        {/* featured (hand-authored) cases keep full cards — one focal tier */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          {cases.map((c) => (
+          {cases.filter((c) => !c.tags.includes("grid")).map((c) => (
             <button
               key={c.case_id}
               type="button"
@@ -280,6 +285,43 @@ export default function Studio() {
             </button>
           ))}
         </div>
+
+        {/* the mechanical grid — the statistical sample, deliberately demoted
+            to a collapsed compact tier so it can't drown the featured cases */}
+        {cases.some((c) => c.tags.includes("grid")) && (
+          <div className="mt-3">
+            <button
+              type="button"
+              onClick={() => setGridOpen((o) => !o)}
+              className="flex items-center gap-2 font-display text-[11px] font-medium uppercase tracking-[0.14em] text-muted transition-colors hover:text-slate-200"
+            >
+              <span className={`inline-block transition-transform ${gridOpen ? "rotate-90" : ""}`}>▸</span>
+              {t("gridCases")}
+              <span className="num">({cases.filter((c) => c.tags.includes("grid")).length})</span>
+              <span className="normal-case tracking-normal font-sans font-normal">— {t("gridCasesHint")}</span>
+            </button>
+            {gridOpen && (
+              <div className="mt-2 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2 animate-fade-in">
+                {cases.filter((c) => c.tags.includes("grid")).map((c) => (
+                  <button
+                    key={c.case_id}
+                    type="button"
+                    onClick={() => selectCase(c)}
+                    className={`panel panel-hover px-2.5 py-2 text-left ${
+                      selected?.case_id === c.case_id ? "border-accent shadow-glow" : ""
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-xs text-accent">{c.ticker}</span>
+                      <span className="num text-[10px] text-muted">{c.n_docs}</span>
+                    </div>
+                    <span className="font-mono text-[10px] text-muted">{c.as_of}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </section>
 
       {selected && (

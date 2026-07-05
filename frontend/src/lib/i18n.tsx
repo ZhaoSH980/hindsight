@@ -127,6 +127,9 @@ const dict = {
     edgarImport: "Import selected", edgarImporting: "Importing…",
     edgarNone: "No filings found before the as-of date (the search covers EDGAR's most recent ~1000 filings).",
     edgarNeedTickerDate: "Enter ticker and as-of date first.",
+    featuredCases: "Featured cases", gridCases: "Mechanical grid",
+    showGrid: "Show all", hideGrid: "Collapse",
+    gridCasesHint: "Fixed universe × pre-committed dates, corpus by rule — the statistical sample behind the leaderboard.",
 
     // ——— confidence vs outcome (calibration replacement) ———
     confVsOutcome: "Confidence vs. outcome",
@@ -261,6 +264,9 @@ const dict = {
     edgarImport: "导入所选", edgarImporting: "导入中…",
     edgarNone: "基准日之前没有找到申报文件（查询范围为 EDGAR 最近约 1000 条申报）。",
     edgarNeedTickerDate: "请先填写股票代码和研究基准日。",
+    featuredCases: "精选案例", gridCases: "机械网格",
+    showGrid: "展开全部", hideGrid: "收起",
+    gridCasesHint: "固定股票池 × 预定日期，语料按规则生成——排行榜统计背后的样本。",
 
     // ——— 置信度 vs 结果（替代校准曲线）———
     confVsOutcome: "置信度 vs 实际结果",

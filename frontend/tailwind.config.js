@@ -5,7 +5,8 @@ export default {
     extend: {
       colors: {
         ink: { 950: "#04060c", 900: "#070b14", 800: "#0b111e", 700: "#141c2e", 600: "#1f2a44" },
-        line: { DEFAULT: "#1c2740" },
+        // borders are structure, not decoration: subtle rgba beats hard hex
+        line: { DEFAULT: "rgba(125, 138, 165, 0.14)", strong: "rgba(125, 138, 165, 0.28)" },
         up: "#34d399",
         down: "#f87171",
         accent: "#22d3ee",
@@ -14,6 +15,8 @@ export default {
         muted: "#7d8aa5",
       },
       fontFamily: {
+        sans: ["IBM Plex Sans", "system-ui", "sans-serif"],
+        display: ["Chakra Petch", "IBM Plex Sans", "sans-serif"],
         mono: ["JetBrains Mono", "ui-monospace", "SFMono-Regular", "Menlo", "monospace"],
       },
       boxShadow: {

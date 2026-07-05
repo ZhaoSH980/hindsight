@@ -1,4 +1,7 @@
+import type { ReactNode } from "react";
+
 import { useLang } from "../lib/i18n";
+import { IconCompass, IconFlag, IconPen, IconSearch, IconShield } from "./icons";
 import type { TraceEvent } from "../lib/types";
 
 /** Live pipeline diagram derived purely from the trace event stream:
@@ -102,7 +105,7 @@ function Edge({ from, to }: { from: NodeState; to: NodeState }) {
 }
 
 interface NodeProps {
-  icon: string;
+  icon: ReactNode;
   label: string;
   sub: string;
   state: NodeState;
@@ -112,8 +115,8 @@ function Node({ icon, label, sub, state }: NodeProps) {
   return (
     <div className={`panel flex min-w-[7.5rem] flex-col items-center gap-0.5 px-3 py-2 transition-all duration-300 ${nodeClass(state)}`}>
       <div className="flex items-center gap-1.5">
-        <span aria-hidden="true">{icon}</span>
-        <span className="text-xs font-semibold">{label}</span>
+        {icon}
+        <span className="font-display text-xs font-semibold">{label}</span>
         {state === "active" && (
           <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse-dot" aria-hidden="true" />
         )}
@@ -160,7 +163,7 @@ export function RunFlow({ events, status }: { events: TraceEvent[]; status: stri
               : "border-line text-muted"
           }`}
         >
-          🔍 {t("agentSandbox")} <span className="num">{d.audits}</span>
+          <IconSearch size={12} /> {t("agentSandbox")} <span className="num">{d.audits}</span>
           {d.denied > 0 && (
             <span className="font-semibold">· {t("feedAuditDenied")} ×{d.denied}</span>
           )}
@@ -169,22 +172,22 @@ export function RunFlow({ events, status }: { events: TraceEvent[]; status: stri
 
       <div className="flex items-stretch gap-1 overflow-x-auto pb-1">
         <Node
-          icon="🧭"
+          icon={<IconCompass size={15} />}
           label={t("agentPlanner")}
           sub={`${d.planSteps} ${t("flowSteps")} · ${d.toolCalls} ${t("flowTools")}`}
           state={s0}
         />
         <Edge from={s0} to={s1} />
-        <Node icon="✍️" label={t("agentAnalyst")} sub={d.stage >= 1 ? t("flowMemo") : ""} state={s1} />
+        <Node icon={<IconPen size={15} />} label={t("agentAnalyst")} sub={d.stage >= 1 ? t("flowMemo") : ""} state={s1} />
         <Edge from={s1} to={s2} />
         <Node
-          icon="🛡️"
+          icon={<IconShield size={15} />}
           label={t("agentCritic")}
           sub={d.checks > 0 ? `${d.checks} ${t("flowChecks")}${d.retries > 0 ? ` · ↺${d.retries} ${t("flowRewrite")}` : ""}` : ""}
           state={s2}
         />
         <Edge from={s2} to={s3} />
-        <Node icon="🏁" label={t("flowScoring")} sub={complete ? "✓" : ""} state={s3} />
+        <Node icon={<IconFlag size={15} />} label={t("flowScoring")} sub={complete ? "✓" : ""} state={s3} />
       </div>
 
       {/* live action ticker */}

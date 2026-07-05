@@ -85,17 +85,19 @@ export function ScoreCards({ scores }: Props) {
   ];
 
   return (
+    // three levers together — size, weight, color — never size alone:
+    // 11px/500 tracked label · 28px/600 tabular value with polarity hue
     <section className="stagger grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
       {cards.map((c) => (
-        <div key={c.labelKey} className="panel panel-hover p-3 flex flex-col gap-1">
-          <span className="flex items-center gap-1 text-[10px] text-muted font-mono">
+        <div key={c.labelKey} className="panel panel-hover p-4 flex flex-col gap-1.5">
+          <span className="flex items-center gap-1 font-display text-[11px] font-medium uppercase tracking-[0.14em] text-muted">
             {t(c.labelKey)}
             <HelpTip text={t(c.helpKey)} />
           </span>
           <AnimatedNumber
             value={c.value}
             format={c.format}
-            className={`num text-lg font-semibold ${polarityClass(c.polarity)}`}
+            className={`num text-[28px] leading-none font-semibold ${polarityClass(c.polarity)}`}
           />
         </div>
       ))}
