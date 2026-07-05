@@ -98,7 +98,7 @@ Both dev servers are also wired into `.claude/launch.json` (backend runs with `H
 
 ## Create your own case
 
-The committed NVDA/SMCI cases were authored by hand; the Studio now has a **case wizard** so you don't have to be. Give it a ticker, an `as_of` date, an outcome window, bilingual title/description metadata, and paste in the documents the agent is allowed to see. The wizard then:
+The original NVDA/SMCI cases were authored by hand; the third committed case (`nvda_20250529`, the post-earnings-drift counterpart to the SMCI trap) was built with the Studio's **case wizard**, so you don't have to author by hand either. Give it a ticker, an `as_of` date, an outcome window, bilingual title/description metadata, and paste in the documents the agent is allowed to see. The wizard then:
 
 - **freezes real market bars automatically** (via yfinance) into the same `bars.json` snapshot format the graders use — no hand-curation of price data;
 - **rejects, at the door, any document dated after `as_of`** — the anti-lookahead rule is enforced at authoring time, not just at retrieval time;

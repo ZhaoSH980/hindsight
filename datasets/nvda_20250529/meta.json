@@ -1,0 +1,15 @@
+{
+  "case_id": "nvda_20250529",
+  "title": "NVDA the day after the FY26Q1 beat (May 2025)",
+  "title_zh": "英伟达 FY2026-Q1 财报超预期次日（2025 年 5 月）",
+  "ticker": "NVDA",
+  "as_of": "2025-05-29",
+  "outcome_window_days": 40,
+  "description": "Research NVDA the day after its May 28, 2025 FY26Q1 report: a revenue beat with Blackwell ramping and hyperscaler capex intact, offset by an ~$8B H20 hit baked into Q2 guidance — the classic post-earnings-drift setup. Deliberately chosen as the tailwind counterpart to the SMCI trap case.",
+  "description_zh": "在英伟达 2025 年 5 月 28 日 FY26Q1 财报发布次日研究该股：营收超预期、Blackwell 放量、云厂商资本开支坚挺，但下季指引已计入约 80 亿美元 H20 出口损失——经典的财报后漂移场景。作为 SMCI 陷阱案例的顺风对照而刻意选入。",
+  "tags": [
+    "earnings",
+    "semis",
+    "post-earnings-drift"
+  ]
+}

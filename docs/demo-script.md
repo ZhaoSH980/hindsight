@@ -70,7 +70,7 @@ git status              # must be clean
 ### Preflight (2 minutes, morning of)
 
 - [ ] `cd backend && .venv/Scripts/python -m pytest -q` → expect: **all tests pass**
-- [ ] Start Option A; open `:8000`; both cases visible in the Studio
+- [ ] Start Option A; open `:8000`; all three cases visible in the Studio
 - [ ] `/leaderboard` shows `suite_c3b22b4b`
 - [ ] Reset state (above) so the run you do live is the first of the day
 
@@ -169,9 +169,11 @@ before/after scores (the mutual-consistency rule; the critic rubric rewrite).
 
 ### Beat 5 — How this scales past two cases (case wizard, ~1 min)
 
-The obvious skeptic question is "two cases — nice demo, where does case 30
-come from?" Answer it before it's asked: open the Studio's **New case**
-wizard. Fill in a ticker and an as-of date, show that pasting a document
+The obvious skeptic question is "a handful of cases — nice demo, where
+does case 30 come from?" Answer it before it's asked — and point out that
+the third case in the list (`nvda_20250529`, the post-earnings-drift
+tailwind case) was built exactly this way: earnings 8-K pulled from EDGAR,
+bars frozen automatically. Then open the Studio's **New case** wizard. Fill in a ticker and an as-of date, show that pasting a document
 dated *after* as-of is rejected at the door (the anti-lookahead rule
 enforced at authoring time), and that real bars are frozen automatically.
 Then the punchline: click the **SEC EDGAR import**, and the company's

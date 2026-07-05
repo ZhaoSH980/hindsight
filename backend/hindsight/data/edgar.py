@@ -117,24 +117,42 @@ def list_filings(
     return out
 
 
+_VIEWER_ARTIFACT_RE = re.compile(r"^(r\d+|.*-index.*|filingsummary.*|show)\.", re.IGNORECASE)
+
+
 def _pick_document(index_json: bytes, primary: str, form: str) -> str:
     """8-K primary docs are iXBRL cover pages; the substance (press release)
-    lives in an ex99 exhibit. Prefer that when present."""
+    lives in an exhibit. Prefer ex99/press-named exhibits; otherwise fall back
+    to the largest non-primary .htm — press releases dwarf the cover page
+    (NVDA names its earnings exhibit q1fy26pr.htm, no 'ex99' anywhere)."""
     if not form.startswith("8-K"):
         return primary
     try:
         items = json.loads(index_json).get("directory", {}).get("item", [])
     except (json.JSONDecodeError, AttributeError):
         return primary
-    exhibits = [
+    htms = [
         f for f in items
         if str(f.get("name", "")).lower().endswith((".htm", ".html"))
-        and ("ex99" in str(f.get("name", "")).lower() or "press" in str(f.get("name", "")).lower())
+        and str(f.get("name", "")) != primary
+        and not _VIEWER_ARTIFACT_RE.match(str(f.get("name", "")))
     ]
-    if not exhibits:
+    named = [
+        f for f in htms
+        if "ex99" in str(f["name"]).lower() or "press" in str(f["name"]).lower()
+    ]
+    pool = named or htms
+    if not pool:
         return primary
-    best = max(exhibits, key=lambda f: int(f.get("size") or 0))
-    name = str(best["name"])
+    best = max(pool, key=lambda f: int(f.get("size") or 0))
+    name, size = str(best["name"]), int(best.get("size") or 0)
+    primary_size = next(
+        (int(f.get("size") or 0) for f in items if str(f.get("name", "")) == primary), 0
+    )
+    # without an ex99/press name, only trust the size heuristic when the
+    # candidate clearly dominates the cover page
+    if not named and size <= max(primary_size, 50_000):
+        return primary
     return name if _DOCNAME_RE.match(name) else primary
 
 

@@ -94,6 +94,27 @@ def test_pick_document_prefers_ex99_exhibit_for_8k():
     assert edgar._pick_document(b"<html>", "cover8k.htm", "8-K") == "cover8k.htm"
 
 
+def test_pick_document_size_fallback_without_ex99_name():
+    """NVDA names its earnings press release q1fy26pr.htm — no 'ex99'. The
+    largest non-primary .htm wins when it clearly dominates the cover page;
+    viewer artifacts (R1.htm, FilingSummary, index pages) never qualify."""
+    index = json.dumps({"directory": {"item": [
+        {"name": "nvda-20250528.htm", "size": 24555},
+        {"name": "q1fy26pr.htm", "size": 298775},
+        {"name": "q1fy26cfocommentary.htm", "size": 200372},
+        {"name": "R1.htm", "size": 999999},
+        {"name": "0001045810-25-000115-index.html", "size": 999999},
+        {"name": "FilingSummary.xml", "size": 1695},
+    ]}}).encode()
+    assert edgar._pick_document(index, "nvda-20250528.htm", "8-K") == "q1fy26pr.htm"
+    # a filing whose only sibling htm is small keeps the primary
+    tiny = json.dumps({"directory": {"item": [
+        {"name": "cover.htm", "size": 24000},
+        {"name": "sig.htm", "size": 3000},
+    ]}}).encode()
+    assert edgar._pick_document(tiny, "cover.htm", "8-K") == "cover.htm"
+
+
 def test_html_to_text_drops_ixbrl_junk():
     html = "<ix:header><div>aapl:A0.000Notesdue2025Member</div></ix:header><p>Real text.</p>"
     junk_token = "x" * 120
