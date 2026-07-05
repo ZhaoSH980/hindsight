@@ -67,3 +67,41 @@ def test_suite_id_can_be_preassigned(case_dir, tmp_path):
     )
     assert returned_id == "suite_preassigned_001"
     assert (tmp_path / "runs" / "suites" / "suite_preassigned_001.json").exists()
+
+
+def test_suite_survives_a_crashing_cell(tmp_path, case_dir):
+    """One exploding run must cost one cell, not the whole grid."""
+    from hindsight.eval.suite import run_suite
+    from hindsight.schemas import RunConfig
+    from hindsight.store.db import Store
+
+    calls = []
+
+    def flaky_run(case_dir_, config, **kw):
+        calls.append(config)
+        if len(calls) == 1:
+            raise RuntimeError("retries exhausted")
+
+        class R:
+            scores = {"outcome": {"hit_rate": 1.0}}
+
+        return R()
+
+    store = Store(tmp_path / "t.db")
+    suite_id = run_suite(
+        [case_dir],
+        {"a": RunConfig(), "b": RunConfig()},
+        llm=None,
+        store=store,
+        runs_root=tmp_path / "runs",
+        run_fn=flaky_run,
+    )
+    import json
+
+    summary = json.loads(
+        (tmp_path / "runs" / "suites" / f"{suite_id}.json").read_text(encoding="utf-8")
+    )
+    cell_a = summary["results"]["fixture_case"]["a"]
+    cell_b = summary["results"]["fixture_case"]["b"]
+    assert cell_a["status"] == "crashed" and "retries exhausted" in cell_a["error"]
+    assert cell_b == {"outcome": {"hit_rate": 1.0}}

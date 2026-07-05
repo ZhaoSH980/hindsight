@@ -1,0 +1,14 @@
+{
+  "case_id": "msft_20250815",
+  "title": "MSFT as of 2025-08-15 (mechanical grid)",
+  "title_zh": "MSFT 网格案例（基准日 2025-08-15）",
+  "ticker": "MSFT",
+  "as_of": "2025-08-15",
+  "outcome_window_days": 40,
+  "description": "Mechanical grid case: corpus is exactly the 6 most recent SEC filings before 2025-08-15 via the EDGAR importer — no discretionary document picks, no narrative authored after the fact. Part of the fixed UNIVERSE x GRID_DATES sample built by backend/scripts/build_grid_cases.py.",
+  "description_zh": "机械网格案例：语料为基准日 2025-08-15 之前最近的 6 份 SEC 申报（EDGAR 导入，日期由监管方盖章），无任何人工挑选或事后撰写。由 build_grid_cases.py 按固定的股票池 × 日期网格生成。",
+  "tags": [
+    "grid",
+    "mechanical-corpus"
+  ]
+}

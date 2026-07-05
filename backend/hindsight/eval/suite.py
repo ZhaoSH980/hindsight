@@ -44,16 +44,25 @@ def run_suite(
         case_name = Path(case_dir).name
         results[case_name] = {}
         for config_name, config in configs.items():
-            result = run_fn(
-                case_dir,
-                config,
-                llm=llm,
-                store=store,
-                runs_root=runs_root,
-                suite_id=suite_id,
-                suite_started_at=suite_started_at,
-            )
-            results[case_name][config_name] = result.scores
+            # per-cell resilience: at 30 cases x 3 configs a single exhausted
+            # 429 retry two hours in must cost one cell, not the whole suite
+            # (run_research already marked its own run row failed)
+            try:
+                result = run_fn(
+                    case_dir,
+                    config,
+                    llm=llm,
+                    store=store,
+                    runs_root=runs_root,
+                    suite_id=suite_id,
+                    suite_started_at=suite_started_at,
+                )
+                results[case_name][config_name] = result.scores
+            except Exception as exc:  # noqa: BLE001 - continue the grid
+                results[case_name][config_name] = {
+                    "status": "crashed",
+                    "error": str(exc)[:300],
+                }
     summary = {
         "suite_id": suite_id,
         "started_at": suite_started_at,
