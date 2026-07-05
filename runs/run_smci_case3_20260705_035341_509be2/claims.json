@@ -1,0 +1,81 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "SMCI closes at least 5% below the as-of price ($51.11) on the 20th trading day after as-of",
+  "type": "direction",
+  "ticker": "SMCI",
+  "horizon_days": 20,
+  "prediction": {
+   "direction": "down",
+   "threshold_pct": 5.0
+  },
+  "confidence": 0.45,
+  "evidence": [
+   "bear_view_margins_governance::000",
+   "10k_filed_compliance::000",
+   "q2_fy25_update::000"
+  ],
+  "status": "hit",
+  "realized_return_pct": -27.528858397185285,
+  "detail": "horizon-end return -27.53% vs down 5.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "SMCI's 20-trading-day return lands between -15% and -5%",
+  "type": "magnitude",
+  "ticker": "SMCI",
+  "horizon_days": 20,
+  "prediction": {
+   "low_pct": -15.0,
+   "high_pct": -5.0
+  },
+  "confidence": 0.3,
+  "evidence": [
+   "bear_view_margins_governance::000",
+   "10k_filed_compliance::000"
+  ],
+  "status": "miss",
+  "realized_return_pct": -27.528858397185285,
+  "detail": "horizon-end return -27.53% vs [-15.0, -5.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "SMCI's 40-trading-day return lands between -20% and +5%",
+  "type": "magnitude",
+  "ticker": "SMCI",
+  "horizon_days": 40,
+  "prediction": {
+   "low_pct": -20.0,
+   "high_pct": 5.0
+  },
+  "confidence": 0.4,
+  "evidence": [
+   "bear_view_margins_governance::000",
+   "bull_thesis_turnaround::000",
+   "q2_fy25_update::000"
+  ],
+  "status": "miss",
+  "realized_return_pct": -29.93543152875988,
+  "detail": "horizon-end return -29.94% vs [-20.0, 5.0]"
+ },
+ {
+  "claim_id": "c4",
+  "statement": "SMCI's realized daily log-return volatility over 40 trading days is above the 70th percentile of same-length rolling windows from the prior 252 trading days",
+  "type": "volatility",
+  "ticker": "SMCI",
+  "horizon_days": 40,
+  "prediction": {
+   "relation": "above",
+   "percentile": 70.0
+  },
+  "confidence": 0.55,
+  "evidence": [
+   "bear_view_margins_governance::000",
+   "10k_filed_compliance::000",
+   "bull_thesis_turnaround::001"
+  ],
+  "status": "miss",
+  "realized_return_pct": -29.93543152875988,
+  "detail": "realized vol 0.06939 vs p70 0.08666 (above)"
+ }
+]

@@ -100,3 +100,7 @@ class RunConfig(BaseModel):
     # memo output language. "en" MUST keep every prompt byte-identical to the
     # pre-language era, or all recorded replays (offline demo) go stale.
     language: Literal["en", "zh"] = "en"
+    # ablation ladder (spec: instrument sensitivity). "full" = the real agent;
+    # "no_planner" = fixed retrieval feeds the analyst (measures the planner);
+    # "naive" = no LLM at all, mechanical coin-flip claims (the zero floor).
+    pipeline: Literal["full", "no_planner", "naive"] = "full"

@@ -102,11 +102,20 @@ EDGAR import, and redesigned dashboard landed:
   filings per company — plenty for recent as_of dates, but a case set in,
   say, 2018 for a filing-heavy company would need the full-index/paginated
   API. The server-side URL rebuild and UA handling carry over unchanged.
-- **Naive baseline config as a leaderboard row.** A no-research (or
-  retrieval-free) config run on every case would anchor the leaderboard:
-  any config that can't beat "guess from the prompt" is measurably not
-  researching. Also the cheapest mitigation for claim-difficulty gaming
-  (below).
+- **Naive baseline config as a leaderboard row.** **Done post-D4**: the
+  `naive` (no LLM, always-up coin-flip claims) and `no_planner` (fixed
+  retrieval) presets now anchor the leaderboard (`suite_bae85908`). The
+  first run of the ladder produced the honest headline in
+  eval-log 2026-07-05: hit rate can't separate the agent from the
+  always-up floor at this N — market beta pays naive for free — which
+  promotes the beta-adjusted-thresholds item below.
+- **Beta-adjusted outcome thresholds.** The ablation ladder's headline
+  finding: in a rising window, "always up ≥1%" collects market beta for
+  free, so raw hit rate conflates research skill with market direction.
+  Fix: grade direction/magnitude claims on return in excess of the
+  market (or of the ticker's trailing drift), or require thresholds to
+  clear a market-implied floor. This is the highest-leverage metric
+  improvement the instrument itself surfaced.
 - **Claim-difficulty scoring.** Today `threshold_pct > 0` is the only
   floor, so trivially easy claims could inflate hit rate unscored
   (methodology §2 now names this limitation). Candidate mechanics:

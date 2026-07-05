@@ -29,7 +29,15 @@ from hindsight.memory.experience import ExperienceRetriever, build_card, render_
 from hindsight.rag.bm25_retriever import BM25Retriever
 from hindsight.sandbox.audit import AuditLog
 from hindsight.sandbox.gate import SandboxedCorpus, SandboxedMarketData
-from hindsight.schemas import GradeStatus, Memo, RunConfig
+from hindsight.schemas import (
+    Claim,
+    ClaimType,
+    DirectionPrediction,
+    GradeStatus,
+    Memo,
+    RunConfig,
+    VolatilityPrediction,
+)
 from hindsight.store.db import Store
 from hindsight.tools.calc import make_calc_tool
 from hindsight.tools.corpus_search import make_corpus_tool
@@ -100,6 +108,55 @@ def _memo_markdown(memo: Memo, graded: list[GradedClaim], language: str = "en") 
             f"{c.statement}{verdict}"
         )
     return "\n".join(lines) + "\n"
+
+
+def _naive_memo(meta) -> Memo:
+    """The zero-intelligence baseline: coin-flip confidence, near-zero-content
+    predictions, no LLM. Everything the full agent scores must be read against
+    this floor — an instrument that can't separate the agent from THIS isn't
+    measuring anything."""
+    text = "naive baseline — no research was performed"
+    return Memo(
+        background=text,
+        bull_case=text,
+        bear_case=text,
+        conclusion=text,
+        claims=[
+            Claim(
+                claim_id="c1",
+                statement=f"{meta.ticker} closes at least 1% above the as-of price "
+                          "on the 20th trading day after as-of (naive baseline)",
+                type=ClaimType.direction,
+                ticker=meta.ticker,
+                horizon_days=20,
+                prediction=DirectionPrediction(direction="up", threshold_pct=1.0),
+                confidence=0.5,
+                evidence=["baseline"],
+            ),
+            Claim(
+                claim_id="c2",
+                statement=f"{meta.ticker} closes at least 1% above the as-of price "
+                          "on the 5th trading day after as-of (naive baseline)",
+                type=ClaimType.direction,
+                ticker=meta.ticker,
+                horizon_days=5,
+                prediction=DirectionPrediction(direction="up", threshold_pct=1.0),
+                confidence=0.5,
+                evidence=["baseline"],
+            ),
+            Claim(
+                claim_id="c3",
+                statement=f"{meta.ticker}'s realized volatility over the 20 trading days "
+                          "after as-of is above its median (naive baseline)",
+                type=ClaimType.volatility,
+                ticker=meta.ticker,
+                horizon_days=20,
+                prediction=VolatilityPrediction(relation="above", percentile=50.0),
+                confidence=0.5,
+                evidence=["baseline"],
+            ),
+        ],
+    )
 
 
 def run_research(
@@ -173,35 +230,56 @@ def _run_research_inner(
     registry.register(make_calc_tool())
     registry.register(FINISH_TOOL)
 
-    probe_text = run_contamination_probe(llm, case.meta.ticker, as_of, ledger)
-
-    cards = []
-    if config.memory_on:
-        retriever = ExperienceRetriever(store)
-        cards = retriever.retrieve(
-            f"{case.meta.ticker} {' '.join(case.meta.tags)} {case.meta.title}",
-            as_of=as_of,
-            exclude_case_id=case.meta.case_id,
-            created_before=suite_started_at,
-        )
-    brief = case_brief(case.meta) + experience_block(render_cards(cards))
-
     temperature = float(config.temperature)
-    run_planner(
-        llm=llm, registry=registry, user_brief=brief,
-        max_steps=config.max_steps, temperature=temperature,
-        trace=trace, ledger=ledger,
-    )
-    audit_seen = _forward_audit(trace, audit, audit_seen)
 
-    bundle = evidence.bundle(trace)
-    market_summary = safe_call(registry, "price_history", {"lookback_days": 60})
-    audit_seen = _forward_audit(trace, audit, audit_seen)
+    if config.pipeline == "naive":
+        # zero-intelligence floor: no LLM anywhere — mechanical coin-flip
+        # claims graded by the same grader. What the full agent must beat.
+        probe_text = ""
+        memo = _naive_memo(case.meta)
+        unverified = False
+    else:
+        probe_text = run_contamination_probe(llm, case.meta.ticker, as_of, ledger)
 
-    memo, unverified = produce_memo(
-        llm, bundle, case.meta, market_summary, temperature, trace, ledger,
-        language=config.language,
-    )
+        cards = []
+        if config.memory_on:
+            retriever = ExperienceRetriever(store)
+            cards = retriever.retrieve(
+                f"{case.meta.ticker} {' '.join(case.meta.tags)} {case.meta.title}",
+                as_of=as_of,
+                exclude_case_id=case.meta.case_id,
+                created_before=suite_started_at,
+            )
+        brief = case_brief(case.meta) + experience_block(render_cards(cards))
+
+        if config.pipeline == "no_planner":
+            # ablation: the analyst still writes the memo, but evidence comes
+            # from two fixed queries instead of the planner's judgment —
+            # whatever score gap opens against "full" is the planner's worth
+            trace.emit(TraceEvent(
+                type="plan_step", agent="planner",
+                payload={"thought": "no_planner ablation: fixed retrieval "
+                                    "(case title + description), no LLM planning"},
+            ))
+            for query in (case.meta.title, case.meta.description[:200]):
+                safe_call(registry, "corpus_search",
+                          {"query": query, "top_k": config.retrieval_top_k})
+        else:
+            run_planner(
+                llm=llm, registry=registry, user_brief=brief,
+                max_steps=config.max_steps, temperature=temperature,
+                trace=trace, ledger=ledger,
+            )
+        audit_seen = _forward_audit(trace, audit, audit_seen)
+
+        bundle = evidence.bundle(trace)
+        market_summary = safe_call(registry, "price_history", {"lookback_days": 60})
+        audit_seen = _forward_audit(trace, audit, audit_seen)
+
+        memo, unverified = produce_memo(
+            llm, bundle, case.meta, market_summary, temperature, trace, ledger,
+            language=config.language,
+        )
     if memo is None:
         scores = {"status": "failed_validation", "cost": ledger.summary(),
                   "contamination_probe": probe_text[:2000],
@@ -218,26 +296,33 @@ def _run_research_inner(
         for g in graded:
             g.status = GradeStatus.ungradable  # unverified memo claims never score
     agg = aggregate(graded)
-    report = run_judge(llm, memo, graded, evidence.evidence_map(), temperature, ledger)
-    jscores = judge_scores(report)
-
-    baseline = max((i for i, b in enumerate(bars) if b.date <= as_of), default=None)
-    if baseline is None:
-        window_end = as_of
-    else:
-        end_i = min(baseline + case.meta.outcome_window_days, len(bars) - 1)
-        window_end = bars[end_i].date
-    card = build_card(case.meta, run_id, graded, report, window_end)
-    ExperienceRetriever(store).write(card)  # write-always (spec §3.5)
 
     scores = {
         "outcome": agg,
-        "process": jscores,
         "cost": ledger.summary(),
         "contamination_probe": probe_text[:2000],
         "unverified": unverified,
         "llm_provenance": _provenance(),
+        "pipeline": config.pipeline,
     }
+    if config.pipeline == "naive":
+        jscores: dict = {}  # no process track: there is no process to judge
+    else:
+        report = run_judge(llm, memo, graded, evidence.evidence_map(), temperature, ledger)
+        jscores = judge_scores(report)
+        scores["process"] = jscores
+
+    if config.pipeline == "full":
+        # only the real agent feeds the experience library — ablation runs
+        # writing cards would contaminate future memory-run inputs
+        baseline = max((i for i, b in enumerate(bars) if b.date <= as_of), default=None)
+        if baseline is None:
+            window_end = as_of
+        else:
+            end_i = min(baseline + case.meta.outcome_window_days, len(bars) - 1)
+            window_end = bars[end_i].date
+        card = build_card(case.meta, run_id, graded, report, window_end)
+        ExperienceRetriever(store).write(card)  # write-always (spec §3.5)
     trace.emit(TraceEvent(type="score", agent="eval", payload={"outcome": agg, "process": jscores}))
     audit_seen = _forward_audit(trace, audit, audit_seen)
 

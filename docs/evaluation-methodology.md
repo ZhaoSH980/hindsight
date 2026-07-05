@@ -191,6 +191,25 @@ plainly as in the spec, not softened.
   sample-size limitation." A paired delta at least holds the ticker/window
   fixed across the compared runs; an absolute cross-case rank would not.
 
+### The ablation ladder (added post-D4)
+
+Two pipeline presets exist purely to test the instrument's sensitivity:
+`naive` (no LLM anywhere — mechanical always-up-1% claims at coin-flip
+confidence, the zero-intelligence floor) and `no_planner` (fixed
+title/description retrieval feeds the analyst; the score gap against
+`base` is the planner's measured worth). Neither writes experience cards,
+so ablations can never contaminate memory-run inputs.
+
+The first full ladder (`suite_bae85908`, 3 cases × 4 configs) produced
+this document's most important honest sentence: **at this N, in a
+mostly-rising window, raw hit rate cannot separate the full agent from
+the always-up floor** — naive collects market beta for free. The
+separation the ladder does show is structural: naive posts no grounding,
+no reasoning-consistency, no attributable failures, because it has no
+process — which is exactly why outcome, process, and cost are three
+tracks instead of one number. Consequence: beta-adjusted outcome
+thresholds are promoted on the roadmap (see future-work).
+
 ## 3. The three anti-lookahead channels (and the one that can't be closed)
 
 The time sandbox (spec §3.2) makes it structurally impossible for the agent

@@ -1,0 +1,83 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "NVDA closes at least 3% above the as-of price of $138.99 on the 20th trading day after May 29, 2025",
+  "type": "direction",
+  "ticker": "NVDA",
+  "horizon_days": 20,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 3.0
+  },
+  "confidence": 0.58,
+  "evidence": [
+   "01_nvda_8_k_filed_2025_05_28::001",
+   "01_nvda_8_k_filed_2025_05_28::003",
+   "08_hyperscaler_capex_commentary_msft_goog_m::000"
+  ],
+  "status": "hit",
+  "realized_return_pct": 13.34216324393278,
+  "detail": "horizon-end return +13.34% vs up 3.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "NVDA's 20-trading-day return lands between +3% and +12%",
+  "type": "magnitude",
+  "ticker": "NVDA",
+  "horizon_days": 20,
+  "prediction": {
+   "low_pct": 3.0,
+   "high_pct": 12.0
+  },
+  "confidence": 0.45,
+  "evidence": [
+   "01_nvda_8_k_filed_2025_05_28::003",
+   "06_blackwell_ramp_supply_chain_readout::001",
+   "08_hyperscaler_capex_commentary_msft_goog_m::000"
+  ],
+  "status": "miss",
+  "realized_return_pct": 13.34216324393278,
+  "detail": "horizon-end return +13.34% vs [3.0, 12.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "NVDA closes at least 5% above the as-of price of $138.99 on the 35th trading day after May 29, 2025",
+  "type": "direction",
+  "ticker": "NVDA",
+  "horizon_days": 35,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 5.0
+  },
+  "confidence": 0.55,
+  "evidence": [
+   "01_nvda_8_k_filed_2025_05_28::001",
+   "01_nvda_8_k_filed_2025_05_28::003",
+   "06_blackwell_ramp_supply_chain_readout::000",
+   "08_hyperscaler_capex_commentary_msft_goog_m::001"
+  ],
+  "status": "hit",
+  "realized_return_pct": 23.135207411416392,
+  "detail": "horizon-end return +23.14% vs up 5.0%"
+ },
+ {
+  "claim_id": "c4",
+  "statement": "NVDA's realized daily log-return volatility over the 40 trading days after May 29, 2025 falls below the 60th percentile of same-length rolling windows from the prior 252 trading days",
+  "type": "volatility",
+  "ticker": "NVDA",
+  "horizon_days": 40,
+  "prediction": {
+   "relation": "below",
+   "percentile": 60.0
+  },
+  "confidence": 0.52,
+  "evidence": [
+   "01_nvda_8_k_filed_2025_05_28::003",
+   "07_h20_china_export_restriction_and_writedo::000",
+   "03_the_bear_case_ai_capex_digestion_risk::001"
+  ],
+  "status": "hit",
+  "realized_return_pct": 26.99351973117259,
+  "detail": "realized vol 0.01653 vs p60 0.04244 (below)"
+ }
+]

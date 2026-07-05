@@ -395,3 +395,37 @@ artifact) follow the selected language.
 
 `pytest -q` -> **176 passed** (6 new: prompt byte-identity, zh insertion,
 config compat, provenance counters live/replay/offline).
+
+## 2026-07-05 — ablation ladder: the instrument's verdict on its own agent
+
+### What ran
+
+`suite_bae85908`: 3 cases × {naive, no_planner, base, memory} = 12 runs.
+Two new pipeline presets: `naive` (no LLM at all — mechanical always-up-1%
+claims at coin-flip confidence; the zero-intelligence floor) and
+`no_planner` (fixed retrieval from the case title/description feeds the
+analyst; measures what the planner is worth). Ablation runs write no
+experience cards — they must not contaminate future memory-run inputs.
+
+### The finding (reported unflattered)
+
+**Hit rate cannot separate the full agent from the always-up floor at this
+N.** naive averaged 0.44 across cases vs base's 0.33 — in a window where
+the market mostly rose, "always up ≥1%" collects market beta for free.
+This is the instrument working, not failing: it just falsified the
+assumption that outcome hit rate demonstrates research skill at small N,
+which is (a) why the process track exists — naive posts no grounding, no
+reasoning consistency, no attributable failures, because it has no process
+— and (b) why beta-adjusted thresholds / claim-difficulty scoring move up
+the roadmap.
+
+Brier separation is real but marginal: naive is locked at 0.250 by
+construction; base averaged 0.252; memory 0.239.
+
+### Memory's first positive cell
+
+On `nvda_20250529` — the first case where the time gate admits TWO prior
+graded cases' lessons — memory posted 0.75 hit rate and 0.203 Brier, the
+best cell in the matrix. One cell is one cell (the same honesty rule that
+applied when memory made NVDA worse applies now that it helped), but the
+mechanism finally has a data point in each direction.

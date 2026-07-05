@@ -42,7 +42,7 @@ def test_suite_passes_one_snapshot_and_orders_cases(case_dir, tmp_path):
 
 
 def test_presets_exist():
-    assert set(PRESETS) == {"base", "memory", "tight"}
+    assert set(PRESETS) == {"base", "memory", "tight", "naive", "no_planner"}
     assert PRESETS["memory"].memory_on is True
     assert PRESETS["tight"].context_budget == 2000
 

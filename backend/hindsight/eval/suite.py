@@ -19,6 +19,10 @@ PRESETS: dict[str, RunConfig] = {
     "base": RunConfig(),
     "memory": RunConfig(memory_on=True),
     "tight": RunConfig(memory_on=True, context_budget=2000),
+    # ablation ladder — instrument sensitivity: the gap each rung opens
+    # against "base" is the measured worth of the ablated component
+    "naive": RunConfig(pipeline="naive"),
+    "no_planner": RunConfig(pipeline="no_planner"),
 }
 
 

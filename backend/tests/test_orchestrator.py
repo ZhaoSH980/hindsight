@@ -196,3 +196,59 @@ def test_crash_marks_run_failed_before_reraise(tmp_path, case_dir):
     assert rows["r_crash"]["status"] == "failed"
     import json
     assert "boom" in json.loads(rows["r_crash"]["scores_json"])["error"]
+
+
+def test_naive_pipeline_needs_no_llm(case_dir, tmp_path):
+    """The zero-intelligence floor: no transport call is ever made, claims are
+    mechanical, graded by the same grader, and no experience card is written
+    (ablation runs must not feed future memory runs)."""
+    class ExplodingTransport:
+        def __call__(self, request):
+            raise AssertionError("naive pipeline must never call the LLM")
+
+    llm = RecordingLLMClient(
+        transport=ExplodingTransport(), db_path=tmp_path / "llm.sqlite", model="m1"
+    )
+    store = Store(tmp_path / "h.db")
+    result = run_research(
+        case_dir=case_dir,
+        config=RunConfig(model="m1", pipeline="naive"),
+        llm=llm,
+        store=store,
+        runs_root=tmp_path / "runs",
+    )
+    assert result.scores["pipeline"] == "naive"
+    assert result.scores["outcome"]["n_claims"] == 3
+    assert "process" not in result.scores  # nothing to judge
+    assert result.scores["llm_provenance"]["live_calls"] == 0
+    # no experience card: ablations must not contaminate the memory library
+    assert store.query_experiences("9999-12-31", exclude_case_id="__none__") == []
+
+
+def test_no_planner_pipeline_skips_planning_but_keeps_analyst(case_dir, tmp_path):
+    """Fixed retrieval replaces the planner; analyst/critic/judge run as usual.
+    The script has NO planner tool-call turns — if the planner ran, the
+    scripted transport would be consumed out of order and the test would fail."""
+    script = [
+        content_response("I do not know anything after that date."),      # probe
+        content_response(MEMO),                                           # analyst
+        content_response(json.dumps({"ok": True, "problems": []})),       # critic
+        content_response(JUDGE),                                          # judge
+    ]
+    llm = RecordingLLMClient(
+        transport=ScriptedTransport(script), db_path=tmp_path / "llm.sqlite", model="m1"
+    )
+    store = Store(tmp_path / "h.db")
+    result = run_research(
+        case_dir=case_dir,
+        config=RunConfig(model="m1", pipeline="no_planner"),
+        llm=llm,
+        store=store,
+        runs_root=tmp_path / "runs",
+    )
+    assert result.scores["pipeline"] == "no_planner"
+    assert result.scores["outcome"]["n_hit"] == 1  # same fixture claim grades
+    assert result.scores["process"]["grounding_rate"] == 1.0
+    assert "planner" not in result.scores["cost"]  # no planner LLM spend
+    # ablation runs write no experience cards either
+    assert store.query_experiences("9999-12-31", exclude_case_id="__none__") == []

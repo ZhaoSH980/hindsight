@@ -1,0 +1,82 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "NVDA closes at least 5% above the as-of price of $132.64 on the 20th trading day after as-of (approximately July 23, 2025), reflecting a positive earnings reaction and Blackwell demand confirmation",
+  "type": "direction",
+  "ticker": "NVDA",
+  "horizon_days": 20,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 5.0
+  },
+  "confidence": 0.45,
+  "evidence": [
+   "analyst_preview::000",
+   "hyperscaler_capex::000",
+   "q4_fy25_recap::000"
+  ],
+  "status": "hit",
+  "realized_return_pct": 8.54476102742401,
+  "detail": "horizon-end return +8.54% vs up 5.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "NVDA's 20-trading-day return lands between +5% and +20%, consistent with a positive but measured post-earnings drift as Blackwell demand offsets China concerns",
+  "type": "magnitude",
+  "ticker": "NVDA",
+  "horizon_days": 20,
+  "prediction": {
+   "low_pct": 5.0,
+   "high_pct": 20.0
+  },
+  "confidence": 0.38,
+  "evidence": [
+   "analyst_preview::000",
+   "hyperscaler_capex::001",
+   "q4_fy25_recap::000"
+  ],
+  "status": "hit",
+  "realized_return_pct": 8.54476102742401,
+  "detail": "horizon-end return +8.54% vs [5.0, 20.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "NVDA's realized daily log-return volatility over the 5 trading days following the as-of date (spanning the May 28 earnings event) ranks above the 80th percentile of same-length rolling windows from the prior 252 trading days, reflecting elevated event-driven turbulence around the report",
+  "type": "volatility",
+  "ticker": "NVDA",
+  "horizon_days": 5,
+  "prediction": {
+   "relation": "above",
+   "percentile": 80.0
+  },
+  "confidence": 0.72,
+  "evidence": [
+   "analyst_preview::000",
+   "h20_export_restriction::000",
+   "ai_capex_skeptic::001"
+  ],
+  "status": "miss",
+  "realized_return_pct": 1.7315382877462815,
+  "detail": "realized vol 0.02449 vs p80 0.04555 (above)"
+ },
+ {
+  "claim_id": "c4",
+  "statement": "NVDA closes at least 3% below the as-of price of $132.64 on the 10th trading day after as-of, reflecting downside risk if Q2 guidance disappoints relative to the ~$45 billion threshold needed to offset the China revenue loss",
+  "type": "direction",
+  "ticker": "NVDA",
+  "horizon_days": 10,
+  "prediction": {
+   "direction": "down",
+   "threshold_pct": 3.0
+  },
+  "confidence": 0.35,
+  "evidence": [
+   "analyst_preview::000",
+   "h20_export_restriction::000",
+   "ai_capex_skeptic::001"
+  ],
+  "status": "miss",
+  "realized_return_pct": 6.692769002609467,
+  "detail": "horizon-end return +6.69% vs down 3.0%"
+ }
+]

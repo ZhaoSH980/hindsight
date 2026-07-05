@@ -19,18 +19,31 @@ function parseJsonSafe<T>(text: string | null | undefined): T | null {
 
 // Mirrors backend/hindsight/eval/suite.py PRESETS — used to recover a run's
 // config *name* from its recorded config_json, since the store only carries
-// the RunConfig fields (memory_on, context_budget), not the preset label.
-const PRESET_SHAPES: { name: string; memory_on: boolean; context_budget: number }[] = [
-  { name: "base", memory_on: false, context_budget: 8000 },
-  { name: "memory", memory_on: true, context_budget: 8000 },
-  { name: "tight", memory_on: true, context_budget: 2000 },
+// the RunConfig fields (memory_on, context_budget, pipeline), not the label.
+const PRESET_SHAPES: {
+  name: string;
+  memory_on: boolean;
+  context_budget: number;
+  pipeline: string;
+}[] = [
+  { name: "base", memory_on: false, context_budget: 8000, pipeline: "full" },
+  { name: "memory", memory_on: true, context_budget: 8000, pipeline: "full" },
+  { name: "tight", memory_on: true, context_budget: 2000, pipeline: "full" },
+  { name: "naive", memory_on: false, context_budget: 8000, pipeline: "naive" },
+  { name: "no_planner", memory_on: false, context_budget: 8000, pipeline: "no_planner" },
 ];
 
 function configNameForRun(run: SuiteRunRow, knownConfigs: string[]): string | null {
-  const cfg = parseJsonSafe<{ memory_on?: boolean; context_budget?: number }>(run.config_json);
+  const cfg = parseJsonSafe<{ memory_on?: boolean; context_budget?: number; pipeline?: string }>(
+    run.config_json
+  );
   if (!cfg) return null;
+  const pipeline = cfg.pipeline ?? "full"; // configs recorded before the field default to full
   const candidates = PRESET_SHAPES.filter(
-    (p) => p.memory_on === cfg.memory_on && p.context_budget === cfg.context_budget
+    (p) =>
+      p.memory_on === cfg.memory_on &&
+      p.context_budget === cfg.context_budget &&
+      p.pipeline === pipeline
   ).map((p) => p.name);
   const match = candidates.find((c) => knownConfigs.includes(c)) ?? candidates[0];
   return match ?? null;
@@ -49,6 +62,8 @@ const CONFIG_COLORS: Record<string, string> = {
   base: "#7d8aa5",
   memory: "#22d3ee",
   tight: "#8b5cf6",
+  naive: "#f87171", // the zero-intelligence floor reads as the red line
+  no_planner: "#fbbf24",
 };
 
 function colorForConfig(name: string, idx: number): string {
