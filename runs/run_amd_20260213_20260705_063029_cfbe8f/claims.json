@@ -1,0 +1,63 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "AMD closes at least 5% above the as-of price of $207.32 on the 40th trading day after 2026-02-13",
+  "type": "direction",
+  "ticker": "AMD",
+  "horizon_days": 40,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 5.0
+  },
+  "confidence": 0.55,
+  "evidence": [
+   "02_amd_8_k_filed_2026_02_03::001",
+   "02_amd_8_k_filed_2026_02_03::004",
+   "02_amd_8_k_filed_2026_02_03::006",
+   "01_amd_10_k_filed_2026_02_04::009"
+  ],
+  "status": "hit",
+  "realized_return_pct": 23.032026969459764,
+  "detail": "horizon-end return +23.03% vs up 5.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "AMD's 40-trading-day return lands between +5% and +20%",
+  "type": "magnitude",
+  "ticker": "AMD",
+  "horizon_days": 40,
+  "prediction": {
+   "low_pct": 5.0,
+   "high_pct": 20.0
+  },
+  "confidence": 0.42,
+  "evidence": [
+   "02_amd_8_k_filed_2026_02_03::001",
+   "02_amd_8_k_filed_2026_02_03::004",
+   "02_amd_8_k_filed_2026_02_03::006",
+   "01_amd_10_k_filed_2026_02_04::009"
+  ],
+  "status": "miss",
+  "realized_return_pct": 23.032026969459764,
+  "detail": "horizon-end return +23.03% vs [5.0, 20.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "AMD's realized daily log-return volatility over the 20 trading days after 2026-02-13 is above the 80th percentile of same-length rolling windows from the prior ~252 trading days",
+  "type": "volatility",
+  "ticker": "AMD",
+  "horizon_days": 20,
+  "prediction": {
+   "relation": "above",
+   "percentile": 80.0
+  },
+  "confidence": 0.6,
+  "evidence": [
+   "02_amd_8_k_filed_2026_02_03::001",
+   "02_amd_8_k_filed_2026_02_03::006"
+  ],
+  "status": "miss",
+  "realized_return_pct": -5.180399919805245,
+  "detail": "realized vol 0.03251 vs p80 0.04829 (above)"
+ }
+]

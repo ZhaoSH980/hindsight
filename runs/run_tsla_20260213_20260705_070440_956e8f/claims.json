@@ -1,0 +1,59 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "TSLA closes at least 5% below the as-of price of $417.44 on the 20th trading day after as-of",
+  "type": "direction",
+  "ticker": "TSLA",
+  "horizon_days": 20,
+  "prediction": {
+   "direction": "down",
+   "threshold_pct": 5.0
+  },
+  "confidence": 0.45,
+  "evidence": [
+   "02_tsla_8_k_filed_2026_01_28::004",
+   "02_tsla_8_k_filed_2026_01_28::006"
+  ],
+  "status": "hit",
+  "realized_return_pct": -5.24147296733587,
+  "detail": "horizon-end return -5.24% vs down 5.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "TSLA's 20-trading-day return lands between -12% and -5%",
+  "type": "magnitude",
+  "ticker": "TSLA",
+  "horizon_days": 20,
+  "prediction": {
+   "low_pct": -12.0,
+   "high_pct": -5.0
+  },
+  "confidence": 0.35,
+  "evidence": [
+   "02_tsla_8_k_filed_2026_01_28::004",
+   "02_tsla_8_k_filed_2026_01_28::006"
+  ],
+  "status": "hit",
+  "realized_return_pct": -5.24147296733587,
+  "detail": "horizon-end return -5.24% vs [-12.0, -5.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "TSLA's realized daily log-return volatility over the 40-trading-day horizon is above the 60th percentile of same-length rolling windows from the prior ~252 trading days",
+  "type": "volatility",
+  "ticker": "TSLA",
+  "horizon_days": 40,
+  "prediction": {
+   "relation": "above",
+   "percentile": 60.0
+  },
+  "confidence": 0.55,
+  "evidence": [
+   "02_tsla_8_k_filed_2026_01_28::011",
+   "02_tsla_8_k_filed_2026_01_28::009"
+  ],
+  "status": "miss",
+  "realized_return_pct": -12.753926294317708,
+  "detail": "realized vol 0.02270 vs p60 0.03298 (above)"
+ }
+]

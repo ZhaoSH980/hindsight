@@ -1,0 +1,56 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "AMZN closes at least 1% above the as-of price on the 20th trading day after as-of (naive baseline)",
+  "type": "direction",
+  "ticker": "AMZN",
+  "horizon_days": 20,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 1.0
+  },
+  "confidence": 0.5,
+  "evidence": [
+   "baseline"
+  ],
+  "status": "hit",
+  "realized_return_pct": 6.514418554454782,
+  "detail": "horizon-end return +6.51% vs up 1.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "AMZN closes at least 1% above the as-of price on the 5th trading day after as-of (naive baseline)",
+  "type": "direction",
+  "ticker": "AMZN",
+  "horizon_days": 5,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 1.0
+  },
+  "confidence": 0.5,
+  "evidence": [
+   "baseline"
+  ],
+  "status": "hit",
+  "realized_return_pct": 3.2597269506423165,
+  "detail": "horizon-end return +3.26% vs up 1.0%"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "AMZN's realized volatility over the 20 trading days after as-of is above its median (naive baseline)",
+  "type": "volatility",
+  "ticker": "AMZN",
+  "horizon_days": 20,
+  "prediction": {
+   "relation": "above",
+   "percentile": 50.0
+  },
+  "confidence": 0.5,
+  "evidence": [
+   "baseline"
+  ],
+  "status": "miss",
+  "realized_return_pct": 6.514418554454782,
+  "detail": "realized vol 0.01601 vs p50 0.01743 (above)"
+ }
+]

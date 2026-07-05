@@ -1,0 +1,79 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "AAPL closes at or above its as-of price (no decline) on the 20th trading day after as-of",
+  "type": "direction",
+  "ticker": "AAPL",
+  "horizon_days": 20,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 0.5
+  },
+  "confidence": 0.55,
+  "evidence": [
+   "02_aapl_8_k_filed_2025_01_30::000",
+   "01_aapl_10_q_filed_2025_01_31::022"
+  ],
+  "status": "miss",
+  "realized_return_pct": -12.51022444518961,
+  "detail": "horizon-end return -12.51% vs up 0.5%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "AAPL's 20-trading-day return lands between +1% and +8%",
+  "type": "magnitude",
+  "ticker": "AAPL",
+  "horizon_days": 20,
+  "prediction": {
+   "low_pct": 1.0,
+   "high_pct": 8.0
+  },
+  "confidence": 0.38,
+  "evidence": [
+   "02_aapl_8_k_filed_2025_01_30::000",
+   "01_aapl_10_q_filed_2025_01_31::021"
+  ],
+  "status": "miss",
+  "realized_return_pct": -12.51022444518961,
+  "detail": "horizon-end return -12.51% vs [1.0, 8.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "AAPL's realized daily log-return volatility over the next 40 trading days falls below the 50th percentile of the prior ~252-day rolling windows",
+  "type": "volatility",
+  "ticker": "AAPL",
+  "horizon_days": 40,
+  "prediction": {
+   "relation": "below",
+   "percentile": 50.0
+  },
+  "confidence": 0.45,
+  "evidence": [
+   "04_aapl_10_k_filed_2024_11_01::017",
+   "01_aapl_10_q_filed_2025_01_31::019"
+  ],
+  "status": "miss",
+  "realized_return_pct": -17.20360773424915,
+  "detail": "realized vol 0.03600 vs p50 0.01447 (below)"
+ },
+ {
+  "claim_id": "c4",
+  "statement": "AAPL closes no more than 5% below its as-of price on the 40th trading day after as-of",
+  "type": "direction",
+  "ticker": "AAPL",
+  "horizon_days": 40,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 0.5
+  },
+  "confidence": 0.58,
+  "evidence": [
+   "02_aapl_8_k_filed_2025_01_30::000",
+   "01_aapl_10_q_filed_2025_01_31::018",
+   "04_aapl_10_k_filed_2024_11_01::016"
+  ],
+  "status": "miss",
+  "realized_return_pct": -17.20360773424915,
+  "detail": "horizon-end return -17.20% vs up 0.5%"
+ }
+]

@@ -1,0 +1,86 @@
+{
+ "outcome": {
+  "n_claims": 3,
+  "n_gradable": 3,
+  "n_hit": 1,
+  "hit_rate": 0.3333333333333333,
+  "brier": 0.165,
+  "calibration": [
+   {
+    "lo": 0.0,
+    "hi": 0.2,
+    "n": 0,
+    "avg_confidence": null,
+    "hit_rate": null
+   },
+   {
+    "lo": 0.2,
+    "hi": 0.4,
+    "n": 1,
+    "avg_confidence": 0.3,
+    "hit_rate": 0.0
+   },
+   {
+    "lo": 0.4,
+    "hi": 0.6,
+    "n": 2,
+    "avg_confidence": 0.5,
+    "hit_rate": 0.5
+   },
+   {
+    "lo": 0.6,
+    "hi": 0.8,
+    "n": 0,
+    "avg_confidence": null,
+    "hit_rate": null
+   },
+   {
+    "lo": 0.8,
+    "hi": 1.0,
+    "n": 0,
+    "avg_confidence": null,
+    "hit_rate": null
+   }
+  ]
+ },
+ "cost": {
+  "probe": {
+   "prompt_tokens": 65,
+   "completion_tokens": 60,
+   "calls": 1
+  },
+  "planner": {
+   "prompt_tokens": 73796,
+   "completion_tokens": 750,
+   "calls": 8
+  },
+  "analyst": {
+   "prompt_tokens": 9183,
+   "completion_tokens": 968,
+   "calls": 1
+  },
+  "critic": {
+   "prompt_tokens": 8477,
+   "completion_tokens": 10,
+   "calls": 1
+  }
+ },
+ "contamination_probe": "I do not know what happened to ExxonMobil (XOM)\u2014its stock price or major business events\u2014after February 13, 2026. As an AI, my knowledge does not extend past my training data cutoff, and I do not have access to real-time tools or future events.",
+ "unverified": false,
+ "llm_provenance": {
+  "cache_hits": 1,
+  "live_calls": 10,
+  "offline": false
+ },
+ "pipeline": "full",
+ "process": {
+  "judge_failed": false,
+  "grounding_rate": 0.0,
+  "reasoning_consistency": 3,
+  "retrieval_sufficiency": 2,
+  "attributions": {
+   "c1": "evidence_missing",
+   "c2": "evidence_missing"
+  }
+ }
+}

@@ -1,0 +1,62 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "META closes at least 3% above the as-of price on the 20th trading day after as-of",
+  "type": "direction",
+  "ticker": "META",
+  "horizon_days": 20,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 3.0
+  },
+  "confidence": 0.45,
+  "evidence": [
+   "02_meta_8_k_filed_2025_07_30::001",
+   "02_meta_8_k_filed_2025_07_30::002",
+   "02_meta_8_k_filed_2025_07_30::014"
+  ],
+  "status": "miss",
+  "realized_return_pct": -2.6145228707291857,
+  "detail": "horizon-end return -2.61% vs up 3.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "META's 20-trading-day return lands between +3% and +10%",
+  "type": "magnitude",
+  "ticker": "META",
+  "horizon_days": 20,
+  "prediction": {
+   "low_pct": 3.0,
+   "high_pct": 10.0
+  },
+  "confidence": 0.35,
+  "evidence": [
+   "02_meta_8_k_filed_2025_07_30::001",
+   "02_meta_8_k_filed_2025_07_30::002",
+   "02_meta_8_k_filed_2025_07_30::014"
+  ],
+  "status": "miss",
+  "realized_return_pct": -2.6145228707291857,
+  "detail": "horizon-end return -2.61% vs [3.0, 10.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "META closes at least 5% below the as-of price on the 40th trading day after as-of",
+  "type": "direction",
+  "ticker": "META",
+  "horizon_days": 40,
+  "prediction": {
+   "direction": "down",
+   "threshold_pct": 5.0
+  },
+  "confidence": 0.3,
+  "evidence": [
+   "02_meta_8_k_filed_2025_07_30::002",
+   "05_meta_8_k_filed_2025_04_30::002",
+   "01_meta_10_q_filed_2025_07_31::027"
+  ],
+  "status": "hit",
+  "realized_return_pct": -8.793223771855052,
+  "detail": "horizon-end return -8.79% vs down 5.0%"
+ }
+]

@@ -1,0 +1,62 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "JPM closes at least 3% above the as-of price of $301.01 on the 30th trading day after 2026-02-13",
+  "type": "direction",
+  "ticker": "JPM",
+  "horizon_days": 30,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 3.0
+  },
+  "confidence": 0.45,
+  "evidence": [
+   "03_jpm_8_k_filed_2026_01_22::003",
+   "06_jpm_8_k_filed_2026_01_13::002",
+   "06_jpm_8_k_filed_2026_01_13::021"
+  ],
+  "status": "miss",
+  "realized_return_pct": -6.207231748554443,
+  "detail": "horizon-end return -6.21% vs up 3.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "JPM's 30-trading-day return lands between +3% and +12%",
+  "type": "magnitude",
+  "ticker": "JPM",
+  "horizon_days": 30,
+  "prediction": {
+   "low_pct": 3.0,
+   "high_pct": 12.0
+  },
+  "confidence": 0.35,
+  "evidence": [
+   "03_jpm_8_k_filed_2026_01_22::003",
+   "06_jpm_8_k_filed_2026_01_13::002",
+   "06_jpm_8_k_filed_2026_01_13::019"
+  ],
+  "status": "miss",
+  "realized_return_pct": -6.207231748554443,
+  "detail": "horizon-end return -6.21% vs [3.0, 12.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "JPM's realized daily log-return volatility over the 20 trading days after as-of is above the 70th percentile of the prior 252-day rolling windows",
+  "type": "volatility",
+  "ticker": "JPM",
+  "horizon_days": 20,
+  "prediction": {
+   "relation": "above",
+   "percentile": 70.0
+  },
+  "confidence": 0.55,
+  "evidence": [
+   "06_jpm_8_k_filed_2026_01_13::019",
+   "06_jpm_8_k_filed_2026_01_13::003",
+   "01_jpm_10_k_filed_2026_02_13::005"
+  ],
+  "status": "miss",
+  "realized_return_pct": -5.417277210201387,
+  "detail": "realized vol 0.01424 vs p70 0.01614 (above)"
+ }
+]

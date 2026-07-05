@@ -1,0 +1,60 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "AMZN closes at or above the as-of price of $231.03 on the 20th trading day after August 15, 2025",
+  "type": "direction",
+  "ticker": "AMZN",
+  "horizon_days": 20,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 0.01
+  },
+  "confidence": 0.58,
+  "evidence": [
+   "02_amzn_8_k_filed_2025_07_31::000",
+   "02_amzn_8_k_filed_2025_07_31::015",
+   "05_amzn_8_k_filed_2025_05_01::000"
+  ],
+  "status": "hit",
+  "realized_return_pct": 0.17313504678952985,
+  "detail": "horizon-end return +0.17% vs up 0.01%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "AMZN's 20-trading-day return falls between -3% and +6%",
+  "type": "magnitude",
+  "ticker": "AMZN",
+  "horizon_days": 20,
+  "prediction": {
+   "low_pct": -3.0,
+   "high_pct": 6.0
+  },
+  "confidence": 0.52,
+  "evidence": [
+   "02_amzn_8_k_filed_2025_07_31::005",
+   "02_amzn_8_k_filed_2025_07_31::015"
+  ],
+  "status": "hit",
+  "realized_return_pct": 0.17313504678952985,
+  "detail": "horizon-end return +0.17% vs [-3.0, 6.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "AMZN's realized daily log-return volatility over the 40-trading-day window is below the 60th percentile of same-length rolling windows from the prior 252 trading days",
+  "type": "volatility",
+  "ticker": "AMZN",
+  "horizon_days": 40,
+  "prediction": {
+   "relation": "below",
+   "percentile": 60.0
+  },
+  "confidence": 0.55,
+  "evidence": [
+   "02_amzn_8_k_filed_2025_07_31::005",
+   "06_amzn_8_k_filed_2025_04_10::019"
+  ],
+  "status": "hit",
+  "realized_return_pct": -4.743968970691215,
+  "detail": "realized vol 0.01676 vs p60 0.01892 (below)"
+ }
+]

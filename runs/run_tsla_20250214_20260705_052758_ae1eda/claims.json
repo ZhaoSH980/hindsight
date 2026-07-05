@@ -1,0 +1,56 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "TSLA closes at least 1% above the as-of price on the 20th trading day after as-of (naive baseline)",
+  "type": "direction",
+  "ticker": "TSLA",
+  "horizon_days": 20,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 1.0
+  },
+  "confidence": 0.5,
+  "evidence": [
+   "baseline"
+  ],
+  "status": "miss",
+  "realized_return_pct": -33.11319779780132,
+  "detail": "horizon-end return -33.11% vs up 1.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "TSLA closes at least 1% above the as-of price on the 5th trading day after as-of (naive baseline)",
+  "type": "direction",
+  "ticker": "TSLA",
+  "horizon_days": 5,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 1.0
+  },
+  "confidence": 0.5,
+  "evidence": [
+   "baseline"
+  ],
+  "status": "miss",
+  "realized_return_pct": -7.112746689262117,
+  "detail": "horizon-end return -7.11% vs up 1.0%"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "TSLA's realized volatility over the 20 trading days after as-of is above its median (naive baseline)",
+  "type": "volatility",
+  "ticker": "TSLA",
+  "horizon_days": 20,
+  "prediction": {
+   "relation": "above",
+   "percentile": 50.0
+  },
+  "confidence": 0.5,
+  "evidence": [
+   "baseline"
+  ],
+  "status": "hit",
+  "realized_return_pct": -33.11319779780132,
+  "detail": "realized vol 0.05174 vs p50 0.03672 (above)"
+ }
+]

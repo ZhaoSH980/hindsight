@@ -1,0 +1,79 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "GOOGL closes at least 3% above the as-of price on the 20th trading day after as-of",
+  "type": "direction",
+  "ticker": "GOOGL",
+  "horizon_days": 20,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 3.0
+  },
+  "confidence": 0.55,
+  "evidence": [
+   "03_googl_8_k_filed_2026_02_04::001",
+   "03_googl_8_k_filed_2026_02_04::002"
+  ],
+  "status": "miss",
+  "realized_return_pct": 0.018021331739426216,
+  "detail": "horizon-end return +0.02% vs up 3.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "GOOGL's 20-trading-day return lands between +3% and +12%",
+  "type": "magnitude",
+  "ticker": "GOOGL",
+  "horizon_days": 20,
+  "prediction": {
+   "low_pct": 3.0,
+   "high_pct": 12.0
+  },
+  "confidence": 0.42,
+  "evidence": [
+   "03_googl_8_k_filed_2026_02_04::001",
+   "03_googl_8_k_filed_2026_02_04::002"
+  ],
+  "status": "miss",
+  "realized_return_pct": 0.018021331739426216,
+  "detail": "horizon-end return +0.02% vs [3.0, 12.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "GOOGL closes at least 5% above the as-of price on the 40th trading day after as-of",
+  "type": "direction",
+  "ticker": "GOOGL",
+  "horizon_days": 40,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 5.0
+  },
+  "confidence": 0.5,
+  "evidence": [
+   "03_googl_8_k_filed_2026_02_04::001",
+   "03_googl_8_k_filed_2026_02_04::002",
+   "05_googl_10_q_filed_2025_10_30::016"
+  ],
+  "status": "hit",
+  "realized_return_pct": 8.970415230274241,
+  "detail": "horizon-end return +8.97% vs up 5.0%"
+ },
+ {
+  "claim_id": "c4",
+  "statement": "GOOGL's 40-trading-day realized daily log-return volatility falls below the 60th percentile of the prior 252-day rolling windows",
+  "type": "volatility",
+  "ticker": "GOOGL",
+  "horizon_days": 40,
+  "prediction": {
+   "relation": "below",
+   "percentile": 60.0
+  },
+  "confidence": 0.45,
+  "evidence": [
+   "03_googl_8_k_filed_2026_02_04::002",
+   "02_googl_10_k_filed_2026_02_05::014"
+  ],
+  "status": "hit",
+  "realized_return_pct": 8.970415230274241,
+  "detail": "realized vol 0.01946 vs p60 0.01957 (below)"
+ }
+]

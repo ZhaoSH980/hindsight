@@ -1,0 +1,87 @@
+{
+ "outcome": {
+  "n_claims": 4,
+  "n_gradable": 4,
+  "n_hit": 1,
+  "hit_rate": 0.25,
+  "brier": 0.279375,
+  "calibration": [
+   {
+    "lo": 0.0,
+    "hi": 0.2,
+    "n": 0,
+    "avg_confidence": null,
+    "hit_rate": null
+   },
+   {
+    "lo": 0.2,
+    "hi": 0.4,
+    "n": 2,
+    "avg_confidence": 0.32499999999999996,
+    "hit_rate": 0.5
+   },
+   {
+    "lo": 0.4,
+    "hi": 0.6,
+    "n": 2,
+    "avg_confidence": 0.5,
+    "hit_rate": 0.0
+   },
+   {
+    "lo": 0.6,
+    "hi": 0.8,
+    "n": 0,
+    "avg_confidence": null,
+    "hit_rate": null
+   },
+   {
+    "lo": 0.8,
+    "hi": 1.0,
+    "n": 0,
+    "avg_confidence": null,
+    "hit_rate": null
+   }
+  ]
+ },
+ "cost": {
+  "probe": {
+   "prompt_tokens": 65,
+   "completion_tokens": 50,
+   "calls": 1
+  },
+  "planner": {
+   "prompt_tokens": 62669,
+   "completion_tokens": 688,
+   "calls": 8
+  },
+  "analyst": {
+   "prompt_tokens": 7642,
+   "completion_tokens": 1282,
+   "calls": 1
+  },
+  "critic": {
+   "prompt_tokens": 7269,
+   "completion_tokens": 14,
+   "calls": 1
+  }
+ },
+ "contamination_probe": "I do not know what happened to AMZN's stock price or major business events after February 13, 2026. As an AI, my training data does not include specific details or post-February 2026 future events for the company.",
+ "unverified": false,
+ "llm_provenance": {
+  "cache_hits": 1,
+  "live_calls": 10,
+  "offline": false
+ },
+ "pipeline": "full",
+ "process": {
+  "judge_failed": false,
+  "grounding_rate": 1.0,
+  "reasoning_consistency": 4,
+  "retrieval_sufficiency": 3,
+  "attributions": {
+   "c1": "reasonable_but_wrong",
+   "c2": "reasonable_but_wrong",
+   "c3": "evidence_missing"
+  }
+ }
+}

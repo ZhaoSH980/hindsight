@@ -1,0 +1,79 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "TSLA closes at least 5% below the as-of price of $330.56 on the 40th trading day after August 15, 2025",
+  "type": "direction",
+  "ticker": "TSLA",
+  "horizon_days": 40,
+  "prediction": {
+   "direction": "down",
+   "threshold_pct": 5.0
+  },
+  "confidence": 0.38,
+  "evidence": [
+   "02_tsla_10_q_filed_2025_07_24::006",
+   "02_tsla_10_q_filed_2025_07_24::024",
+   "02_tsla_10_q_filed_2025_07_24::004"
+  ],
+  "status": "miss",
+  "realized_return_pct": 31.867133687045257,
+  "detail": "horizon-end return +31.87% vs down 5.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "TSLA's 40-trading-day return lands between -10% and -5%",
+  "type": "magnitude",
+  "ticker": "TSLA",
+  "horizon_days": 40,
+  "prediction": {
+   "low_pct": -10.0,
+   "high_pct": -5.0
+  },
+  "confidence": 0.25,
+  "evidence": [
+   "02_tsla_10_q_filed_2025_07_24::006",
+   "02_tsla_10_q_filed_2025_07_24::024"
+  ],
+  "status": "miss",
+  "realized_return_pct": 31.867133687045257,
+  "detail": "horizon-end return +31.87% vs [-10.0, -5.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "TSLA's realized daily log-return volatility over the next 20 trading days exceeds the 75th percentile of its prior 252-day rolling windows",
+  "type": "volatility",
+  "ticker": "TSLA",
+  "horizon_days": 20,
+  "prediction": {
+   "relation": "above",
+   "percentile": 75.0
+  },
+  "confidence": 0.42,
+  "evidence": [
+   "02_tsla_10_q_filed_2025_07_24::024",
+   "02_tsla_10_q_filed_2025_07_24::006"
+  ],
+  "status": "miss",
+  "realized_return_pct": 24.044049967733862,
+  "detail": "realized vol 0.02823 vs p75 0.05146 (above)"
+ },
+ {
+  "claim_id": "c4",
+  "statement": "TSLA closes at least 3% above the as-of price of $330.56 on the 10th trading day after August 15, 2025",
+  "type": "direction",
+  "ticker": "TSLA",
+  "horizon_days": 10,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 3.0
+  },
+  "confidence": 0.28,
+  "evidence": [
+   "02_tsla_10_q_filed_2025_07_24::017",
+   "02_tsla_10_q_filed_2025_07_24::014"
+  ],
+  "status": "miss",
+  "realized_return_pct": 1.0013303433689114,
+  "detail": "horizon-end return +1.00% vs up 3.0%"
+ }
+]

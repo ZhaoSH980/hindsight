@@ -1,0 +1,6655 @@
+{
+ "suite_id": "suite_95b96129",
+ "started_at": "2026-07-05T05:07:45+00:00",
+ "cases": [
+  "aapl_20250214",
+  "amd_20250214",
+  "amzn_20250214",
+  "avgo_20250214",
+  "googl_20250214",
+  "meta_20250214",
+  "msft_20250214",
+  "tsla_20250214",
+  "xom_20250214",
+  "aapl_20250815",
+  "amd_20250815",
+  "amzn_20250815",
+  "avgo_20250815",
+  "googl_20250815",
+  "jpm_20250815",
+  "meta_20250815",
+  "msft_20250815",
+  "tsla_20250815",
+  "xom_20250815",
+  "aapl_20260213",
+  "amd_20260213",
+  "amzn_20260213",
+  "avgo_20260213",
+  "googl_20260213",
+  "jpm_20260213",
+  "meta_20260213",
+  "msft_20260213",
+  "tsla_20260213",
+  "xom_20260213"
+ ],
+ "configs": [
+  "naive",
+  "base",
+  "memory"
+ ],
+ "results": {
+  "aapl_20250214": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 2,
+     "hit_rate": 0.6666666666666666,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.6666666666666666
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 4,
+     "n_gradable": 4,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.24645,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 1,
+       "avg_confidence": 0.38,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5266666666666667,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 56,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 37699,
+      "completion_tokens": 500,
+      "calls": 6
+     },
+     "analyst": {
+      "prompt_tokens": 16403,
+      "completion_tokens": 1876,
+      "calls": 2
+     },
+     "critic": {
+      "prompt_tokens": 7361,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to AAPL—its stock price or any major business events—after February 14, 2025. Because my training data only goes up to a certain point, I do not have information or memory of real-world events occurring after that date.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 10,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.75,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing",
+      "c3": "evidence_missing",
+      "c4": "evidence_missing"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 4,
+     "n_gradable": 4,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.24645,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 1,
+       "avg_confidence": 0.38,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5266666666666667,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 56,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 37699,
+      "completion_tokens": 500,
+      "calls": 6
+     },
+     "analyst": {
+      "prompt_tokens": 16403,
+      "completion_tokens": 1876,
+      "calls": 2
+     },
+     "critic": {
+      "prompt_tokens": 7361,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to AAPL—its stock price or any major business events—after February 14, 2025. Because my training data only goes up to a certain point, I do not have information or memory of real-world events occurring after that date.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 10,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.75,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing",
+      "c3": "evidence_missing",
+      "c4": "evidence_missing"
+     }
+    }
+   }
+  },
+  "amd_20250214": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.1758333333333333,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 1,
+       "avg_confidence": 0.35,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.5
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 64,
+      "completion_tokens": 42,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 83672,
+      "completion_tokens": 704,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 7172,
+      "completion_tokens": 1022,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 6616,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to AMD after 2025-02-14. I do not have access to real-time or future information and do not know specific stock prices or business events after that date.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 11,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.1758333333333333,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 1,
+       "avg_confidence": 0.35,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.5
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 64,
+      "completion_tokens": 42,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 83672,
+      "completion_tokens": 704,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 7172,
+      "completion_tokens": 1022,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 6616,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to AMD after 2025-02-14. I do not have access to real-time or future information and do not know specific stock prices or business events after that date.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 11,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing"
+     }
+    }
+   }
+  },
+  "amzn_20250214": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.3333333333333333
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.21833333333333335,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.3333333333333333
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 42,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 74079,
+      "completion_tokens": 775,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 18211,
+      "completion_tokens": 2328,
+      "calls": 2
+     },
+     "critic": {
+      "prompt_tokens": 8559,
+      "completion_tokens": 10,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to AMZN's stock price or its major business events after February 14, 2025. My training data does not include specific information or events occurring after this date.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 12,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.3333333333333333,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.21833333333333335,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.3333333333333333
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 42,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 74079,
+      "completion_tokens": 775,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 18211,
+      "completion_tokens": 2328,
+      "calls": 2
+     },
+     "critic": {
+      "prompt_tokens": 8559,
+      "completion_tokens": 10,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to AMZN's stock price or its major business events after February 14, 2025. My training data does not include specific information or events occurring after this date.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 12,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.3333333333333333,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing"
+     }
+    }
+   }
+  },
+  "avgo_20250214": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.3333333333333333
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 4,
+     "n_gradable": 4,
+     "n_hit": 1,
+     "hit_rate": 0.25,
+     "brier": 0.218125,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.4833333333333334,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 1,
+       "avg_confidence": 0.6,
+       "hit_rate": 1.0
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 47,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 84390,
+      "completion_tokens": 858,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 9051,
+      "completion_tokens": 1200,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 8552,
+      "completion_tokens": 11,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to AVGO after February 14, 2025. My memory only extends to late 2023, so I have no information or specifics regarding its stock price or major business events after that date.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 11,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing",
+      "c4": "evidence_missing"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 4,
+     "n_gradable": 4,
+     "n_hit": 1,
+     "hit_rate": 0.25,
+     "brier": 0.218125,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.4833333333333334,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 1,
+       "avg_confidence": 0.6,
+       "hit_rate": 1.0
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 47,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 84390,
+      "completion_tokens": 858,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 9051,
+      "completion_tokens": 1200,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 8552,
+      "completion_tokens": 11,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to AVGO after February 14, 2025. My memory only extends to late 2023, so I have no information or specifics regarding its stock price or major business events after that date.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 11,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing",
+      "c4": "evidence_missing"
+     }
+    }
+   }
+  },
+  "googl_20250214": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.3333333333333333
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.22166666666666668,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.46666666666666673,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 66,
+      "completion_tokens": 51,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 73730,
+      "completion_tokens": 720,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 7650,
+      "completion_tokens": 951,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 6925,
+      "completion_tokens": 10,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to GOOGL or its major business events after February 14, 2025. Because my knowledge does not include events after that date, I cannot provide any specifics regarding its stock price or corporate developments during that timeframe.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 11,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.6666666666666666,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing",
+      "c3": "evidence_missing"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.22166666666666668,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.46666666666666673,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 66,
+      "completion_tokens": 51,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 73730,
+      "completion_tokens": 720,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 7650,
+      "completion_tokens": 951,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 6925,
+      "completion_tokens": 10,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to GOOGL or its major business events after February 14, 2025. Because my knowledge does not include events after that date, I cannot provide any specifics regarding its stock price or corporate developments during that timeframe.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 11,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.6666666666666666,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing",
+      "c3": "evidence_missing"
+     }
+    }
+   }
+  },
+  "meta_20250214": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.3333333333333333
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.20776666666666666,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 1,
+       "avg_confidence": 0.38,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.485,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 64,
+      "completion_tokens": 48,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 68612,
+      "completion_tokens": 793,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 18363,
+      "completion_tokens": 2214,
+      "calls": 2
+     },
+     "critic": {
+      "prompt_tokens": 8393,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to Meta's stock price or major business events after February 14, 2025. Because my training data has a cutoff, I do not have information or memory of real-world events occurring after that date.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 12,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": true
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.20776666666666666,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 1,
+       "avg_confidence": 0.38,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.485,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 64,
+      "completion_tokens": 48,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 68612,
+      "completion_tokens": 793,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 18363,
+      "completion_tokens": 2214,
+      "calls": 2
+     },
+     "critic": {
+      "prompt_tokens": 8393,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to Meta's stock price or major business events after February 14, 2025. Because my training data has a cutoff, I do not have information or memory of real-world events occurring after that date.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 12,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": true
+    }
+   }
+  },
+  "msft_20250214": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.3333333333333333
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 4,
+     "n_gradable": 4,
+     "n_hit": 4,
+     "hit_rate": 1.0,
+     "brier": 0.170825,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.565,
+       "hit_rate": 1.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 2,
+       "avg_confidence": 0.61,
+       "hit_rate": 1.0
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 74,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 77332,
+      "completion_tokens": 656,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 19948,
+      "completion_tokens": 2354,
+      "calls": 2
+     },
+     "critic": {
+      "prompt_tokens": 18664,
+      "completion_tokens": 198,
+      "calls": 2
+     }
+    },
+    "contamination_probe": "I do not know what happened to Microsoft (MSFT) after February 14, 2025. As an AI, my training data has a cutoff, and I do not have access to real-time information, news, or post-2025-02-14 events. Therefore, I cannot provide specifics regarding its stock price or major business events after that date.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 13,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.75,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {}
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 4,
+     "n_gradable": 4,
+     "n_hit": 4,
+     "hit_rate": 1.0,
+     "brier": 0.170825,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.565,
+       "hit_rate": 1.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 2,
+       "avg_confidence": 0.61,
+       "hit_rate": 1.0
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 74,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 77332,
+      "completion_tokens": 656,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 19948,
+      "completion_tokens": 2354,
+      "calls": 2
+     },
+     "critic": {
+      "prompt_tokens": 18664,
+      "completion_tokens": 198,
+      "calls": 2
+     }
+    },
+    "contamination_probe": "I do not know what happened to Microsoft (MSFT) after February 14, 2025. As an AI, my training data has a cutoff, and I do not have access to real-time information, news, or post-2025-02-14 events. Therefore, I cannot provide specifics regarding its stock price or major business events after that date.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 13,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.75,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {}
+    }
+   }
+  },
+  "tsla_20250214": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.3333333333333333
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 4,
+     "n_gradable": 4,
+     "n_hit": 3,
+     "hit_rate": 0.75,
+     "brier": 0.193125,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.4833333333333334,
+       "hit_rate": 0.6666666666666666
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 1,
+       "avg_confidence": 0.6,
+       "hit_rate": 1.0
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 66,
+      "completion_tokens": 36,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 54330,
+      "completion_tokens": 914,
+      "calls": 7
+     },
+     "analyst": {
+      "prompt_tokens": 8183,
+      "completion_tokens": 1249,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 7784,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to TSLA after February 14, 2025. I do not have information about its stock price or major business events after that date.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 10,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c2": "evidence_missing"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 4,
+     "n_gradable": 4,
+     "n_hit": 3,
+     "hit_rate": 0.75,
+     "brier": 0.193125,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.4833333333333334,
+       "hit_rate": 0.6666666666666666
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 1,
+       "avg_confidence": 0.6,
+       "hit_rate": 1.0
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 66,
+      "completion_tokens": 36,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 54330,
+      "completion_tokens": 914,
+      "calls": 7
+     },
+     "analyst": {
+      "prompt_tokens": 8183,
+      "completion_tokens": 1249,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 7784,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to TSLA after February 14, 2025. I do not have information about its stock price or major business events after that date.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 10,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c2": "evidence_missing"
+     }
+    }
+   }
+  },
+  "xom_20250214": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 3,
+     "hit_rate": 1.0,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 1.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 2,
+     "hit_rate": 0.6666666666666666,
+     "brier": 0.3786,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 2,
+       "avg_confidence": 0.355,
+       "hit_rate": 1.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 1,
+       "avg_confidence": 0.55,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 45,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 40218,
+      "completion_tokens": 1052,
+      "calls": 6
+     },
+     "analyst": {
+      "prompt_tokens": 14826,
+      "completion_tokens": 1765,
+      "calls": 2
+     },
+     "critic": {
+      "prompt_tokens": 6475,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to XOM (Exxon Mobil)—its stock price or major business events—after February 14, 2025. I do not have information or memory of events occurring after that date.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 10,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.6666666666666666,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c3": "evidence_missing"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 2,
+     "hit_rate": 0.6666666666666666,
+     "brier": 0.3786,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 2,
+       "avg_confidence": 0.355,
+       "hit_rate": 1.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 1,
+       "avg_confidence": 0.55,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 45,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 40218,
+      "completion_tokens": 1052,
+      "calls": 6
+     },
+     "analyst": {
+      "prompt_tokens": 14826,
+      "completion_tokens": 1765,
+      "calls": 2
+     },
+     "critic": {
+      "prompt_tokens": 6475,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to XOM (Exxon Mobil)—its stock price or major business events—after February 14, 2025. I do not have information or memory of events occurring after that date.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 10,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.6666666666666666,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c3": "evidence_missing"
+     }
+    }
+   }
+  },
+  "aapl_20250815": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 2,
+     "hit_rate": 0.6666666666666666,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.6666666666666666
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 4,
+     "n_gradable": 4,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.149225,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 2,
+       "avg_confidence": 0.33999999999999997,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.42500000000000004,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 52,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 77638,
+      "completion_tokens": 669,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 9999,
+      "completion_tokens": 1204,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 9472,
+      "completion_tokens": 10,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to AAPL after August 15, 2025. As an AI, my training data does not include events from that future date, and I cannot access real-time tools to look up current stock prices or recent business events.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 11,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.75,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing",
+      "c3": "evidence_missing",
+      "c4": "evidence_missing"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.25379999999999997,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 1,
+       "avg_confidence": 0.35,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.565,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 52,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 73899,
+      "completion_tokens": 712,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 10202,
+      "completion_tokens": 912,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 9421,
+      "completion_tokens": 10,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to AAPL after August 15, 2025. As an AI, my training data does not include events from that future date, and I cannot access real-time tools to look up current stock prices or recent business events.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 1,
+     "live_calls": 10,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing",
+      "c3": "evidence_missing"
+     }
+    }
+   }
+  },
+  "amd_20250815": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 3,
+     "hit_rate": 1.0,
+     "brier": 0.30916666666666665,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 1,
+       "avg_confidence": 0.35,
+       "hit_rate": 1.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.5,
+       "hit_rate": 1.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 64,
+      "completion_tokens": 48,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 37811,
+      "completion_tokens": 575,
+      "calls": 6
+     },
+     "analyst": {
+      "prompt_tokens": 9035,
+      "completion_tokens": 1026,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 8448,
+      "completion_tokens": 10,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to AMD after August 15, 2025. Because my training data does not extend past that date, I do not have information regarding its stock price or any major business events that occurred after that time.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 9,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 4,
+     "retrieval_sufficiency": 3,
+     "attributions": {}
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 4,
+     "n_gradable": 4,
+     "n_hit": 3,
+     "hit_rate": 0.75,
+     "brier": 0.294375,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 1,
+       "avg_confidence": 0.35,
+       "hit_rate": 1.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.6666666666666666
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 64,
+      "completion_tokens": 48,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 77038,
+      "completion_tokens": 1333,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 8676,
+      "completion_tokens": 1179,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 8210,
+      "completion_tokens": 15,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to AMD after August 15, 2025. Because my training data does not extend past that date, I do not have information regarding its stock price or any major business events that occurred after that time.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 1,
+     "live_calls": 10,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 4,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c4": "evidence_missing"
+     }
+    }
+   }
+  },
+  "amzn_20250815": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 3,
+     "hit_rate": 1.0,
+     "brier": 0.20309999999999997,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5499999999999999,
+       "hit_rate": 1.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 47,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 63140,
+      "completion_tokens": 696,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 15799,
+      "completion_tokens": 2140,
+      "calls": 2
+     },
+     "critic": {
+      "prompt_tokens": 7143,
+      "completion_tokens": 10,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to AMZN after August 15, 2025. Because that date is in the future relative to my training, I have no information or specifics about its stock price or business events beyond that point.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 12,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 4,
+     "retrieval_sufficiency": 3,
+     "attributions": {}
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.27176666666666666,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5166666666666667,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 47,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 74130,
+      "completion_tokens": 700,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 9245,
+      "completion_tokens": 997,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 8606,
+      "completion_tokens": 15,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to AMZN after August 15, 2025. Because that date is in the future relative to my training, I have no information or specifics about its stock price or business events beyond that point.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 1,
+     "live_calls": 10,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": true
+    }
+   }
+  },
+  "avgo_20250815": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 2,
+     "hit_rate": 0.6666666666666666,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.6666666666666666
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 2,
+     "hit_rate": 0.6666666666666666,
+     "brier": 0.21643333333333334,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.48333333333333334,
+       "hit_rate": 0.6666666666666666
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 52,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 38874,
+      "completion_tokens": 930,
+      "calls": 6
+     },
+     "analyst": {
+      "prompt_tokens": 8813,
+      "completion_tokens": 903,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 7994,
+      "completion_tokens": 10,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to AVGO after August 15, 2025. Because my knowledge has a cutoff and I cannot access real-time information or tools, I do not have any specifics regarding its stock price or major business events beyond that date.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 9,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 4,
+     "retrieval_sufficiency": 3,
+     "attributions": {
+      "c2": "reasonable_but_wrong"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.2041666666666667,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.4833333333333334,
+       "hit_rate": 0.3333333333333333
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 52,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 40315,
+      "completion_tokens": 909,
+      "calls": 6
+     },
+     "analyst": {
+      "prompt_tokens": 8945,
+      "completion_tokens": 990,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 8209,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to AVGO after August 15, 2025. Because my knowledge has a cutoff and I cannot access real-time information or tools, I do not have any specifics regarding its stock price or major business events beyond that date.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 1,
+     "live_calls": 8,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.6666666666666666,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c2": "reasonable_but_wrong",
+      "c3": "evidence_missing"
+     }
+    }
+   }
+  },
+  "googl_20250815": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 3,
+     "hit_rate": 1.0,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 1.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 2,
+     "hit_rate": 0.6666666666666666,
+     "brier": 0.18509999999999996,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5166666666666667,
+       "hit_rate": 0.6666666666666666
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 66,
+      "completion_tokens": 56,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 52542,
+      "completion_tokens": 719,
+      "calls": 7
+     },
+     "analyst": {
+      "prompt_tokens": 8387,
+      "completion_tokens": 1021,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 7712,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to GOOGL or its major business events after August 15, 2025. Because that date is in the future relative to my knowledge cutoff, I do not have any information or specifics about its stock price or business events beyond that point.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 10,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.6666666666666666,
+     "reasoning_consistency": 4,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c2": "evidence_missing"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.19243333333333335,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 1,
+       "avg_confidence": 0.38,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.485,
+       "hit_rate": 0.5
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 66,
+      "completion_tokens": 56,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 49186,
+      "completion_tokens": 535,
+      "calls": 7
+     },
+     "analyst": {
+      "prompt_tokens": 7598,
+      "completion_tokens": 990,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 6889,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to GOOGL or its major business events after August 15, 2025. Because that date is in the future relative to my knowledge cutoff, I do not have any information or specifics about its stock price or business events beyond that point.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 1,
+     "live_calls": 9,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.6666666666666666,
+     "reasoning_consistency": 4,
+     "retrieval_sufficiency": 3,
+     "attributions": {
+      "c2": "reasonable_but_wrong",
+      "c3": "evidence_missing"
+     }
+    }
+   }
+  },
+  "jpm_20250815": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 2,
+     "hit_rate": 0.6666666666666666,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.6666666666666666
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 2,
+     "hit_rate": 0.6666666666666666,
+     "brier": 0.25166666666666665,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.6666666666666666
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 53,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 71092,
+      "completion_tokens": 652,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 21164,
+      "completion_tokens": 2027,
+      "calls": 2
+     },
+     "critic": {
+      "prompt_tokens": 9713,
+      "completion_tokens": 10,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to JPM (JPMorgan Chase & Co.) after August 15, 2025. Because my knowledge does not extend past that date, I cannot provide any specifics regarding its stock price or major business events beyond that timeframe.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 12,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 4,
+     "retrieval_sufficiency": 3,
+     "attributions": {
+      "c2": "evidence_missing"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 2,
+     "hit_rate": 0.6666666666666666,
+     "brier": 0.28500000000000003,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.6666666666666666
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 53,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 81155,
+      "completion_tokens": 697,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 21131,
+      "completion_tokens": 1918,
+      "calls": 2
+     },
+     "critic": {
+      "prompt_tokens": 9625,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to JPM (JPMorgan Chase & Co.) after August 15, 2025. Because my knowledge does not extend past that date, I cannot provide any specifics regarding its stock price or major business events beyond that timeframe.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 1,
+     "live_calls": 11,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 4,
+     "retrieval_sufficiency": 3,
+     "attributions": {
+      "c2": "evidence_missing"
+     }
+    }
+   }
+  },
+  "meta_20250815": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.19846666666666668,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 1,
+       "avg_confidence": 0.35,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.46499999999999997,
+       "hit_rate": 0.5
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 64,
+      "completion_tokens": 53,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 40451,
+      "completion_tokens": 953,
+      "calls": 6
+     },
+     "analyst": {
+      "prompt_tokens": 10324,
+      "completion_tokens": 992,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 9577,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to Meta (META)—its stock price or major business events—after August 15, 2025. Because that date is in the future relative to my training data, I have no information or memory of events occurring after it.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 9,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 4,
+     "retrieval_sufficiency": 3,
+     "attributions": {
+      "c1": "reasonable_but_wrong",
+      "c2": "reasonable_but_wrong"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.27166666666666667,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 2,
+       "avg_confidence": 0.32499999999999996,
+       "hit_rate": 0.5
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 1,
+       "avg_confidence": 0.45,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 64,
+      "completion_tokens": 53,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 40573,
+      "completion_tokens": 898,
+      "calls": 6
+     },
+     "analyst": {
+      "prompt_tokens": 28887,
+      "completion_tokens": 3116,
+      "calls": 3
+     },
+     "critic": {
+      "prompt_tokens": 26465,
+      "completion_tokens": 274,
+      "calls": 3
+     }
+    },
+    "contamination_probe": "I do not know what happened to Meta (META)—its stock price or major business events—after August 15, 2025. Because that date is in the future relative to my training data, I have no information or memory of events occurring after it.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 1,
+     "live_calls": 12,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 4,
+     "retrieval_sufficiency": 3,
+     "attributions": {
+      "c1": "reasonable_but_wrong",
+      "c2": "reasonable_but_wrong"
+     }
+    }
+   }
+  },
+  "msft_20250815": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.22713333333333338,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5266666666666667,
+       "hit_rate": 0.3333333333333333
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 54,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 79738,
+      "completion_tokens": 1173,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 15497,
+      "completion_tokens": 1988,
+      "calls": 2
+     },
+     "critic": {
+      "prompt_tokens": 6924,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to Microsoft (MSFT) after August 15, 2025. Because that date is in the future relative to my knowledge cutoff, I do not have any information or specifics about its stock price or major business events beyond that point.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 12,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 4,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.2516666666666667,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.3333333333333333
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 54,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 77169,
+      "completion_tokens": 665,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 7227,
+      "completion_tokens": 948,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 6436,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to Microsoft (MSFT) after August 15, 2025. Because that date is in the future relative to my knowledge cutoff, I do not have any information or specifics about its stock price or major business events beyond that point.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 1,
+     "live_calls": 10,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing"
+     }
+    }
+   }
+  },
+  "tsla_20250815": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 2,
+     "hit_rate": 0.6666666666666666,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.6666666666666666
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 4,
+     "n_gradable": 4,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.115425,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 3,
+       "avg_confidence": 0.30333333333333334,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 1,
+       "avg_confidence": 0.42,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 66,
+      "completion_tokens": 51,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 120449,
+      "completion_tokens": 822,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 9399,
+      "completion_tokens": 1098,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 8813,
+      "completion_tokens": 10,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to TSLA's stock price or its major business events after August 15, 2025. Because that date is in the future relative to my current knowledge, I do not have any information or specifics about it.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 11,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing",
+      "c3": "evidence_missing",
+      "c4": "evidence_missing"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.2091666666666667,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 1,
+       "avg_confidence": 0.35,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 66,
+      "completion_tokens": 51,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 80647,
+      "completion_tokens": 790,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 9114,
+      "completion_tokens": 1108,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 8567,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to TSLA's stock price or its major business events after August 15, 2025. Because that date is in the future relative to my current knowledge, I do not have any information or specifics about it.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 1,
+     "live_calls": 10,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.6666666666666666,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing",
+      "c3": "evidence_missing"
+     }
+    }
+   }
+  },
+  "xom_20250815": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 2,
+     "hit_rate": 0.6666666666666666,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.6666666666666666
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.2091666666666667,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 1,
+       "avg_confidence": 0.35,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 62,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 38049,
+      "completion_tokens": 819,
+      "calls": 6
+     },
+     "analyst": {
+      "prompt_tokens": 26353,
+      "completion_tokens": 2943,
+      "calls": 3
+     },
+     "critic": {
+      "prompt_tokens": 15797,
+      "completion_tokens": 99,
+      "calls": 2
+     }
+    },
+    "contamination_probe": "I do not know what happened to ExxonMobil (XOM) after August 15, 2025. Because my training data has a cutoff, and given that date is in the future, I have no information or specifics regarding its stock price, business events, or any other developments beyond that point.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 12,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.6666666666666666,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing",
+      "c3": "evidence_missing"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 2,
+     "hit_rate": 0.6666666666666666,
+     "brier": 0.2996333333333333,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.51,
+       "hit_rate": 0.6666666666666666
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 62,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 54720,
+      "completion_tokens": 1076,
+      "calls": 7
+     },
+     "analyst": {
+      "prompt_tokens": 25332,
+      "completion_tokens": 2916,
+      "calls": 3
+     },
+     "critic": {
+      "prompt_tokens": 15285,
+      "completion_tokens": 141,
+      "calls": 2
+     }
+    },
+    "contamination_probe": "I do not know what happened to ExxonMobil (XOM) after August 15, 2025. Because my training data has a cutoff, and given that date is in the future, I have no information or specifics regarding its stock price, business events, or any other developments beyond that point.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 1,
+     "live_calls": 12,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.6666666666666666,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c3": "evidence_missing"
+     }
+    }
+   }
+  },
+  "aapl_20260213": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.3333333333333333
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.2091666666666667,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 1,
+       "avg_confidence": 0.35,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 35,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 77387,
+      "completion_tokens": 928,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 8561,
+      "completion_tokens": 1006,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 7854,
+      "completion_tokens": 10,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to AAPL after 2026-02-13. I do not have information or knowledge of specific events or stock prices beyond that date.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 11,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing",
+      "c3": "evidence_missing"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.24296666666666666,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.49,
+       "hit_rate": 0.3333333333333333
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 35,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 83027,
+      "completion_tokens": 1183,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 8923,
+      "completion_tokens": 1042,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 8252,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to AAPL after 2026-02-13. I do not have information or knowledge of specific events or stock prices beyond that date.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 1,
+     "live_calls": 10,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing"
+     }
+    }
+   }
+  },
+  "amd_20260213": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.3333333333333333
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.24629999999999996,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.485,
+       "hit_rate": 0.5
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 1,
+       "avg_confidence": 0.6,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 64,
+      "completion_tokens": 51,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 38792,
+      "completion_tokens": 897,
+      "calls": 6
+     },
+     "analyst": {
+      "prompt_tokens": 15907,
+      "completion_tokens": 2160,
+      "calls": 2
+     },
+     "critic": {
+      "prompt_tokens": 14732,
+      "completion_tokens": 120,
+      "calls": 2
+     }
+    },
+    "contamination_probe": "I do not know what happened after 2026-02-13. I do not have information or memory of events, stock prices, or business developments beyond my knowledge cutoff, and therefore I cannot provide any specifics or dates regarding AMD after that time.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 11,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.6666666666666666,
+     "reasoning_consistency": 4,
+     "retrieval_sufficiency": 3,
+     "attributions": {
+      "c2": "reasonable_but_wrong",
+      "c3": "evidence_missing"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.24083333333333332,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.47500000000000003,
+       "hit_rate": 0.5
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 1,
+       "avg_confidence": 0.6,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 64,
+      "completion_tokens": 51,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 76934,
+      "completion_tokens": 663,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 8011,
+      "completion_tokens": 1029,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 7431,
+      "completion_tokens": 10,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened after 2026-02-13. I do not have information or memory of events, stock prices, or business developments beyond my knowledge cutoff, and therefore I cannot provide any specifics or dates regarding AMD after that time.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 1,
+     "live_calls": 10,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.6666666666666666,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c2": "reasonable_but_wrong",
+      "c3": "evidence_missing"
+     }
+    }
+   }
+  },
+  "amzn_20260213": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 2,
+     "hit_rate": 0.6666666666666666,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.6666666666666666
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 4,
+     "n_gradable": 4,
+     "n_hit": 4,
+     "hit_rate": 1.0,
+     "brier": 0.260725,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 4,
+       "avg_confidence": 0.49250000000000005,
+       "hit_rate": 1.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 50,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 79451,
+      "completion_tokens": 782,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 14441,
+      "completion_tokens": 2416,
+      "calls": 2
+     },
+     "critic": {
+      "prompt_tokens": 6802,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to AMZN's stock price or major business events after February 13, 2026. As an AI, my training data does not include specific details or post-February 2026 future events for the company.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 12,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 4,
+     "retrieval_sufficiency": 3,
+     "attributions": {}
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 4,
+     "n_gradable": 4,
+     "n_hit": 1,
+     "hit_rate": 0.25,
+     "brier": 0.279375,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 2,
+       "avg_confidence": 0.32499999999999996,
+       "hit_rate": 0.5
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 50,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 62669,
+      "completion_tokens": 688,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 7642,
+      "completion_tokens": 1282,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 7269,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to AMZN's stock price or major business events after February 13, 2026. As an AI, my training data does not include specific details or post-February 2026 future events for the company.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 1,
+     "live_calls": 10,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 4,
+     "retrieval_sufficiency": 3,
+     "attributions": {
+      "c1": "reasonable_but_wrong",
+      "c2": "reasonable_but_wrong",
+      "c3": "evidence_missing"
+     }
+    }
+   }
+  },
+  "avgo_20260213": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.3333333333333333
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 2,
+     "hit_rate": 0.6666666666666666,
+     "brier": 0.28833333333333333,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.5,
+       "hit_rate": 1.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 1,
+       "avg_confidence": 0.6,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 52,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 76172,
+      "completion_tokens": 1086,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 8377,
+      "completion_tokens": 954,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 7622,
+      "completion_tokens": 10,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to AVGO after February 13, 2026. Because my training data only goes up to early 2025, I do not have information, stock prices, or business events for dates in 2026 or beyond.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 11,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.6666666666666666,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c3": "evidence_missing"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 2,
+     "hit_rate": 0.6666666666666666,
+     "brier": 0.25166666666666665,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.6666666666666666
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 52,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 75597,
+      "completion_tokens": 693,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 8394,
+      "completion_tokens": 885,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 7569,
+      "completion_tokens": 10,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to AVGO after February 13, 2026. Because my training data only goes up to early 2025, I do not have information, stock prices, or business events for dates in 2026 or beyond.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 1,
+     "live_calls": 10,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.6666666666666666,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c3": "evidence_missing"
+     }
+    }
+   }
+  },
+  "googl_20260213": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.3333333333333333
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.26630000000000004,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.51,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 66,
+      "completion_tokens": 57,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 73183,
+      "completion_tokens": 672,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 7928,
+      "completion_tokens": 960,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 7175,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to GOOGL—its stock price or major business events—after February 13, 2026. Because my knowledge has a cutoff and I do not have real-time data, I cannot provide any specifics or dates for events occurring after that time.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 11,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing",
+      "c3": "reasonable_but_wrong"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 4,
+     "n_gradable": 4,
+     "n_hit": 2,
+     "hit_rate": 0.5,
+     "brier": 0.25785,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 4,
+       "avg_confidence": 0.48,
+       "hit_rate": 0.5
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 66,
+      "completion_tokens": 57,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 74958,
+      "completion_tokens": 776,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 14203,
+      "completion_tokens": 2231,
+      "calls": 2
+     },
+     "critic": {
+      "prompt_tokens": 6316,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to GOOGL—its stock price or major business events—after February 13, 2026. Because my knowledge has a cutoff and I do not have real-time data, I cannot provide any specifics or dates for events occurring after that time.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 1,
+     "live_calls": 11,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.75,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing"
+     }
+    }
+   }
+  },
+  "jpm_20260213": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.3333333333333333
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.2091666666666667,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 1,
+       "avg_confidence": 0.35,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 67,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 90594,
+      "completion_tokens": 663,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 12180,
+      "completion_tokens": 999,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 11482,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to JPMorgan Chase (JPM)—specifically its stock price or major business events—after February 13, 2026. \n\nBecause my training data does not extend past early 2025, I have no information regarding events, stock movements, or corporate developments occurring in that future timeframe.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 11,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.3333333333333333,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing",
+      "c3": "reasonable_but_wrong"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 4,
+     "n_gradable": 4,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.17885,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 1,
+       "avg_confidence": 0.35,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.44333333333333336,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 67,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 96011,
+      "completion_tokens": 836,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 12419,
+      "completion_tokens": 1273,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 11964,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to JPMorgan Chase (JPM)—specifically its stock price or major business events—after February 13, 2026. \n\nBecause my training data does not extend past early 2025, I have no information regarding events, stock movements, or corporate developments occurring in that future timeframe.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 1,
+     "live_calls": 10,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.0,
+     "reasoning_consistency": 2,
+     "retrieval_sufficiency": 1,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing",
+      "c3": "evidence_missing",
+      "c4": "evidence_missing"
+     }
+    }
+   }
+  },
+  "meta_20260213": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.1758333333333333,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 1,
+       "avg_confidence": 0.35,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.5
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 64,
+      "completion_tokens": 56,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 62860,
+      "completion_tokens": 592,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 9034,
+      "completion_tokens": 1029,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 8347,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to META after February 13, 2026. Because my training data does not include specific, verified events from the future or beyond my knowledge cutoff, I cannot provide any specifics, stock prices, or major business events that occurred after that date.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 11,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 4,
+     "n_gradable": 4,
+     "n_hit": 1,
+     "hit_rate": 0.25,
+     "brier": 0.19269999999999998,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 2,
+       "avg_confidence": 0.33999999999999997,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.41000000000000003,
+       "hit_rate": 0.5
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 64,
+      "completion_tokens": 56,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 75191,
+      "completion_tokens": 673,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 9337,
+      "completion_tokens": 1169,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 8761,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to META after February 13, 2026. Because my training data does not include specific, verified events from the future or beyond my knowledge cutoff, I cannot provide any specifics, stock prices, or major business events that occurred after that date.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 1,
+     "live_calls": 10,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.25,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing",
+      "c3": "evidence_missing"
+     }
+    }
+   }
+  },
+  "msft_20260213": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.3333333333333333
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 4,
+     "n_gradable": 4,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.268125,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.4833333333333334,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 1,
+       "avg_confidence": 0.6,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 52,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 83734,
+      "completion_tokens": 845,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 21306,
+      "completion_tokens": 2332,
+      "calls": 2
+     },
+     "critic": {
+      "prompt_tokens": 19975,
+      "completion_tokens": 169,
+      "calls": 2
+     }
+    },
+    "contamination_probe": "I do not know what happened to Microsoft (MSFT) after February 13, 2026. Because my training data and knowledge cutoff occur before that date, I have no information regarding its stock price or major business events beyond that specific point in time.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 13,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.75,
+     "reasoning_consistency": 2,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing",
+      "c3": "evidence_missing",
+      "c4": "evidence_missing"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.1758333333333333,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 1,
+       "avg_confidence": 0.35,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.5
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 52,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 85343,
+      "completion_tokens": 771,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 9751,
+      "completion_tokens": 1036,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 9066,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to Microsoft (MSFT) after February 13, 2026. Because my training data and knowledge cutoff occur before that date, I have no information regarding its stock price or major business events beyond that specific point in time.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 1,
+     "live_calls": 10,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing"
+     }
+    }
+   }
+  },
+  "tsla_20260213": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 0,
+     "hit_rate": 0.0,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 3,
+     "hit_rate": 1.0,
+     "brier": 0.35896666666666666,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 2,
+       "avg_confidence": 0.33999999999999997,
+       "hit_rate": 1.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 1,
+       "avg_confidence": 0.55,
+       "hit_rate": 1.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 66,
+      "completion_tokens": 83,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 73136,
+      "completion_tokens": 762,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 6821,
+      "completion_tokens": 1042,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 6221,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to TSLA—its stock price or major business events—after 2026-02-13. \n\nBecause my training data has a cutoff well before that date, and I am operating from memory without access to real-time or future data, I have no information or specifics regarding events that have not yet occurred. I cannot provide stock prices or business updates for that time period.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 11,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 4,
+     "retrieval_sufficiency": 4,
+     "attributions": {}
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 2,
+     "hit_rate": 0.6666666666666666,
+     "brier": 0.3425,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 1,
+       "avg_confidence": 0.35,
+       "hit_rate": 1.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.5
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 66,
+      "completion_tokens": 83,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 78134,
+      "completion_tokens": 894,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 7275,
+      "completion_tokens": 945,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 6578,
+      "completion_tokens": 14,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to TSLA—its stock price or major business events—after 2026-02-13. \n\nBecause my training data has a cutoff well before that date, and I am operating from memory without access to real-time or future data, I have no information or specifics regarding events that have not yet occurred. I cannot provide stock prices or business updates for that time period.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 1,
+     "live_calls": 10,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.6666666666666666,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c3": "evidence_missing"
+     }
+    }
+   }
+  },
+  "xom_20260213": {
+   "naive": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 3,
+     "hit_rate": 1.0,
+     "brier": 0.25,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 3,
+       "avg_confidence": 0.5,
+       "hit_rate": 1.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {},
+    "contamination_probe": "",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 0,
+     "offline": false
+    },
+    "pipeline": "naive"
+   },
+   "base": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.21693333333333334,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 2,
+       "avg_confidence": 0.33999999999999997,
+       "hit_rate": 0.5
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 1,
+       "avg_confidence": 0.42,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 60,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 72996,
+      "completion_tokens": 682,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 9556,
+      "completion_tokens": 976,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 8855,
+      "completion_tokens": 10,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to ExxonMobil (XOM)—its stock price or major business events—after February 13, 2026. As an AI, my knowledge does not extend past my training data cutoff, and I do not have access to real-time tools or future events.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 0,
+     "live_calls": 11,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 1.0,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing"
+     }
+    }
+   },
+   "memory": {
+    "outcome": {
+     "n_claims": 3,
+     "n_gradable": 3,
+     "n_hit": 1,
+     "hit_rate": 0.3333333333333333,
+     "brier": 0.165,
+     "calibration": [
+      {
+       "lo": 0.0,
+       "hi": 0.2,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.2,
+       "hi": 0.4,
+       "n": 1,
+       "avg_confidence": 0.3,
+       "hit_rate": 0.0
+      },
+      {
+       "lo": 0.4,
+       "hi": 0.6,
+       "n": 2,
+       "avg_confidence": 0.5,
+       "hit_rate": 0.5
+      },
+      {
+       "lo": 0.6,
+       "hi": 0.8,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      },
+      {
+       "lo": 0.8,
+       "hi": 1.0,
+       "n": 0,
+       "avg_confidence": null,
+       "hit_rate": null
+      }
+     ]
+    },
+    "cost": {
+     "probe": {
+      "prompt_tokens": 65,
+      "completion_tokens": 60,
+      "calls": 1
+     },
+     "planner": {
+      "prompt_tokens": 73796,
+      "completion_tokens": 750,
+      "calls": 8
+     },
+     "analyst": {
+      "prompt_tokens": 9183,
+      "completion_tokens": 968,
+      "calls": 1
+     },
+     "critic": {
+      "prompt_tokens": 8477,
+      "completion_tokens": 10,
+      "calls": 1
+     }
+    },
+    "contamination_probe": "I do not know what happened to ExxonMobil (XOM)—its stock price or major business events—after February 13, 2026. As an AI, my knowledge does not extend past my training data cutoff, and I do not have access to real-time tools or future events.",
+    "unverified": false,
+    "llm_provenance": {
+     "cache_hits": 1,
+     "live_calls": 10,
+     "offline": false
+    },
+    "pipeline": "full",
+    "process": {
+     "judge_failed": false,
+     "grounding_rate": 0.0,
+     "reasoning_consistency": 3,
+     "retrieval_sufficiency": 2,
+     "attributions": {
+      "c1": "evidence_missing",
+      "c2": "evidence_missing"
+     }
+    }
+   }
+  }
+ }
+}

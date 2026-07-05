@@ -1,0 +1,88 @@
+{
+ "outcome": {
+  "n_claims": 4,
+  "n_gradable": 4,
+  "n_hit": 0,
+  "hit_rate": 0.0,
+  "brier": 0.24645,
+  "calibration": [
+   {
+    "lo": 0.0,
+    "hi": 0.2,
+    "n": 0,
+    "avg_confidence": null,
+    "hit_rate": null
+   },
+   {
+    "lo": 0.2,
+    "hi": 0.4,
+    "n": 1,
+    "avg_confidence": 0.38,
+    "hit_rate": 0.0
+   },
+   {
+    "lo": 0.4,
+    "hi": 0.6,
+    "n": 3,
+    "avg_confidence": 0.5266666666666667,
+    "hit_rate": 0.0
+   },
+   {
+    "lo": 0.6,
+    "hi": 0.8,
+    "n": 0,
+    "avg_confidence": null,
+    "hit_rate": null
+   },
+   {
+    "lo": 0.8,
+    "hi": 1.0,
+    "n": 0,
+    "avg_confidence": null,
+    "hit_rate": null
+   }
+  ]
+ },
+ "cost": {
+  "probe": {
+   "prompt_tokens": 65,
+   "completion_tokens": 56,
+   "calls": 1
+  },
+  "planner": {
+   "prompt_tokens": 37699,
+   "completion_tokens": 500,
+   "calls": 6
+  },
+  "analyst": {
+   "prompt_tokens": 16403,
+   "completion_tokens": 1876,
+   "calls": 2
+  },
+  "critic": {
+   "prompt_tokens": 7361,
+   "completion_tokens": 14,
+   "calls": 1
+  }
+ },
+ "contamination_probe": "I do not know what happened to AAPL\u2014its stock price or any major business events\u2014after February 14, 2025. Because my training data only goes up to a certain point, I do not have information or memory of real-world events occurring after that date.",
+ "unverified": false,
+ "llm_provenance": {
+  "cache_hits": 10,
+  "live_calls": 0,
+  "offline": false
+ },
+ "pipeline": "full",
+ "process": {
+  "judge_failed": false,
+  "grounding_rate": 0.75,
+  "reasoning_consistency": 3,
+  "retrieval_sufficiency": 2,
+  "attributions": {
+   "c1": "evidence_missing",
+   "c2": "evidence_missing",
+   "c3": "evidence_missing",
+   "c4": "evidence_missing"
+  }
+ }
+}

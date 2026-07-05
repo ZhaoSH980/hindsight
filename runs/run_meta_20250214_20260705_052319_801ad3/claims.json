@@ -1,0 +1,62 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "META closes at least 3% above the as-of price of $733.05 on the 40th trading day after 2025-02-14",
+  "type": "direction",
+  "ticker": "META",
+  "horizon_days": 40,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 3.0
+  },
+  "confidence": 0.55,
+  "evidence": [
+   "02_meta_8_k_filed_2025_01_29::000",
+   "02_meta_8_k_filed_2025_01_29::001",
+   "02_meta_8_k_filed_2025_01_29::002"
+  ],
+  "status": "miss",
+  "realized_return_pct": -27.78953256380098,
+  "detail": "horizon-end return -27.79% vs up 3.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "META's 40-trading-day return lands between +3% and +12%",
+  "type": "magnitude",
+  "ticker": "META",
+  "horizon_days": 40,
+  "prediction": {
+   "low_pct": 3.0,
+   "high_pct": 12.0
+  },
+  "confidence": 0.42,
+  "evidence": [
+   "02_meta_8_k_filed_2025_01_29::000",
+   "02_meta_8_k_filed_2025_01_29::002",
+   "02_meta_8_k_filed_2025_01_29::003"
+  ],
+  "status": "miss",
+  "realized_return_pct": -27.78953256380098,
+  "detail": "horizon-end return -27.79% vs [3.0, 12.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "META's realized daily log-return volatility over the next 20 trading days falls below the 60th percentile of the prior 252-day rolling windows",
+  "type": "volatility",
+  "ticker": "META",
+  "horizon_days": 20,
+  "prediction": {
+   "relation": "below",
+   "percentile": 60.0
+  },
+  "confidence": 0.38,
+  "evidence": [
+   "02_meta_8_k_filed_2025_01_29::002",
+   "02_meta_8_k_filed_2025_01_29::003",
+   "05_meta_8_k_filed_2024_10_30::002"
+  ],
+  "status": "miss",
+  "realized_return_pct": -17.81420151707235,
+  "detail": "realized vol 0.02365 vs p60 0.01804 (below)"
+ }
+]

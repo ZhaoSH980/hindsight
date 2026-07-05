@@ -1,0 +1,80 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "AVGO closes at least 3% above the as-of price of $230.11 on the 20th trading day after 2025-02-14",
+  "type": "direction",
+  "ticker": "AVGO",
+  "horizon_days": 20,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 3.0
+  },
+  "confidence": 0.55,
+  "evidence": [
+   "04_avgo_8_k_filed_2024_12_12::000",
+   "04_avgo_8_k_filed_2024_12_12::001",
+   "04_avgo_8_k_filed_2024_12_12::003"
+  ],
+  "status": "miss",
+  "realized_return_pct": -16.537937060201102,
+  "detail": "horizon-end return -16.54% vs up 3.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "AVGO's 20-trading-day return lands between +3% and +12%",
+  "type": "magnitude",
+  "ticker": "AVGO",
+  "horizon_days": 20,
+  "prediction": {
+   "low_pct": 3.0,
+   "high_pct": 12.0
+  },
+  "confidence": 0.4,
+  "evidence": [
+   "04_avgo_8_k_filed_2024_12_12::000",
+   "04_avgo_8_k_filed_2024_12_12::001"
+  ],
+  "status": "miss",
+  "realized_return_pct": -16.537937060201102,
+  "detail": "horizon-end return -16.54% vs [3.0, 12.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "AVGO's realized daily log-return volatility over the 40-trading-day horizon is above the 70th percentile of same-length rolling windows from the prior ~252 trading days",
+  "type": "volatility",
+  "ticker": "AVGO",
+  "horizon_days": 40,
+  "prediction": {
+   "relation": "above",
+   "percentile": 70.0
+  },
+  "confidence": 0.6,
+  "evidence": [
+   "04_avgo_8_k_filed_2024_12_12::008",
+   "03_avgo_10_k_filed_2024_12_20::004"
+  ],
+  "status": "hit",
+  "realized_return_pct": -23.232190474017965,
+  "detail": "realized vol 0.04889 vs p70 0.03925 (above)"
+ },
+ {
+  "claim_id": "c4",
+  "statement": "AVGO closes at least 5% above the as-of price of $230.11 on the 40th trading day after 2025-02-14",
+  "type": "direction",
+  "ticker": "AVGO",
+  "horizon_days": 40,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 5.0
+  },
+  "confidence": 0.5,
+  "evidence": [
+   "04_avgo_8_k_filed_2024_12_12::000",
+   "04_avgo_8_k_filed_2024_12_12::001",
+   "01_avgo_8_k_filed_2025_01_13::002"
+  ],
+  "status": "miss",
+  "realized_return_pct": -23.232190474017965,
+  "detail": "horizon-end return -23.23% vs up 5.0%"
+ }
+]

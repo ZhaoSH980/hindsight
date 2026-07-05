@@ -1,0 +1,62 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "MSFT closes at least 3% above the as-of price ($516.048) on the 40th trading day after August 15, 2025",
+  "type": "direction",
+  "ticker": "MSFT",
+  "horizon_days": 40,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 3.0
+  },
+  "confidence": 0.55,
+  "evidence": [
+   "02_msft_8_k_filed_2025_07_30::001",
+   "02_msft_8_k_filed_2025_07_30::003",
+   "01_msft_10_k_filed_2025_07_30::009"
+  ],
+  "status": "miss",
+  "realized_return_pct": -1.0140887016109268,
+  "detail": "horizon-end return -1.01% vs up 3.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "MSFT's 40-trading-day return lands between 0% and +8%",
+  "type": "magnitude",
+  "ticker": "MSFT",
+  "horizon_days": 40,
+  "prediction": {
+   "low_pct": 0.0,
+   "high_pct": 8.0
+  },
+  "confidence": 0.45,
+  "evidence": [
+   "02_msft_8_k_filed_2025_07_30::001",
+   "02_msft_8_k_filed_2025_07_30::003",
+   "05_msft_8_k_filed_2025_04_30::001"
+  ],
+  "status": "miss",
+  "realized_return_pct": -1.0140887016109268,
+  "detail": "horizon-end return -1.01% vs [0.0, 8.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "MSFT's realized daily log-return volatility over the 40-trading-day horizon falls below the 60th percentile of the prior 252-day rolling windows, indicating relatively calm price action",
+  "type": "volatility",
+  "ticker": "MSFT",
+  "horizon_days": 40,
+  "prediction": {
+   "relation": "below",
+   "percentile": 60.0
+  },
+  "confidence": 0.5,
+  "evidence": [
+   "02_msft_8_k_filed_2025_07_30::005",
+   "05_msft_8_k_filed_2025_04_30::005",
+   "01_msft_10_k_filed_2025_07_30::005"
+  ],
+  "status": "hit",
+  "realized_return_pct": -1.0140887016109268,
+  "detail": "realized vol 0.00968 vs p60 0.01549 (below)"
+ }
+]

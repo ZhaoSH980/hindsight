@@ -1,0 +1,80 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "TSLA closes at least 5% below the as-of price of $355.84 on the 20th trading day after as-of",
+  "type": "direction",
+  "ticker": "TSLA",
+  "horizon_days": 20,
+  "prediction": {
+   "direction": "down",
+   "threshold_pct": 5.0
+  },
+  "confidence": 0.55,
+  "evidence": [
+   "02_tsla_8_k_filed_2025_01_29::003",
+   "02_tsla_8_k_filed_2025_01_29::004",
+   "02_tsla_8_k_filed_2025_01_29::002"
+  ],
+  "status": "hit",
+  "realized_return_pct": -33.11319779780132,
+  "detail": "horizon-end return -33.11% vs down 5.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "TSLA's 20-trading-day return lands between -15% and -5%",
+  "type": "magnitude",
+  "ticker": "TSLA",
+  "horizon_days": 20,
+  "prediction": {
+   "low_pct": -15.0,
+   "high_pct": -5.0
+  },
+  "confidence": 0.4,
+  "evidence": [
+   "02_tsla_8_k_filed_2025_01_29::003",
+   "02_tsla_8_k_filed_2025_01_29::004"
+  ],
+  "status": "miss",
+  "realized_return_pct": -33.11319779780132,
+  "detail": "horizon-end return -33.11% vs [-15.0, -5.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "TSLA's realized daily log-return volatility over the next 30 trading days is above the 70th percentile of same-length rolling windows from the prior ~252 trading days",
+  "type": "volatility",
+  "ticker": "TSLA",
+  "horizon_days": 30,
+  "prediction": {
+   "relation": "above",
+   "percentile": 70.0
+  },
+  "confidence": 0.6,
+  "evidence": [
+   "02_tsla_8_k_filed_2025_01_29::010",
+   "01_tsla_10_k_filed_2025_01_30::004"
+  ],
+  "status": "hit",
+  "realized_return_pct": -27.169512609812983,
+  "detail": "realized vol 0.05316 vs p70 0.04365 (above)"
+ },
+ {
+  "claim_id": "c4",
+  "statement": "TSLA closes at least 8% below the as-of price of $355.84 on the 40th trading day after as-of",
+  "type": "direction",
+  "ticker": "TSLA",
+  "horizon_days": 40,
+  "prediction": {
+   "direction": "down",
+   "threshold_pct": 8.0
+  },
+  "confidence": 0.5,
+  "evidence": [
+   "02_tsla_8_k_filed_2025_01_29::003",
+   "02_tsla_8_k_filed_2025_01_29::002",
+   "02_tsla_8_k_filed_2025_01_29::004"
+  ],
+  "status": "hit",
+  "realized_return_pct": -29.08329341823207,
+  "detail": "horizon-end return -29.08% vs down 8.0%"
+ }
+]

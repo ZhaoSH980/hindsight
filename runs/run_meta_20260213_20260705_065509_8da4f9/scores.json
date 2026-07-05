@@ -1,0 +1,87 @@
+{
+ "outcome": {
+  "n_claims": 4,
+  "n_gradable": 4,
+  "n_hit": 1,
+  "hit_rate": 0.25,
+  "brier": 0.19269999999999998,
+  "calibration": [
+   {
+    "lo": 0.0,
+    "hi": 0.2,
+    "n": 0,
+    "avg_confidence": null,
+    "hit_rate": null
+   },
+   {
+    "lo": 0.2,
+    "hi": 0.4,
+    "n": 2,
+    "avg_confidence": 0.33999999999999997,
+    "hit_rate": 0.0
+   },
+   {
+    "lo": 0.4,
+    "hi": 0.6,
+    "n": 2,
+    "avg_confidence": 0.41000000000000003,
+    "hit_rate": 0.5
+   },
+   {
+    "lo": 0.6,
+    "hi": 0.8,
+    "n": 0,
+    "avg_confidence": null,
+    "hit_rate": null
+   },
+   {
+    "lo": 0.8,
+    "hi": 1.0,
+    "n": 0,
+    "avg_confidence": null,
+    "hit_rate": null
+   }
+  ]
+ },
+ "cost": {
+  "probe": {
+   "prompt_tokens": 64,
+   "completion_tokens": 56,
+   "calls": 1
+  },
+  "planner": {
+   "prompt_tokens": 75191,
+   "completion_tokens": 673,
+   "calls": 8
+  },
+  "analyst": {
+   "prompt_tokens": 9337,
+   "completion_tokens": 1169,
+   "calls": 1
+  },
+  "critic": {
+   "prompt_tokens": 8761,
+   "completion_tokens": 14,
+   "calls": 1
+  }
+ },
+ "contamination_probe": "I do not know what happened to META after February 13, 2026. Because my training data does not include specific, verified events from the future or beyond my knowledge cutoff, I cannot provide any specifics, stock prices, or major business events that occurred after that date.",
+ "unverified": false,
+ "llm_provenance": {
+  "cache_hits": 1,
+  "live_calls": 10,
+  "offline": false
+ },
+ "pipeline": "full",
+ "process": {
+  "judge_failed": false,
+  "grounding_rate": 0.25,
+  "reasoning_consistency": 3,
+  "retrieval_sufficiency": 2,
+  "attributions": {
+   "c1": "evidence_missing",
+   "c2": "evidence_missing",
+   "c3": "evidence_missing"
+  }
+ }
+}

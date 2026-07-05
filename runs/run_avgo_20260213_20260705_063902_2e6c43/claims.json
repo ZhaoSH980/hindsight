@@ -1,0 +1,61 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "AVGO closes at least 5% above the as-of price of $323.98 on the 40th trading day after 2026-02-13",
+  "type": "direction",
+  "ticker": "AVGO",
+  "horizon_days": 40,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 5.0
+  },
+  "confidence": 0.55,
+  "evidence": [
+   "03_avgo_8_k_filed_2025_12_11::000",
+   "03_avgo_8_k_filed_2025_12_11::001",
+   "03_avgo_8_k_filed_2025_12_11::002"
+  ],
+  "status": "hit",
+  "realized_return_pct": 17.347465124550876,
+  "detail": "horizon-end return +17.35% vs up 5.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "AVGO's 40-trading-day return lands between +5% and +20%",
+  "type": "magnitude",
+  "ticker": "AVGO",
+  "horizon_days": 40,
+  "prediction": {
+   "low_pct": 5.0,
+   "high_pct": 20.0
+  },
+  "confidence": 0.45,
+  "evidence": [
+   "03_avgo_8_k_filed_2025_12_11::000",
+   "03_avgo_8_k_filed_2025_12_11::001",
+   "03_avgo_8_k_filed_2025_12_11::002"
+  ],
+  "status": "hit",
+  "realized_return_pct": 17.347465124550876,
+  "detail": "horizon-end return +17.35% vs [5.0, 20.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "AVGO's realized daily log-return volatility over the next 20 trading days exceeds the 75th percentile of same-length rolling windows from the prior 252 trading days",
+  "type": "volatility",
+  "ticker": "AVGO",
+  "horizon_days": 20,
+  "prediction": {
+   "relation": "above",
+   "percentile": 75.0
+  },
+  "confidence": 0.6,
+  "evidence": [
+   "03_avgo_8_k_filed_2025_12_11::008",
+   "02_avgo_10_k_filed_2025_12_18::004"
+  ],
+  "status": "miss",
+  "realized_return_pct": -0.07687406556704524,
+  "detail": "realized vol 0.02145 vs p75 0.03388 (above)"
+ }
+]

@@ -1,0 +1,62 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "XOM closes at least 3% below the as-of price of $104.16 on the 20th trading day after August 15, 2025",
+  "type": "direction",
+  "ticker": "XOM",
+  "horizon_days": 20,
+  "prediction": {
+   "direction": "down",
+   "threshold_pct": 3.0
+  },
+  "confidence": 0.45,
+  "evidence": [
+   "02_xom_8_k_filed_2025_08_01::005",
+   "05_xom_10_q_filed_2025_05_05::026",
+   "02_xom_8_k_filed_2025_08_01::003"
+  ],
+  "status": "miss",
+  "realized_return_pct": 5.502862505748918,
+  "detail": "horizon-end return +5.50% vs down 3.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "XOM's 20-trading-day return falls between -8% and -3%",
+  "type": "magnitude",
+  "ticker": "XOM",
+  "horizon_days": 20,
+  "prediction": {
+   "low_pct": -8.0,
+   "high_pct": -3.0
+  },
+  "confidence": 0.35,
+  "evidence": [
+   "02_xom_8_k_filed_2025_08_01::005",
+   "05_xom_10_q_filed_2025_05_05::026",
+   "02_xom_8_k_filed_2025_08_01::003"
+  ],
+  "status": "miss",
+  "realized_return_pct": 5.502862505748918,
+  "detail": "horizon-end return +5.50% vs [-8.0, -3.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "XOM's realized daily log-return volatility over the 40-trading-day horizon window falls above the 60th percentile of same-length rolling windows from the prior ~252 trading days",
+  "type": "volatility",
+  "ticker": "XOM",
+  "horizon_days": 40,
+  "prediction": {
+   "relation": "above",
+   "percentile": 60.0
+  },
+  "confidence": 0.55,
+  "evidence": [
+   "05_xom_10_q_filed_2025_05_05::026",
+   "01_xom_10_q_filed_2025_08_04::021",
+   "02_xom_8_k_filed_2025_08_01::003"
+  ],
+  "status": "miss",
+  "realized_return_pct": 5.399563114550987,
+  "detail": "realized vol 0.01208 vs p60 0.01430 (above)"
+ }
+]

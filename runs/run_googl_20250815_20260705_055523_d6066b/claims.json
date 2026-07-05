@@ -1,0 +1,61 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "GOOGL closes at or above 3% above the as-of price of $203.32 on the 40th trading day after 2025-08-15",
+  "type": "direction",
+  "ticker": "GOOGL",
+  "horizon_days": 40,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 3.0
+  },
+  "confidence": 0.55,
+  "evidence": [
+   "02_googl_8_k_filed_2025_07_23::000",
+   "02_googl_8_k_filed_2025_07_23::001",
+   "01_googl_10_q_filed_2025_07_24::016"
+  ],
+  "status": "hit",
+  "realized_return_pct": 19.84715993016919,
+  "detail": "horizon-end return +19.85% vs up 3.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "GOOGL's 40-trading-day return lands between 0% and +8%",
+  "type": "magnitude",
+  "ticker": "GOOGL",
+  "horizon_days": 40,
+  "prediction": {
+   "low_pct": 0.0,
+   "high_pct": 8.0
+  },
+  "confidence": 0.42,
+  "evidence": [
+   "02_googl_8_k_filed_2025_07_23::000",
+   "02_googl_8_k_filed_2025_07_23::011",
+   "01_googl_10_q_filed_2025_07_24::006"
+  ],
+  "status": "miss",
+  "realized_return_pct": 19.84715993016919,
+  "detail": "horizon-end return +19.85% vs [0.0, 8.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "GOOGL's realized daily log-return volatility over the 40-trading-day horizon falls below the 60th percentile of same-length rolling windows from the prior ~252 trading days",
+  "type": "volatility",
+  "ticker": "GOOGL",
+  "horizon_days": 40,
+  "prediction": {
+   "relation": "below",
+   "percentile": 60.0
+  },
+  "confidence": 0.58,
+  "evidence": [
+   "02_googl_8_k_filed_2025_07_23::000",
+   "02_googl_8_k_filed_2025_07_23::001"
+  ],
+  "status": "hit",
+  "realized_return_pct": 19.84715993016919,
+  "detail": "realized vol 0.01916 vs p60 0.02069 (below)"
+ }
+]

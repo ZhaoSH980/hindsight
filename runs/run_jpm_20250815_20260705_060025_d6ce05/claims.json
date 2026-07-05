@@ -1,0 +1,61 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "JPM closes at least 2% above the as-of price of $286.32 on the 40th trading day after 2025-08-15",
+  "type": "direction",
+  "ticker": "JPM",
+  "horizon_days": 40,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 2.0
+  },
+  "confidence": 0.45,
+  "evidence": [
+   "04_jpm_8_k_filed_2025_07_15::025",
+   "01_jpm_10_q_filed_2025_08_05::016",
+   "01_jpm_10_q_filed_2025_08_05::017"
+  ],
+  "status": "hit",
+  "realized_return_pct": 6.532860365231108,
+  "detail": "horizon-end return +6.53% vs up 2.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "JPM's 40-trading-day return falls between -3% and +5%",
+  "type": "magnitude",
+  "ticker": "JPM",
+  "horizon_days": 40,
+  "prediction": {
+   "low_pct": -3.0,
+   "high_pct": 5.0
+  },
+  "confidence": 0.55,
+  "evidence": [
+   "01_jpm_10_q_filed_2025_08_05::027",
+   "01_jpm_10_q_filed_2025_08_05::016",
+   "04_jpm_8_k_filed_2025_07_15::025"
+  ],
+  "status": "miss",
+  "realized_return_pct": 6.532860365231108,
+  "detail": "horizon-end return +6.53% vs [-3.0, 5.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "JPM's realized daily log-return volatility over the 40-trading-day window after 2025-08-15 falls below the 60th percentile of same-length rolling windows from the prior ~252 trading days",
+  "type": "volatility",
+  "ticker": "JPM",
+  "horizon_days": 40,
+  "prediction": {
+   "relation": "below",
+   "percentile": 60.0
+  },
+  "confidence": 0.5,
+  "evidence": [
+   "01_jpm_10_q_filed_2025_08_05::019",
+   "01_jpm_10_q_filed_2025_08_05::016"
+  ],
+  "status": "hit",
+  "realized_return_pct": 6.532860365231108,
+  "detail": "realized vol 0.01001 vs p60 0.01733 (below)"
+ }
+]

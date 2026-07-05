@@ -1,0 +1,61 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "AAPL closes at least 3% below the as-of price of $230.94 on the 20th trading day after as-of",
+  "type": "direction",
+  "ticker": "AAPL",
+  "horizon_days": 20,
+  "prediction": {
+   "direction": "down",
+   "threshold_pct": 3.0
+  },
+  "confidence": 0.55,
+  "evidence": [
+   "01_aapl_10_q_filed_2025_08_01::027",
+   "01_aapl_10_q_filed_2025_08_01::023",
+   "06_aapl_10_q_filed_2025_05_02::027"
+  ],
+  "status": "miss",
+  "realized_return_pct": 2.206491006341471,
+  "detail": "horizon-end return +2.21% vs down 3.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "AAPL's 20-trading-day return lands between -10% and -3%",
+  "type": "magnitude",
+  "ticker": "AAPL",
+  "horizon_days": 20,
+  "prediction": {
+   "low_pct": -10.0,
+   "high_pct": -3.0
+  },
+  "confidence": 0.35,
+  "evidence": [
+   "01_aapl_10_q_filed_2025_08_01::027",
+   "01_aapl_10_q_filed_2025_08_01::023"
+  ],
+  "status": "miss",
+  "realized_return_pct": 2.206491006341471,
+  "detail": "horizon-end return +2.21% vs [-10.0, -3.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "AAPL's realized daily log-return volatility over the 40-trading-day window is above the 60th percentile of same-length rolling windows from the prior ~252 trading days",
+  "type": "volatility",
+  "ticker": "AAPL",
+  "horizon_days": 40,
+  "prediction": {
+   "relation": "above",
+   "percentile": 60.0
+  },
+  "confidence": 0.58,
+  "evidence": [
+   "01_aapl_10_q_filed_2025_08_01::023",
+   "02_aapl_8_k_filed_2025_07_31::002",
+   "01_aapl_10_q_filed_2025_08_01::027"
+  ],
+  "status": "miss",
+  "realized_return_pct": 6.9389977868025365,
+  "detail": "realized vol 0.01520 vs p60 0.01691 (above)"
+ }
+]

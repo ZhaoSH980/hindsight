@@ -429,3 +429,53 @@ graded cases' lessons — memory posted 0.75 hit rate and 0.203 Brier, the
 best cell in the matrix. One cell is one cell (the same honesty rule that
 applied when memory made NVDA worse applies now that it helped), but the
 mechanism finally has a data point in each direction.
+
+## 2026-07-05 — the 29-case grid: statistics that finally mean something
+
+### What ran
+
+`suite_95b96129`: the mechanical grid (10-ticker universe × 3 pre-committed
+calendar dates, corpus = most recent ≤6 SEC filings before as_of, built by
+`backend/scripts/build_grid_cases.py`; jpm_20250214 could not be built —
+EDGAR recent-window limitation, documented) × {naive, base, memory} =
+87 runs, all completed, zero crashed cells, ~3 hours end to end. All 29
+contamination probes came back clean ("I do not know…"). Pooled analysis
+by `backend/scripts/pooled_stats.py`.
+
+### Results (claim-level pooling, Wilson 95% CIs)
+
+| config | claims | hit rate | 95% CI | Brier mean ± SE |
+|---|---|---|---|---|
+| naive  | 87 | 0.402 | [0.306, 0.507] | 0.2500 (by construction) |
+| base   | 95 | 0.400 | [0.307, 0.501] | 0.2274 ± 0.0105 |
+| memory | 96 | 0.365 | [0.275, 0.464] | 0.2377 ± 0.0097 |
+
+Paired per-case Brier deltas:
+- **base − naive: −0.0226 mean, base better in 21/29 cases**
+  (sign test one-sided p = 0.012, two-sided p = 0.024)
+- **memory − base: +0.0102 mean, memory better in only 9/29**
+  (one-sided p = 0.031 that memory is worse)
+
+### The three findings
+
+1. **Raw hit rate measures the market, not the agent — now confirmed at
+   n≈90 claims.** naive 0.402 vs base 0.400: identical to two decimal
+   places, CIs almost coincident. The n=3 ladder suggested it; the n=29
+   grid settles it. Hit rate stays on the dashboard because honesty
+   requires showing it, but it is not the instrument's signal.
+
+2. **Calibration is the signal: the agent knows what it knows.** Brier
+   separates base from the coin-flip floor with a consistent paired
+   advantage (21/29, p≈0.02). The research pipeline's measurable value
+   is not picking direction better than "always up" — it is placing
+   confidence better than 50/50 everywhere.
+
+3. **The experience-memory mechanism subtracts value at scale.** After
+   the single positive cell on the tailwind case, the 29-case verdict is
+   the opposite and now carries weight: worse Brier in 20/29 cases
+   (p≈0.03). Injected lessons from other tickers' outcomes appear to be
+   noise, not signal, for this design. That is a real, honestly earned
+   negative result — the "improves over time" loop needs a better
+   mechanism (per-ticker gating? lesson quality filtering?), and the
+   instrument that discovered this is the same one that will grade the
+   replacement.

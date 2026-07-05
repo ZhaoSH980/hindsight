@@ -1,0 +1,82 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "AMZN closes at least 3% above the as-of price of $198.79 on the 20th trading day after 2026-02-13",
+  "type": "direction",
+  "ticker": "AMZN",
+  "horizon_days": 20,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 3.0
+  },
+  "confidence": 0.55,
+  "evidence": [
+   "02_amzn_8_k_filed_2026_02_05::001",
+   "02_amzn_8_k_filed_2026_02_05::003",
+   "02_amzn_8_k_filed_2026_02_05::007"
+  ],
+  "status": "hit",
+  "realized_return_pct": 6.514418554454782,
+  "detail": "horizon-end return +6.51% vs up 3.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "AMZN's 20-trading-day return lands between +3% and +12%",
+  "type": "magnitude",
+  "ticker": "AMZN",
+  "horizon_days": 20,
+  "prediction": {
+   "low_pct": 3.0,
+   "high_pct": 12.0
+  },
+  "confidence": 0.4,
+  "evidence": [
+   "02_amzn_8_k_filed_2026_02_05::001",
+   "02_amzn_8_k_filed_2026_02_05::003",
+   "02_amzn_8_k_filed_2026_02_05::007"
+  ],
+  "status": "hit",
+  "realized_return_pct": 6.514418554454782,
+  "detail": "horizon-end return +6.51% vs [3.0, 12.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "AMZN's realized daily log-return volatility over the 20 trading days after 2026-02-13 falls below the 60th percentile of same-length rolling windows from the prior ~252 trading days",
+  "type": "volatility",
+  "ticker": "AMZN",
+  "horizon_days": 20,
+  "prediction": {
+   "relation": "below",
+   "percentile": 60.0
+  },
+  "confidence": 0.5,
+  "evidence": [
+   "02_amzn_8_k_filed_2026_02_05::007",
+   "01_amzn_10_k_filed_2026_02_06::011"
+  ],
+  "status": "hit",
+  "realized_return_pct": 6.514418554454782,
+  "detail": "realized vol 0.01601 vs p60 0.02038 (below)"
+ },
+ {
+  "claim_id": "c4",
+  "statement": "AMZN closes at least 5% above the as-of price of $198.79 on the 40th trading day after 2026-02-13",
+  "type": "direction",
+  "ticker": "AMZN",
+  "horizon_days": 40,
+  "prediction": {
+   "direction": "up",
+   "threshold_pct": 5.0
+  },
+  "confidence": 0.52,
+  "evidence": [
+   "02_amzn_8_k_filed_2026_02_05::001",
+   "02_amzn_8_k_filed_2026_02_05::003",
+   "02_amzn_8_k_filed_2026_02_05::007",
+   "01_amzn_10_k_filed_2026_02_06::013"
+  ],
+  "status": "hit",
+  "realized_return_pct": 25.267876997223105,
+  "detail": "horizon-end return +25.27% vs up 5.0%"
+ }
+]

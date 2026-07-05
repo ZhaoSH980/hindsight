@@ -210,6 +210,16 @@ process — which is exactly why outcome, process, and cost are three
 tracks instead of one number. Consequence: beta-adjusted outcome
 thresholds are promoted on the roadmap (see future-work).
 
+The 29-case mechanical grid (`suite_95b96129`, 87 runs — see eval-log
+2026-07-05) settled what the n=3 ladder could only suggest: pooled over
+~90 claims per config, hit rate is identical between the agent and the
+always-up floor (0.400 vs 0.402), while **Brier separates them with a
+consistent paired advantage** (base better in 21/29 cases, sign-test
+p≈0.02). The instrument's verdict: this pipeline's measurable skill is
+confidence placement, not direction picking. The same grid also returned
+a statistically meaningful negative for the experience-memory mechanism
+(worse Brier in 20/29 cases, p≈0.03) — the honest input for its redesign.
+
 ## 3. The three anti-lookahead channels (and the one that can't be closed)
 
 The time sandbox (spec §3.2) makes it structurally impossible for the agent

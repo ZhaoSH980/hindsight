@@ -1,0 +1,63 @@
+[
+ {
+  "claim_id": "c1",
+  "statement": "AMD closes at least 5% below the as-of price ($177.51) on the 20th trading day after as-of",
+  "type": "direction",
+  "ticker": "AMD",
+  "horizon_days": 20,
+  "prediction": {
+   "direction": "down",
+   "threshold_pct": 5.0
+  },
+  "confidence": 0.45,
+  "evidence": [
+   "02_amd_8_k_filed_2025_08_05::001",
+   "02_amd_8_k_filed_2025_08_05::007",
+   "01_amd_10_q_filed_2025_08_06::012"
+  ],
+  "status": "hit",
+  "realized_return_pct": -9.210743817637223,
+  "detail": "horizon-end return -9.21% vs down 5.0%"
+ },
+ {
+  "claim_id": "c2",
+  "statement": "AMD's 20-trading-day return lands between -15% and -5%",
+  "type": "magnitude",
+  "ticker": "AMD",
+  "horizon_days": 20,
+  "prediction": {
+   "low_pct": -15.0,
+   "high_pct": -5.0
+  },
+  "confidence": 0.35,
+  "evidence": [
+   "02_amd_8_k_filed_2025_08_05::001",
+   "02_amd_8_k_filed_2025_08_05::007",
+   "01_amd_10_q_filed_2025_08_06::015"
+  ],
+  "status": "hit",
+  "realized_return_pct": -9.210743817637223,
+  "detail": "horizon-end return -9.21% vs [-15.0, -5.0]"
+ },
+ {
+  "claim_id": "c3",
+  "statement": "AMD's realized daily log-return volatility over the 40-trading-day window is above the 70th percentile of same-length rolling windows from the prior 252 trading days",
+  "type": "volatility",
+  "ticker": "AMD",
+  "horizon_days": 40,
+  "prediction": {
+   "relation": "above",
+   "percentile": 70.0
+  },
+  "confidence": 0.55,
+  "evidence": [
+   "02_amd_8_k_filed_2025_08_05::001",
+   "02_amd_8_k_filed_2025_08_05::005",
+   "01_amd_10_q_filed_2025_08_06::012",
+   "02_amd_8_k_filed_2025_08_05::011"
+  ],
+  "status": "hit",
+  "realized_return_pct": 21.919894578449185,
+  "detail": "realized vol 0.04488 vs p70 0.02840 (above)"
+ }
+]

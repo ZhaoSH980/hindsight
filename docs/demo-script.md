@@ -70,7 +70,7 @@ git status              # must be clean
 ### Preflight (2 minutes, morning of)
 
 - [ ] `cd backend && .venv/Scripts/python -m pytest -q` → expect: **all tests pass**
-- [ ] Start Option A; open `:8000`; all three cases visible in the Studio
+- [ ] Start Option A; open `:8000`; the case list loads (3 hand-authored + 29 mechanical-grid cases)
 - [ ] `/leaderboard` shows `suite_c3b22b4b`
 - [ ] Reset state (above) so the run you do live is the first of the day
 
