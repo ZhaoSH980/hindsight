@@ -96,8 +96,6 @@ npm run dev
 | ![Eval Dashboard —— 分数卡片、逐条论断置信度条带、逐条论断评分与归因标签](docs/assets/eval-dashboard.png) | ![Leaderboard —— case × 配置矩阵、配对差值、质量-成本散点图](docs/assets/leaderboard.png) |
 | **Eval Dashboard** —— hit rate、Brier、grounding、逐条论断的"置信度 vs 结局"条带（附一条诚实说明：单次运行只有 3–5 条论断，为什么不画校准曲线）、逐条论断判定与失败归因、污染探针。 | **Leaderboard** —— 真实评估套件矩阵：各 case 的 base vs memory、配对差值、质量-成本散点图。 |
 
-*（截图为较早版本的界面；当前版本采用更深的科幻风主题，并新增了实时流水线图和 case 创建向导。）*
-
 ## 创建你自己的案例
 
 仓库里的 NVDA / SMCI 两个 case 是手工编写的；现在 Studio 内置了 **case 创建向导**，你不必再手工来。给它一个股票代码、一个 `as_of` 日期、一个结果窗口、双语标题/描述元数据，再粘贴智能体被允许看到的文档，向导会：

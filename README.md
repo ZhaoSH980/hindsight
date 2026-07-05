@@ -96,8 +96,6 @@ Both dev servers are also wired into `.claude/launch.json` (backend runs with `H
 | ![Eval Dashboard — score cards, per-claim confidence strip, per-claim grading with attribution tags](docs/assets/eval-dashboard.png) | ![Leaderboard — case-by-config matrix with paired deltas and a quality-vs-cost scatter](docs/assets/leaderboard.png) |
 | **Eval Dashboard** — hit rate, Brier, grounding, a per-claim confidence-vs-outcome strip (with an honesty note on why no calibration curve is drawn at n=3–5), per-claim verdicts and failure attribution, contamination probe. | **Leaderboard** — the real suite matrix: base vs memory per case, paired deltas, quality-vs-cost scatter. |
 
-*(Screenshots show an earlier iteration of the UI; the current build has a darker sci-fi theme, a live pipeline diagram, and the case wizard.)*
-
 ## Create your own case
 
 The committed NVDA/SMCI cases were authored by hand; the Studio now has a **case wizard** so you don't have to be. Give it a ticker, an `as_of` date, an outcome window, bilingual title/description metadata, and paste in the documents the agent is allowed to see. The wizard then:
